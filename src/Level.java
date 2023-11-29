@@ -26,7 +26,17 @@ class Level {
     }
 
     private void setupCodeMap() {
-        tileCodesMap.put(' ', new Tile(0, 0, null));
-        tileCodesMap.put('|', new Tile(0, 0, null));
+        tileCodesMap.put('░', new Tile(0, 0, null));
+        tileCodesMap.put('█', new Tile(0, 0, null));
+        tileCodesMap.put('▀', new Tile(0, 0, null));
+        tileCodesMap.put('▄', new Tile(0, 0, null));
+        tileCodesMap.put('▌', new Tile(0, 0, null));
+        tileCodesMap.put('▐', new Tile(0, 0, null));
+        tileCodesMap.put('▙', new Tile(0, 0, null));
+        tileCodesMap.put('▟', new Tile(0, 0, null));
+        tileCodesMap.put('▛', new Tile(0, 0, null));
+        tileCodesMap.put('▜', new Tile(0, 0, null)); 
+        tileCodesMap.put('▘', new Tile(0, 0, null));
+        tileCodesMap.put('▝', new Tile(0, 0, null)); 
     }
 }
