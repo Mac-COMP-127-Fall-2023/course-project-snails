@@ -14,9 +14,9 @@ class Level {
         setupCodeMap();
         int x = 0;
         int y = 0;
-        for (String line : mapStr.split("\\r?\\n")) {
-            for (char tileChar : line.toCharArray()) {
-                tileMap.put(new Point(x, y), null);
+        for (String tileRow : mapStr.split("\\r?\\n")) {
+            for (char tileCode : tileRow.toCharArray()) {
+                tileMap.put(new Point(x, y), tileCodesMap.get(tileCode));
             }
         }
     }
