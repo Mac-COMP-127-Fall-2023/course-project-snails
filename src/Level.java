@@ -5,8 +5,12 @@ import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Point;
 
 /*
- * DO TO: add 2 layers (2 different graphics groups): the 
- * background, and the top layer that the snail can interact with
+ * DO TO: 
+ * 1. add 2 layers (2 different graphics groups): the 
+ *    background, and the top layer that the snail can interact with
+ * 2. add a finishing point visual of some kind (** this will also
+ *    be used in SnailGame to see if the snail should proceed to the 
+ *    next level)
  */
 class Level {
     GraphicsGroup group = new GraphicsGroup();

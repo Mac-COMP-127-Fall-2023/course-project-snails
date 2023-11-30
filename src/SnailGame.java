@@ -14,7 +14,7 @@ public class SnailGame {
     private Snail snail;
 
     private static List<Level> levels = List.of(
-                new Level("░░░░░"), 
+               new Level("░S░░░░"), 
                 new Level("""
                             ▍
                             ▍
@@ -23,22 +23,36 @@ public class SnailGame {
                             ▙▃▃▃▃▃▃▃▟"""));
 
 
-    public SnailGame(Level curLevel) {
+    public SnailGame() {
         canvas = new CanvasWindow("Snails", (int) SCREEN_SIZE.getWidth(), (int) SCREEN_SIZE.getHeight());
+
+        for(Level curLevel : levels){
+            playRound(curLevel);
+        }     
+    }
+
+    /*
+     * plays the game for 1 level
+     * returns true if won
+     */
+    private boolean playRound(Level curLevel){
+        canvas.removeAll();
         canvas.add(curLevel.getGraphics());
         snail = new Snail(curLevel.getSnailPos());
         canvas.add(snail.getGraphics());
-        
-        snail.updateAnimation();
         canvas.draw();
 
-        playRound();
+        handleSnailMovement();
+
+        return false; //temporary
     }
 
-    private void playRound(){
+    private void handleSnailMovement(){
         canvas.animate(() -> {
             if(canvas.getKeysPressed().contains(Key.RIGHT_ARROW)){
+                snail.updateAnimation();
                 snail.moveRight();
+                checkCollisions();
             }
         });
     }
@@ -52,12 +66,20 @@ public class SnailGame {
      * of the way so it doesn't look weird.** 
      * idk if im explaining that poorly lol and there's probably a 
      * better way to do that
+     * 
      */
-    public static void checkCollisions() {
-       // if()
+    private void checkCollisions() {
+
+    }
+
+    /*
+     * return true if the snail has reached the endpoint
+     */
+    private boolean winRound(){
+        return false; //temporary
     }
 
     public static void main(String[] args) {
-        SnailGame game = new SnailGame(levels.get(1));
+        SnailGame game = new SnailGame();
     }
 }

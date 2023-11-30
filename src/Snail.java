@@ -64,8 +64,7 @@ public class Snail {
     }
 
     /**
-     * Moves the snail according to its orientation when the right
-     * arrow key is pressed. Then checks for collisions (unimplemented)
+     * Moves the snail according to its orientation.
      */
     private void move(int m) {
         switch (snailBottomOrientation) {
@@ -83,17 +82,15 @@ public class Snail {
                 break;
         }
         currentImage.setPosition(x,y);
-
-        SnailGame.checkCollisions();
     }
 
     /**
-     * Accelerates the snail downwards and then checks for collisions
+     * Accelerates the snail downwards
      */
     private void fall() {
         velocity+=2;
         y+=velocity;
-        SnailGame.checkCollisions();
+       // SnailGame.checkCollisions(); I don't think this should be in Snail
     }
 
     public void setAttached(boolean attached) {
@@ -126,6 +123,7 @@ public class Snail {
     public Image getGraphics() {
         return currentImage;
     }
+
 
     public void setOrientation(Orientation newOrientation) {
         this.snailBottomOrientation = newOrientation;
