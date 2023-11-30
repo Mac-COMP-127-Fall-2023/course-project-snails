@@ -17,9 +17,9 @@ public class Snail {
     // current velocity while falling
     private int velocity = 0;
 
-    public Snail(int x, int y) {
-        this.x = x;
-        this.y = y;
+    public Snail(int[] snailPos) {
+        x = snailPos[0];
+        y = snailPos[1];
         snailBottomOrientation = Orientation.BOTTOM;
         attached = true;
     }

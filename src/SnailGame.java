@@ -5,21 +5,24 @@ public class SnailGame {
 
     public static final int PIXEL_RATIO = 6;
 
-    Level level1 = new Level("▛");
-    Level level2 = new Level("""
+    static Level level1 = new Level("▛");
+    static Level level2 = new Level("""
 ▛▀▀▀▀▀▀▜
 ▌░░░░░░▐
-▌░░░░░░▐
+▌🐌░░░░░▐
 ▙▄▄▄▄▄▄▟
     """);
 
-    public SnailGame() {
+    private Snail snail;
+
+    public SnailGame(Level curLevel) {
         canvas = new CanvasWindow("Snails", 1920, 1080);
-        canvas.add(level1.getGraphics());
+        canvas.add(curLevel.getGraphics());
+        snail = new Snail(curLevel.getSnailPos());
         canvas.draw();
     }
     public static void main(String[] args) {
-        SnailGame game = new SnailGame();
+        SnailGame game = new SnailGame(level1);
     }
 
     /**
