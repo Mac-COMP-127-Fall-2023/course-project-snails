@@ -1,4 +1,5 @@
 import edu.macalester.graphics.CanvasWindow;
+import edu.macalester.graphics.events.Key;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -25,11 +26,22 @@ public class SnailGame {
         canvas.add(curLevel.getGraphics());
         snail = new Snail(curLevel.getSnailPos());
         canvas.add(snail.getGraphics());
+        
         snail.updateAnimation();
         canvas.draw();
+
+        playRound();
     }
 
-        /**
+    private void playRound(){
+        canvas.animate(() -> {
+            if(canvas.getKeysPressed().contains(Key.RIGHT_ARROW)){
+                snail.moveRight();
+            }
+        });
+    }
+
+    /**
      * called after our snail moves or falls, should check collisions
      * and update its orientation if necessary. **We also need to check
      * if one pixel below the center of the snail bottom is no longer

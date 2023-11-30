@@ -82,6 +82,8 @@ public class Snail {
                 y-=m;
                 break;
         }
+        currentImage.setPosition(x,y);
+
         SnailGame.checkCollisions();
     }
 
