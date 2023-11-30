@@ -7,7 +7,6 @@ import edu.macalester.graphics.Point;
 class Level {
     GraphicsGroup group = new GraphicsGroup();
     Map<Point, Tile> tileMap = new HashMap<>();
-    private int[] snailPos = new int[2];
 
     private final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
 
@@ -16,14 +15,10 @@ class Level {
         int tileY = 0;
         for (String tileRow : mapStr.split("\\r?\\n")) { //iterate through each line of the multiline string
             for (char tileKey : tileRow.toCharArray()) { //iterate through each char in line
-                if (tileKey == "🐌") {
-                    tileKey = "░";
-                    snailPos[0]=tileX;
-                    snailPos[1]=tileY;
-                }
                 Tile newTile = new Tile(tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileKey); //create a new tile based on the character it reads
                 tileMap.put(new Point(tileX, tileY), newTile);
                 group.add(newTile);
+
                 tileX++;
             }
             tileX = 0;
@@ -38,9 +33,5 @@ class Level {
 
     public GraphicsGroup getGraphics() {
         return group;
-    }
-
-    public int[] getSnailPos() {
-        return snailPos;
     }
 }
