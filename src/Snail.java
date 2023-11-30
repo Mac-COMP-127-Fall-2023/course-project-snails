@@ -1,6 +1,3 @@
-import java.util.HashMap;
-import java.util.Map;
-
 import edu.macalester.graphics.Image;
 
 public class Snail {
@@ -8,7 +5,7 @@ public class Snail {
     private boolean attached;
 
     private Image currentImage;
-    private int currentFrame;
+    private int currentFrame = 1;
     private String currentPath;
 
     //current action state--corresponds to animation state
@@ -33,8 +30,9 @@ public class Snail {
     public Snail(int[] snailPos) {
         x = snailPos[0];
         y = snailPos[1];
-        currentState = State.UNCURLED;
-        lastState = currentState;
+        currentImage = new Image(x, y);
+        currentState = State.CRAWLING;
+        // lastState = currentState;
         snailBottomOrientation = Orientation.BOTTOM;
         attached = true;
         updateAnimation();
@@ -100,30 +98,27 @@ public class Snail {
     }
 
     public void updateAnimation() {
-        if (currentState == lastState) {
-
-        }
-
-        else if (currentState == State.CRAWLING) {
+        if ((currentState == State.CRAWLING)) {
             currentPath = "Snail\\Crawl\\snail_crawl";
-            currentFrame = 0;
         }
 
-        else if (currentState == State.ROLLING) {
-            currentPath = "Snail\\Crawl\\snail_roll";
+        else if ((currentState == State.ROLLING)) {
+            currentPath = "Snail\\Roll\\snail_roll";
         }
         
-        else if (currentState == State.CURLED) {
-            currentPath = "Snail\\Crawl\\snail_curl";
+        else if ((currentState == State.CURLED)) {
+            currentPath = "Snail\\Curl\\snail_curl";
         }
         
-        else if (currentState == State.ROLLING) {
-            currentPath = "Snail\\Crawl\\snail_uncurl";
+        else if ((currentState == State.UNCURLED)) {
+            currentPath = "Snail\\Uncurl\\snail_uncurl";
         }
 
-        currentFrame = currentFrame >= 8 ? 0 : currentFrame + 1;
         
+
+        currentFrame = currentFrame >= 8 || currentState != lastState ? 1 : currentFrame + 1;
         currentImage.setImagePath(currentPath + currentFrame + ".png");
+        lastState = currentState;
     }
 
     public Image getGraphics() {
