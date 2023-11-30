@@ -10,8 +10,6 @@ public class Tile extends Image{
         super(x, y);
         setupImageCodeMap();
         setImagePath(IMAGE_PATH_MAP.get(key));
-        
-
     }
 
     private void setupImageCodeMap() {
