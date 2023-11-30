@@ -24,6 +24,8 @@ public class SnailGame {
         canvas = new CanvasWindow("Snails", (int) SCREEN_SIZE.getWidth(), (int) SCREEN_SIZE.getHeight());
         canvas.add(curLevel.getGraphics());
         snail = new Snail(curLevel.getSnailPos());
+        canvas.add(snail.getGraphics());
+        snail.updateAnimation();
         canvas.draw();
     }
 

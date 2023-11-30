@@ -34,6 +34,7 @@ public class Snail {
         x = snailPos[0];
         y = snailPos[1];
         currentState = State.UNCURLED;
+        lastState = currentState;
         snailBottomOrientation = Orientation.BOTTOM;
         attached = true;
         updateAnimation();
@@ -123,6 +124,10 @@ public class Snail {
         currentFrame = currentFrame >= 8 ? 0 : currentFrame + 1;
         
         currentImage.setImagePath(currentPath + currentFrame + ".png");
+    }
+
+    public Image getGraphics() {
+        return currentImage;
     }
 
     public void setOrientation(Orientation newOrientation) {
