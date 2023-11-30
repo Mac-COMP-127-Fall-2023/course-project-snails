@@ -1,4 +1,5 @@
 import edu.macalester.graphics.Image;
+import edu.macalester.graphics.Point;
 
 public class Snail {
     private int x, y;
@@ -27,9 +28,9 @@ public class Snail {
     Orientation snailBottomOrientation;
     // current velocity while falling
     private int velocity = 0;
-    public Snail(int[] snailPos) {
-        x = snailPos[0];
-        y = snailPos[1];
+    public Snail(Point snailPos) {
+        x = (int)snailPos.getX();
+        y = (int)snailPos.getY();
         currentImage = new Image(x, y);
         currentState = State.CRAWLING;
         // lastState = currentState;
