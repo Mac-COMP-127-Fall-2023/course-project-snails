@@ -4,9 +4,9 @@ import java.util.Map;
 import edu.macalester.graphics.Image;
 
 public class Tile extends Image{
-    private final Map<Character, String> IMAGE_PATH_MAP = new HashMap<>();
+    private final Map<String, String> IMAGE_PATH_MAP = new HashMap<>();
 
-    public Tile(int x, int y, char key) {
+    public Tile(int x, int y, String key) {
         super(x, y);
         setupImageCodeMap();
         setImagePath(IMAGE_PATH_MAP.get(key));
