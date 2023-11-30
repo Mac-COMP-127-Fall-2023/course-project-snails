@@ -4,13 +4,17 @@ import java.util.Map;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Point;
 
+/*
+ * DO TO: add 2 layers (2 different graphics groups): the 
+ * background, and the top layer that the snail can interact with
+ */
 class Level {
     GraphicsGroup group = new GraphicsGroup();
     Map<Point, Tile> tileMap = new HashMap<>();
 
     private final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
 
-    private Point snailPos;
+    private Point snailPos; 
 
     public Level(String mapStr) {
         int tileX = 0;

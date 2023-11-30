@@ -3,6 +3,7 @@ import edu.macalester.graphics.events.Key;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.util.List;
 
 public class SnailGame {
     CanvasWindow canvas;
@@ -12,14 +13,15 @@ public class SnailGame {
 
     private Snail snail;
 
-    private static Level level1 = new Level("░░░░░");
+    private static List<Level> levels = List.of(
+                new Level("░░░░░"), 
+                new Level("""
+                            ▍
+                            ▍
+                            ▍
+                            ▍S░░░░░░░
+                            ▙▃▃▃▃▃▃▃▟"""));
 
-    private static Level level2 = new Level("""
-    ▍
-    ▍
-    ▍
-    ▍S░░░░░░░
-    ▙▃▃▃▃▃▃▃▟""");
 
     public SnailGame(Level curLevel) {
         canvas = new CanvasWindow("Snails", (int) SCREEN_SIZE.getWidth(), (int) SCREEN_SIZE.getHeight());
@@ -52,9 +54,10 @@ public class SnailGame {
      * better way to do that
      */
     public static void checkCollisions() {
+       // if()
     }
 
     public static void main(String[] args) {
-        SnailGame game = new SnailGame(level2);
+        SnailGame game = new SnailGame(levels.get(1));
     }
 }
