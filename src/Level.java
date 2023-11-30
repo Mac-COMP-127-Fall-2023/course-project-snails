@@ -5,20 +5,17 @@ import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Point;
 
 class Level {
-    private final Map<Character, String> IMAGE_PATH_MAP = new HashMap<>();
-
     GraphicsGroup group = new GraphicsGroup();
     Map<Point, Tile> tileMap = new HashMap<>();
 
     private final int PIXELS_PER_UNIT = 16;
 
     public Level(String mapStr) {
-        setupImageCodeMap();
         int xi = 0;
         int yi = 0;
         for (String tileRow : mapStr.split("\\r?\\n")) {
-            for (char tileCode : tileRow.toCharArray()) {
-                Tile newTile = new Tile(xi * PIXELS_PER_UNIT * SnailGame.PIXEL_RATIO, yi * PIXELS_PER_UNIT * SnailGame.PIXEL_RATIO, IMAGE_PATH_MAP.get(tileCode));
+            for (char tileKey : tileRow.toCharArray()) {
+                Tile newTile = new Tile(xi * PIXELS_PER_UNIT * SnailGame.PIXEL_RATIO, yi * PIXELS_PER_UNIT * SnailGame.PIXEL_RATIO, tileKey);
                 tileMap.put(new Point(xi, yi), newTile);
                 group.add(newTile);
 
@@ -35,22 +32,5 @@ class Level {
 
     public GraphicsGroup getGraphics() {
         return group;
-    }
-
-    private void setupImageCodeMap() {
-        IMAGE_PATH_MAP.put('░', "Tiles\\empty.png");
-        IMAGE_PATH_MAP.put('█', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▀', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▄', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▌', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▐', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▙', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▟', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▛', "Tiles\\block_i_dirt_rb.png");
-        IMAGE_PATH_MAP.put('▜', "Tiles\\block_e_dirt.png"); 
-        IMAGE_PATH_MAP.put('▘', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▝', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▘', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▝', "Tiles\\block_e_dirt.png"); 
     }
 }

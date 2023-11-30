@@ -5,7 +5,8 @@ public class SnailGame {
 
     public static final int PIXEL_RATIO = 6;
 
-    Level level1 = new Level("""
+    Level level1 = new Level("▛");
+    Level level2 = new Level("""
 ▛▀▀▀▀▀▀▜
 ▌░░░░░░▐
 ▌░░░░░░▐
