@@ -7,6 +7,7 @@ import java.util.List;
 
 public class SnailGame {
     CanvasWindow canvas;
+    int ticks = 0;
 
     public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
     public static final int SCREEN_PIXEL_RATIO = (int) SCREEN_SIZE.getWidth() / 320; //the size, in screen pixels, of a single in-game pixel 
@@ -49,11 +50,14 @@ public class SnailGame {
 
     private void handleSnailMovement(){
         canvas.animate(() -> {
-            if(canvas.getKeysPressed().contains(Key.RIGHT_ARROW)){
-                snail.updateAnimation();
-                snail.moveRight();
-                checkCollisions();
+            if (ticks % 6 == 0){ //animate at 10 fps instead of 60
+                if(canvas.getKeysPressed().contains(Key.RIGHT_ARROW)){
+                    snail.updateAnimation();
+                    snail.moveRight();
+                    checkCollisions();
+                }
             }
+            ticks++;
         });
     }
 

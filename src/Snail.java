@@ -67,6 +67,7 @@ public class Snail {
      * Moves the snail according to its orientation.
      */
     private void move(int m) {
+        m *= SnailGame.SCREEN_PIXEL_RATIO;
         switch (snailBottomOrientation) {
             case BOTTOM:
                 x+=m;
