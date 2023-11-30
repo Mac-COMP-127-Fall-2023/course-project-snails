@@ -100,22 +100,21 @@ public class Snail {
 
     public void updateAnimation() {
         if ((currentState == State.CRAWLING)) {
-            currentPath = "Snail\\Crawl\\snail_crawl";
+            currentPath = "Snail/Crawl/snail_crawl";
         }
 
         else if ((currentState == State.ROLLING)) {
-            currentPath = "Snail\\Roll\\snail_roll";
+            currentPath = "Snail/Roll/snail_roll";
         }
         
         else if ((currentState == State.CURLED)) {
-            currentPath = "Snail\\Curl\\snail_curl";
+            currentPath = "Snail/Curl/snail_curl";
         }
         
         else if ((currentState == State.UNCURLED)) {
-            currentPath = "Snail\\Uncurl\\snail_uncurl";
+            currentPath = "Snail/Uncurl/snail_uncurl";
         }
 
-        
 
         currentFrame = currentFrame >= 8 || currentState != lastState ? 1 : currentFrame + 1;
         currentImage.setImagePath(currentPath + currentFrame + ".png");
