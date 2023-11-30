@@ -4,13 +4,21 @@ import java.util.Map;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Point;
 
+/*
+ * DO TO: 
+ * 1. add 2 layers (2 different graphics groups): the 
+ *    background, and the top layer that the snail can interact with
+ * 2. add a finishing point visual of some kind (** this will also
+ *    be used in SnailGame to see if the snail should proceed to the 
+ *    next level)
+ */
 class Level {
     GraphicsGroup group = new GraphicsGroup();
     Map<Point, Tile> tileMap = new HashMap<>();
 
     private final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
 
-    private int[] snailPos = new int[2];
+    private Point snailPos; 
 
     public Level(String mapStr) {
         int tileX = 0;
@@ -19,8 +27,8 @@ class Level {
             for (char tileKey : tileRow.toCharArray()) { //iterate through each char in line
                 if (tileKey == 'S') {
                     tileKey = '░';
-                    snailPos[0]=tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO;
-                    snailPos[1]=tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO;
+                    snailPos = new Point(tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO,
+                                        tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO);
                 }
                 Tile newTile = new Tile(tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileKey); //create a new tile based on the character it reads
                 tileMap.put(new Point(tileX, tileY), newTile);
@@ -42,7 +50,7 @@ class Level {
         return group;
     }
 
-    public int[] getSnailPos() {
+    public Point getSnailPos() {
         return snailPos;
     }
 }

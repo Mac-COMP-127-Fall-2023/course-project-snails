@@ -1,4 +1,5 @@
 import edu.macalester.graphics.Image;
+import edu.macalester.graphics.Point;
 
 public class Snail {
     private int x, y;
@@ -27,9 +28,9 @@ public class Snail {
     Orientation snailBottomOrientation;
     // current velocity while falling
     private int velocity = 0;
-    public Snail(int[] snailPos) {
-        x = snailPos[0];
-        y = snailPos[1];
+    public Snail(Point snailPos) {
+        x = (int)snailPos.getX();
+        y = (int)snailPos.getY();
         currentImage = new Image(x, y);
         currentState = State.CRAWLING;
         // lastState = currentState;
@@ -63,8 +64,7 @@ public class Snail {
     }
 
     /**
-     * Moves the snail according to its orientation when the right
-     * arrow key is pressed. Then checks for collisions (unimplemented)
+     * Moves the snail according to its orientation.
      */
     private void move(int m) {
         switch (snailBottomOrientation) {
@@ -81,16 +81,16 @@ public class Snail {
                 y-=m;
                 break;
         }
-        SnailGame.checkCollisions();
+        currentImage.setPosition(x,y);
     }
 
     /**
-     * Accelerates the snail downwards and then checks for collisions
+     * Accelerates the snail downwards
      */
     private void fall() {
         velocity+=2;
         y+=velocity;
-        SnailGame.checkCollisions();
+       // SnailGame.checkCollisions(); I don't think this should be in Snail
     }
 
     public void setAttached(boolean attached) {
@@ -99,22 +99,21 @@ public class Snail {
 
     public void updateAnimation() {
         if ((currentState == State.CRAWLING)) {
-            currentPath = "Snail\\Crawl\\snail_crawl";
+            currentPath = "Snail/Crawl/snail_crawl";
         }
 
         else if ((currentState == State.ROLLING)) {
-            currentPath = "Snail\\Roll\\snail_roll";
+            currentPath = "Snail/Roll/snail_roll";
         }
         
         else if ((currentState == State.CURLED)) {
-            currentPath = "Snail\\Curl\\snail_curl";
+            currentPath = "Snail/Curl/snail_curl";
         }
         
         else if ((currentState == State.UNCURLED)) {
-            currentPath = "Snail\\Uncurl\\snail_uncurl";
+            currentPath = "Snail/Uncurl/snail_uncurl";
         }
 
-        
 
         currentFrame = currentFrame >= 8 || currentState != lastState ? 1 : currentFrame + 1;
         currentImage.setImagePath(currentPath + currentFrame + ".png");
@@ -124,6 +123,7 @@ public class Snail {
     public Image getGraphics() {
         return currentImage;
     }
+
 
     public void setOrientation(Orientation newOrientation) {
         this.snailBottomOrientation = newOrientation;

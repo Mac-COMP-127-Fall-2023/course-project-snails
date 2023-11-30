@@ -13,19 +13,19 @@ public class Tile extends Image{
     }
 
     private void setupImageCodeMap() {
-        IMAGE_PATH_MAP.put('░', "Tiles\\rocks_small1.png");
-        IMAGE_PATH_MAP.put('□', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('◯', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▃', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▍', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('|', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▙', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▟', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▛', "Tiles\\block_i_dirt_rb.png");
-        IMAGE_PATH_MAP.put('▜', "Tiles\\block_e_dirt.png"); 
-        IMAGE_PATH_MAP.put('▘', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▝', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▘', "Tiles\\block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▝', "Tiles\\block_e_dirt.png"); 
+        IMAGE_PATH_MAP.put('░', "Tiles/rocks_small1.png");
+        IMAGE_PATH_MAP.put('□', "Tiles/block_e_dirt.png");
+        IMAGE_PATH_MAP.put('◯', "Tiles/block_e_dirt.png");
+        IMAGE_PATH_MAP.put('▃', "Tiles/block_e_dirt.png");
+        IMAGE_PATH_MAP.put('▍', "Tiles/block_e_dirt.png");
+        IMAGE_PATH_MAP.put('|', "Tiles/block_e_dirt.png");
+        IMAGE_PATH_MAP.put('▙', "Tiles/block_e_dirt.png");
+        IMAGE_PATH_MAP.put('▟', "Tiles/block_e_dirt.png");
+        IMAGE_PATH_MAP.put('▛', "Tiles/block_i_dirt_rb.png");
+        IMAGE_PATH_MAP.put('▜', "Tiles/block_e_dirt.png"); 
+        IMAGE_PATH_MAP.put('▘', "Tiles/block_e_dirt.png");
+        IMAGE_PATH_MAP.put('▝', "Tiles/block_e_dirt.png");
+        IMAGE_PATH_MAP.put('▘', "Tiles/block_e_dirt.png");
+        IMAGE_PATH_MAP.put('▝', "Tiles/block_e_dirt.png"); 
     }
 }
