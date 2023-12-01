@@ -10,8 +10,7 @@ public class SnailGame {
     CanvasWindow canvas;
     int ticks = 0;
 
-    public static final Dimension SCREEN_SIZE = Toolkit.getDefaultToolkit().getScreenSize();
-    public static final int SCREEN_PIXEL_RATIO = (int) SCREEN_SIZE.getWidth() / 320; //the size, in screen pixels, of a single in-game pixel
+    public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
 
     private Snail snail;
 
@@ -26,7 +25,7 @@ public class SnailGame {
 
 
     public SnailGame() {
-        canvas = new CanvasWindow("Snails", (int) SCREEN_SIZE.getWidth(), (int) SCREEN_SIZE.getHeight());
+        canvas = new CanvasWindow("Snails", 1920, 1080);
 
         for(Level curLevel : levels){
             playRound(curLevel);
