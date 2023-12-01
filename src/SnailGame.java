@@ -16,13 +16,13 @@ public class SnailGame {
     private Snail snail;
 
     private static List<Level> levels = List.of(
-               new Level("░S░░░░"), 
-                new Level("""
-                            ▍
-                            ▍
-                            ▍
-                            ▍S░░░░░░░
-                            ▙▃▃▃▃▃▃▃▟"""));
+        //new Level(" S    "), 
+        new Level("""
+4-------+
+[       ]
+[       ]
+[S    . ]
+\\_______/"""));
 
 
     public SnailGame() {
@@ -51,18 +51,18 @@ public class SnailGame {
 
     private void handleSnailMovement(){
         canvas.animate(() -> {
-            if (ticks % 6 == 0){ //animate at 10 fps instead of 60
+            if (ticks % 5 == 0){ //animate at 12 fps instead of 60
                 if(canvas.getKeysPressed().contains(Key.RIGHT_ARROW)){
                     snail.updateAnimation();
                     snail.moveRight();
                     checkCollisions();
                 }
-                if(canvas.getKeysPressed().contains(Key.LEFT_ARROW)){
+                else if(canvas.getKeysPressed().contains(Key.LEFT_ARROW)){
                     snail.updateAnimation();
                     snail.moveLeft();
                     checkCollisions();
                 }
-                if(canvas.getKeysPressed().contains(Key.SPACE)){
+                else if(canvas.getKeysPressed().contains(Key.SPACE)){
                     snail.updateAnimation();
                     snail.curl();
                     checkCollisions();

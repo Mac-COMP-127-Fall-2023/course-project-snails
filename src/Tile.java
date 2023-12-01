@@ -8,21 +8,21 @@ public class Tile extends Image{
 
     public Tile(int x, int y, char key) {
         super(x, y);
-        setupImageCodeMap();
-        setImagePath(IMAGE_PATH_MAP.get(key));
+        setupImagePathMap();
+        setImagePath(!IMAGE_PATH_MAP.get(key).isEmpty() ? IMAGE_PATH_MAP.get(key) : "Tile/empty.png");
     }
 
-    private void setupImageCodeMap() {
-        IMAGE_PATH_MAP.put('░', "Tiles/rocks_small1.png");
-        IMAGE_PATH_MAP.put('□', "Tiles/block_e_dirt.png");
-        IMAGE_PATH_MAP.put('◯', "Tiles/block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▃', "Tiles/block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▍', "Tiles/block_e_dirt.png");
-        IMAGE_PATH_MAP.put('|', "Tiles/block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▙', "Tiles/block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▟', "Tiles/block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▛', "Tiles/block_i_dirt_rb.png");
-        IMAGE_PATH_MAP.put('▜', "Tiles/block_e_dirt.png"); 
+    private void setupImagePathMap() {
+        IMAGE_PATH_MAP.put(' ', "Tiles/empty.png"); //not a space, \u0020
+        IMAGE_PATH_MAP.put('.', "Tiles/rocks_small1.png");
+        IMAGE_PATH_MAP.put('-', "Tiles/block_e_dirt_b.png");
+        IMAGE_PATH_MAP.put('_', "Tiles/block_e_dirt_t.png");
+        IMAGE_PATH_MAP.put('[', "Tiles/block_e_dirt_r.png");
+        IMAGE_PATH_MAP.put(']', "Tiles/block_e_dirt_l.png");
+        IMAGE_PATH_MAP.put('\\', "Tiles/block_i_dirt_lb.png");
+        IMAGE_PATH_MAP.put('/', "Tiles/block_i_dirt_lt.png");
+        IMAGE_PATH_MAP.put('4', "Tiles/block_i_dirt_rb.png");
+        IMAGE_PATH_MAP.put('+', "Tiles/block_i_dirt_lb.png"); 
         IMAGE_PATH_MAP.put('▘', "Tiles/block_e_dirt.png");
         IMAGE_PATH_MAP.put('▝', "Tiles/block_e_dirt.png");
         IMAGE_PATH_MAP.put('▘', "Tiles/block_e_dirt.png");
