@@ -10,24 +10,33 @@ public class Snail {
     private String currentPath;
 
     //current action state--corresponds to animation state
-    enum State {
+    public enum State {
         CRAWLING,
         ROLLING,
         CURLED,
         UNCURLED
     }
     // the side that the snail is attached to
-    enum Orientation {
+    public enum Orientation {
         BOTTOM,
         LEFT,
         TOP,
         RIGHT
     }
+
+    public enum Direction {
+        LEFT,
+        RIGHT
+    }
+
     State currentState;
     State lastState;
     Orientation snailBottomOrientation;
+    Direction facing;
+
     // current velocity while falling
     private int velocity = 0;
+
     public Snail(Point snailPos) {
         x = (int)snailPos.getX();
         y = (int)snailPos.getY();
@@ -55,12 +64,23 @@ public class Snail {
         return snailBottomOrientation;
     }
 
+    public void curl() {
+        if (attached) {
+            currentState = State.CURLED;
+            fall();
+        }
+    }
+
     public void moveRight() {
         move(1);
+        facing = Direction.RIGHT;
+        currentState = State.CRAWLING;
     }
 
     public void moveLeft() {
         move(-1);
+        facing = Direction.LEFT;
+        currentState = State.CRAWLING;
     }
 
     /**
@@ -89,8 +109,8 @@ public class Snail {
      * Accelerates the snail downwards
      */
     private void fall() {
-        velocity+=2;
-        y+=velocity;
+        velocity += 2;
+        y += velocity;
        // SnailGame.checkCollisions(); I don't think this should be in Snail
     }
 
@@ -114,7 +134,6 @@ public class Snail {
         else if ((currentState == State.UNCURLED)) {
             currentPath = "Snail/Uncurl/snail_uncurl";
         }
-
 
         currentFrame = currentFrame >= 8 || currentState != lastState ? 1 : currentFrame + 1;
         currentImage.setImagePath(currentPath + currentFrame + ".png");

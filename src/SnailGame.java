@@ -57,6 +57,16 @@ public class SnailGame {
                     snail.moveRight();
                     checkCollisions();
                 }
+                if(canvas.getKeysPressed().contains(Key.LEFT_ARROW)){
+                    snail.updateAnimation();
+                    snail.moveLeft();
+                    checkCollisions();
+                }
+                if(canvas.getKeysPressed().contains(Key.SPACE)){
+                    snail.updateAnimation();
+                    snail.curl();
+                    checkCollisions();
+                }
             }
             ticks++;
         });
