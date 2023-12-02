@@ -12,7 +12,7 @@ public class SnailGame {
     private Snail snail;
 
     private static List<Level> levels = List.of(
-        new Level(" S    ")//, 
+       new Level(" S    ")//, 
 //         new Level("""
 // 4-----------------+
 // [                  ]

@@ -17,8 +17,9 @@ public class Snail {
     public enum Appearance {
         CRAWLING,
         ROLLING,
-        CURLED,
-        UNCURLED
+        CURLING,
+        UNCURLING,
+        INSHELL
     }
 
     public enum Movement{
@@ -123,7 +124,7 @@ public class Snail {
 
     public void curl() {
         if (attached) {
-            currentAppearance = Appearance.CURLED;
+            currentAppearance = Appearance.CURLING;
             currentMovement = Movement.FALL;
             fall();
         }
@@ -152,17 +153,25 @@ public class Snail {
             currentPath = "Snail/Roll/snail_roll";
         }
         
-        else if ((currentAppearance == Appearance.CURLED)) {
+        else if ((currentAppearance == Appearance.CURLING)) {
             currentPath = "Snail/Curl/snail_curl";
         }
         
-        else if ((currentAppearance == Appearance.UNCURLED)) {
+        else if ((currentAppearance == Appearance.UNCURLING)) {
             currentPath = "Snail/Uncurl/snail_uncurl";
         }
 
-        currentFrame = currentFrame >= 8 || currentAppearance != lastAppearance ? 1 : currentFrame + 1;
-        currentImage.setImagePath(currentPath + currentFrame + ".png");
-        lastAppearance = currentAppearance;
+        if(!(currentAppearance == Appearance.INSHELL)){
+            currentFrame = currentFrame >= 8|| currentAppearance != lastAppearance ? 1 : currentFrame + 1;
+            String newPath = currentPath + currentFrame + ".png";
+
+            if(newPath.equals("Snail/Curl/snail_curl8.png")){
+                currentAppearance = Appearance.INSHELL;
+            }
+            
+            currentImage.setImagePath(newPath);
+            lastAppearance = currentAppearance;
+        }
     }
 
     public Image getGraphics() {
