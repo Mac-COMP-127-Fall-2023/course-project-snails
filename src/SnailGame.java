@@ -1,9 +1,6 @@
 import edu.macalester.graphics.CanvasWindow;
-import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.events.Key;
 
-import java.awt.Dimension;
-import java.awt.Toolkit;
 import java.util.List;
 
 public class SnailGame {
@@ -17,11 +14,17 @@ public class SnailGame {
     private static List<Level> levels = List.of(
         //new Level(" S    "), 
         new Level("""
-4-------+
-[       ]
-[       ]
-[S    . ]
-\\_______/"""));
+4-----------------+
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[S    .            ]
+\\__________________/"""));
 
 
     public SnailGame() {
