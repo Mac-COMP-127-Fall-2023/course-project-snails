@@ -14,7 +14,8 @@ import edu.macalester.graphics.Point;
  *    next level)
  */
 class Level {
-    GraphicsGroup group = new GraphicsGroup();
+    GraphicsGroup collidableGroup = new GraphicsGroup();
+    GraphicsGroup background = new GraphicsGroup();
     Map<Point, Tile> tileMap = new HashMap<>();
 
     private final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
@@ -34,7 +35,14 @@ class Level {
                 }
                 Tile newTile = new Tile(tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileKey); //create a new tile based on the character it reads
                 tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
-                group.add(newTile);
+                
+                if(collidableKeys.contains(tileKey)){
+                     collidableGroup.add(newTile);
+                }
+                else{
+                    background.add(newTile);
+                }
+               
                 tileX++;
             }
             tileX = 0;
@@ -53,7 +61,14 @@ class Level {
     }
 
     public GraphicsGroup getGraphics() {
+        GraphicsGroup group = new GraphicsGroup();
+        group.add(background);
+        group.add(collidableGroup);
         return group;
+    }
+
+    public boolean checkCollision(Point p){
+        return collidableGroup.testHit(p.getX(), p.getY());
     }
 
     public Point getSnailPos() {

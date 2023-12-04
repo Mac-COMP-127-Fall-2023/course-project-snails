@@ -1,6 +1,6 @@
 import edu.macalester.graphics.CanvasWindow;
-import edu.macalester.graphics.events.Key;
-
+import edu.macalester.graphics.Point;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SnailGame {
@@ -10,6 +10,8 @@ public class SnailGame {
     public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
 
     private Snail snail;
+
+    private Level currentLevel;
 
     private static List<Level> levels = List.of(
        new Level(" S    ")//, 
@@ -32,7 +34,8 @@ public class SnailGame {
         canvas = new CanvasWindow("Snails", 1920, 1080);
 
         for(Level curLevel : levels){
-            playRound(curLevel);
+            currentLevel = curLevel;
+            playRound(currentLevel);
         }     
     }
 
@@ -74,7 +77,24 @@ public class SnailGame {
      * 
      */
     private void checkCollisions() {
+        //order: top right, right middle, bottom right, bottom middle, bottom left, left middle, top left
+        List<Point> snailBoundaries = snail.getBoundryPoints();
+        boolean[] hitPoints = new boolean[snailBoundaries.size()];
+        
+        for(int i = 0; i < snailBoundaries.size(); i++){
+             hitPoints[i] =(currentLevel.checkCollision(snailBoundaries.get(i)));
+        }
 
+        if(snail.getFacing() == Snail.Direction.RIGHT){
+            if(hitPoints[5] && hitPoints[6] && hitPoints[7]){
+                snail.setOrientation(Snail.Orientation.RIGHT);
+            }
+        }
+        else if(snail.getFacing() == Snail.Direction.LEFT){
+            if(hitPoints[1] && hitPoints[2] && hitPoints[3]){
+                snail.setOrientation(Snail.Orientation.LEFT);
+            }
+        }
     }
 
     /*

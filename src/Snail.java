@@ -13,8 +13,8 @@ public class Snail {
     private int currentFrame = 1;
     private String currentPath;
 
-    //current action state--corresponds to animation state
-    public enum Appearance {
+    //current animation state
+    public static enum Appearance {
         CRAWLING,
         ROLLING,
         CURLING,
@@ -22,20 +22,21 @@ public class Snail {
         INSHELL
     }
 
-    public enum Movement{
+    //current action state
+    public static enum Movement{
         CRAWL,
         FALL
     }
 
     // the side that the snail is attached to
-    public enum Orientation {
+    public static enum Orientation {
         BOTTOM,
         LEFT,
         TOP,
         RIGHT
     }
 
-    public enum Direction {
+    public static enum Direction {
         LEFT,
         RIGHT
     }
@@ -44,7 +45,7 @@ public class Snail {
     Appearance lastAppearance;
     Movement currentMovement;
     Orientation snailBottomOrientation;
-    Direction facing;
+    Direction facing; //TO DO: write into code
 
     // current velocity while falling
     private int velocity = 0;
@@ -54,7 +55,7 @@ public class Snail {
         y = (int)snailPos.getY();
         currentImage = new Image(x, y);
         currentAppearance = Appearance.CRAWLING;
-        // lastState = currentState;
+        facing = Direction.RIGHT;
         currentMovement = Movement.CRAWL;
         snailBottomOrientation = Orientation.BOTTOM;
         attached = true;
@@ -131,7 +132,6 @@ public class Snail {
     }
     /**
      * Accelerates the snail downwards
-     * TODO: fix bug; currently comes in & out of shell as it falls
      */
     private void fall() {
         velocity += 2;
@@ -178,6 +178,21 @@ public class Snail {
         return currentImage;
     }
 
+    public Direction getFacing(){
+        return facing;
+    }
+
+    public List<Point> getBoundryPoints(){
+        return List.of(
+            currentImage.getPosition(), //top right
+            currentImage.getPosition().add(new Point(0, currentImage.getHeight()/2)), // right middle
+            currentImage.getPosition().add(new Point(0, currentImage.getHeight())), //bottom right
+            currentImage.getCenter().add(new Point(0, currentImage.getHeight()/2)), //bottom middle
+            currentImage.getCenter().add(new Point(currentImage.getWidth()/2, currentImage.getHeight()/2)),//bottom left
+            currentImage.getCenter().add(new Point(currentImage.getWidth()/2, 0)), //left middle
+            currentImage.getCenter().add(new Point(currentImage.getWidth()/2, - currentImage.getHeight()/2)) //top left
+         );
+    }
 
     public void setOrientation(Orientation newOrientation) {
         this.snailBottomOrientation = newOrientation;
