@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.macalester.graphics.GraphicsGroup;
@@ -17,6 +18,8 @@ class Level {
     Map<Point, Tile> tileMap = new HashMap<>();
 
     private final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
+
+    private List<Character> collidableKeys = List.of('-', '_', '[', ']', '\\', '/', '4', '+', '▘', '▝', '▝');
 
     private Point snailPos; 
 
