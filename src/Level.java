@@ -21,19 +21,17 @@ class Level {
     private Point snailPos; 
 
     public Level(String mapStr) {
-        int tileX = 0;
-        int tileY = 0;
+        int tileX = 0; //x position in the unit of tiles (16*16 game pixels, 96*96 screen pixels)
+        int tileY = 0; //y position in tiles
         for (String tileRow : mapStr.split("\\r?\\n")) { //iterate through each line of the multiline string
             for (char tileKey : tileRow.toCharArray()) { //iterate through each char in line
                 if (tileKey == 'S') {
-                    tileKey = '░';
-                    snailPos = new Point(tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO,
-                                        tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO);
+                    tileKey = ' '; //place an empty tile
+                    snailPos = new Point((tileX + .5) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, (tileY - 1) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO); //set the position of the snail to the bottom of the current tile
                 }
                 Tile newTile = new Tile(tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileKey); //create a new tile based on the character it reads
-                tileMap.put(new Point(tileX, tileY), newTile);
+                tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
                 group.add(newTile);
-
                 tileX++;
             }
             tileX = 0;
@@ -42,6 +40,11 @@ class Level {
 
     }
 
+    /**
+     * @param screenX X coordinate within canvas
+     * @param screenY Y coordinate within canvas
+     * @return Tile object at given coordinates
+     */
     public Tile getTile(int screenX, int screenY) {
         return tileMap.get(new Point((int)(screenX / PIXELS_PER_TILE / SnailGame.SCREEN_PIXEL_RATIO), (int) (screenY / PIXELS_PER_TILE / SnailGame.SCREEN_PIXEL_RATIO))); //converts screen coordinates to tile coordinates, uses tile coords as key
     }

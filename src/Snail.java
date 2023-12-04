@@ -1,5 +1,9 @@
+import java.util.List;
+import java.util.Set;
+
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
+import edu.macalester.graphics.events.Key;
 
 public class Snail {
     private int x, y;
@@ -10,30 +14,48 @@ public class Snail {
     private String currentPath;
 
     //current action state--corresponds to animation state
-    enum State {
+    public enum Appearance {
         CRAWLING,
         ROLLING,
-        CURLED,
-        UNCURLED
+        CURLING,
+        UNCURLING,
+        INSHELL
     }
+
+    public enum Movement{
+        CRAWL,
+        FALL
+    }
+
     // the side that the snail is attached to
-    enum Orientation {
+    public enum Orientation {
         BOTTOM,
         LEFT,
         TOP,
         RIGHT
     }
-    State currentState;
-    State lastState;
+
+    public enum Direction {
+        LEFT,
+        RIGHT
+    }
+
+    Appearance currentAppearance;
+    Appearance lastAppearance;
+    Movement currentMovement;
     Orientation snailBottomOrientation;
+    Direction facing;
+
     // current velocity while falling
     private int velocity = 0;
+
     public Snail(Point snailPos) {
         x = (int)snailPos.getX();
         y = (int)snailPos.getY();
         currentImage = new Image(x, y);
-        currentState = State.CRAWLING;
+        currentAppearance = Appearance.CRAWLING;
         // lastState = currentState;
+        currentMovement = Movement.CRAWL;
         snailBottomOrientation = Orientation.BOTTOM;
         attached = true;
         updateAnimation();
@@ -55,18 +77,29 @@ public class Snail {
         return snailBottomOrientation;
     }
 
-    public void moveRight() {
-        move(1);
-    }
-
-    public void moveLeft() {
-        move(-1);
+    public void move(Set<Key> keysPressed){
+        if(currentMovement == Movement.FALL){
+            fall();
+        }
+        else{
+            if(keysPressed.contains(Key.RIGHT_ARROW)){
+                crawl(1);
+            }
+            else if(keysPressed.contains(Key.LEFT_ARROW)){
+                crawl(-1);
+                
+            }
+            else if (keysPressed.contains(Key.SPACE)){
+                curl();
+            }
+        }
     }
 
     /**
      * Moves the snail according to its orientation.
      */
-    private void move(int m) {
+    private void crawl(int m) {
+        m *= SnailGame.SCREEN_PIXEL_RATIO;
         switch (snailBottomOrientation) {
             case BOTTOM:
                 x+=m;
@@ -82,15 +115,29 @@ public class Snail {
                 break;
         }
         currentImage.setPosition(x,y);
+
+        updateAnimation();
+
+        currentMovement = Movement.CRAWL;
+        currentAppearance = Appearance.CRAWLING;
     }
 
+    public void curl() {
+        if (attached) {
+            currentAppearance = Appearance.CURLING;
+            currentMovement = Movement.FALL;
+            fall();
+        }
+    }
     /**
      * Accelerates the snail downwards
+     * TODO: fix bug; currently comes in & out of shell as it falls
      */
     private void fall() {
-        velocity+=2;
-        y+=velocity;
-       // SnailGame.checkCollisions(); I don't think this should be in Snail
+        velocity += 2;
+        y += velocity;
+        currentImage.setPosition(x,y);
+        updateAnimation();
     }
 
     public void setAttached(boolean attached) {
@@ -98,26 +145,33 @@ public class Snail {
     }
 
     public void updateAnimation() {
-        if ((currentState == State.CRAWLING)) {
+        if ((currentAppearance == Appearance.CRAWLING)) {
             currentPath = "Snail/Crawl/snail_crawl";
         }
 
-        else if ((currentState == State.ROLLING)) {
+        else if ((currentAppearance == Appearance.ROLLING)) {
             currentPath = "Snail/Roll/snail_roll";
         }
         
-        else if ((currentState == State.CURLED)) {
+        else if ((currentAppearance == Appearance.CURLING)) {
             currentPath = "Snail/Curl/snail_curl";
         }
         
-        else if ((currentState == State.UNCURLED)) {
+        else if ((currentAppearance == Appearance.UNCURLING)) {
             currentPath = "Snail/Uncurl/snail_uncurl";
         }
 
+        if(!(currentAppearance == Appearance.INSHELL)){
+            currentFrame = currentFrame >= 8|| currentAppearance != lastAppearance ? 1 : currentFrame + 1;
+            String newPath = currentPath + currentFrame + ".png";
 
-        currentFrame = currentFrame >= 8 || currentState != lastState ? 1 : currentFrame + 1;
-        currentImage.setImagePath(currentPath + currentFrame + ".png");
-        lastState = currentState;
+            if(newPath.equals("Snail/Curl/snail_curl8.png")){
+                currentAppearance = Appearance.INSHELL;
+            }
+            
+            currentImage.setImagePath(newPath);
+            lastAppearance = currentAppearance;
+        }
     }
 
     public Image getGraphics() {
