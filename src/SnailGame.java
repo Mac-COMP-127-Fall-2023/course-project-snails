@@ -3,6 +3,8 @@ import edu.macalester.graphics.Point;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//import Snail.Orientation;
+
 public class SnailGame {
     CanvasWindow canvas;
 
@@ -29,24 +31,24 @@ public class SnailGame {
 
     private void handleSnailMovement(){
         canvas.animate(() -> {
+            List<Boolean> hitPoints = snail.getBoundaryPoints()
+                                                    .stream()
+                                                    .map(point -> currentLevel.checkCollision(point))
+                                                    .collect(Collectors.toList());
             /*
              * evaluate a possible new position
              */
-            Point newPos = snail.testMove(
-                            canvas.getKeysPressed(), 
-                            possibleDirections(snail.getBoundaryPoints()
-                                                    .stream()
-                                                    .map(point -> currentLevel.checkCollision(point))
-                                                    .collect(Collectors.toList()))
-                            );
+            Point newPos = snail.testMove(canvas.getKeysPressed(), possibleDirections(hitPoints));
 
+            determineOrientation(hitPoints);
             /*
              * if the possible new position follows the rules of the game (is either attached to something
              * or is falling), move the snail to the new position.
              */
-           if(remainsAttached(newPos.getX(), newPos.getY()) || snail.getCurrentMovement() == Snail.Movement.FALL){
+            //determineOriengation
+           //if(remainsAttached(newPos.getX(), newPos.getY()) || snail.getCurrentMovement() == Snail.Movement.FALL){
                 snail.move(newPos.getX(), newPos.getY());
-            }
+            //}
         });
     }
 
@@ -55,57 +57,87 @@ public class SnailGame {
      * the snail can currently go that way based on obstacles
      */
     private List<Boolean> possibleDirections(List<Boolean> hitPoints){
-        boolean canLeft = canMoveDirection(hitPoints, 0, 7, 6);
-        boolean canUp = canMoveDirection(hitPoints, 0, 1, 2);
-        boolean canDown = canMoveDirection(hitPoints, 6, 5, 4);
-        boolean canRight = canMoveDirection(hitPoints, 2, 3, 4);
+        boolean canLeft = canMoveDirection(hitPoints, Snail.Orientation.LEFT);
+        boolean canUp = canMoveDirection(hitPoints, Snail.Orientation.TOP);
+        boolean canDown = canMoveDirection(hitPoints, Snail.Orientation.BOTTOM);
+        boolean canRight = canMoveDirection(hitPoints, Snail.Orientation.RIGHT);
 
         return List.of(canLeft, canUp, canDown, canRight);
     }
 
-    /*
-     * returns true if the snail would remain attached to an object if moved to 
-     * position (testX, testY)
-     */
-    private boolean remainsAttached(double testX, double testY){
-        List<Boolean> testHitPoints = snail.getTestBoundaryPoints(testX, testY).stream()
-                                                    .map(p -> currentLevel.checkCollision(p))
-                                                    .collect(Collectors.toList());
-        if(testHitPoints.contains(true)){
-            return true;
+
+    private void determineOrientation(List<Boolean> hitPoints){
+        if(snail.getCurrentOrientation() != Snail.Orientation.TOP 
+            && hitPoints.get(0) && hitPoints.get(1) && hitPoints.get(2)){
+            
+           snail.setOrientation(Snail.Orientation.TOP);
         }
-        else{
-            return false;
+        else if (snail.getCurrentOrientation() != Snail.Orientation.RIGHT && hitPoints.get(2) && hitPoints.get(3) && hitPoints.get(4)){
+            snail.setOrientation(Snail.Orientation.RIGHT);
+        }
+        else if (snail.getCurrentOrientation() != Snail.Orientation.BOTTOM && hitPoints.get(6) && hitPoints.get(5) && hitPoints.get(4)){
+            snail.setOrientation(Snail.Orientation.BOTTOM);
+        }
+        else if (snail.getCurrentOrientation() != Snail.Orientation.LEFT && hitPoints.get(0) && hitPoints.get(7) && hitPoints.get(6)){
+            snail.setOrientation(Snail.Orientation.LEFT);
         }
     }
 
     /*
      * determines whether there is an obstacle preventing the snail from moving 
      * in a certain direction
-     * @param int side1, int middle, and int side2 represent the indexes in hitPoints of the 
-     * 3 points on the particular side
      */
-    private boolean canMoveDirection(List<Boolean> hitPoints, int side1, int middle, int side2){
-        boolean can = true;
+    private boolean canMoveDirection(List<Boolean> hitPoints, Snail.Orientation direction){
+       int midPoint;
 
-        if(hitPoints.get(middle)){
-            can = false;
+        if(direction == Snail.Orientation.LEFT){
+            midPoint = 7;
+        }
+        else if (direction == Snail.Orientation.TOP){
+            midPoint = 1;
+        }
+        else if (direction == Snail.Orientation.RIGHT){
+            midPoint = 3;
+        }
+        else{
+            midPoint = 5;
         }
 
-        return can;
+        if(snail.getCurrentOrientation() == Snail.Orientation.BOTTOM){
+            if(direction == Snail.Orientation.TOP){
+                return false;
+            }
+        }
+
+        if(snail.getCurrentOrientation() == Snail.Orientation.LEFT){
+            if(direction == Snail.Orientation.RIGHT){
+                return false;
+            }
+        }
+
+         if(snail.getCurrentOrientation() == Snail.Orientation.RIGHT){
+            if(direction == Snail.Orientation.LEFT){
+                return false;
+            }
+        }
+
+         if(snail.getCurrentOrientation() == Snail.Orientation.TOP){
+            if(direction == Snail.Orientation.BOTTOM){
+                return false;
+            }
+        }
+
+        if(snail.getCurrentOrientation() == direction){
+            return false;
+        }
+
+        if(hitPoints.get(midPoint)){
+            return false;
+        }
+
+        return true;
     }
 
-    // private boolean allElseFalse(List<Boolean> hitPoints, int a, int b){
-    //     for(int i = 0; i < hitPoints.size(); i++){
-    //         if(i != a && i != b){
-    //             if(hitPoints.get(i)){
-    //                 return false;
-    //             }
-    //         }
-    //     }
-    //     return true;
-    // }
-    
     public static void main(String[] args) {
         SnailGame game = new SnailGame();
     }

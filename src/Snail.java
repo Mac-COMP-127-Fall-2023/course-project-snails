@@ -1,14 +1,10 @@
 import java.awt.Color;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.Rectangle;
 import edu.macalester.graphics.events.Key;
-
-
-import java.util.stream.Collectors;
 
 public class Snail {
     private double x, y;
@@ -35,6 +31,7 @@ public class Snail {
     }
 
     Movement currentMovement;
+    Orientation currentOrientation;
 
     private int velocity = 0;
 
@@ -46,6 +43,7 @@ public class Snail {
         graphic.setFillColor(Color.ORANGE);
 
         currentMovement = Movement.CRAWL;
+        currentOrientation = Orientation.BOTTOM;
     }
 
     public double getX() {
@@ -117,6 +115,13 @@ public class Snail {
         return graphic;
     }
 
+    public void setOrientation(Orientation newOrientation){
+        currentOrientation = newOrientation;
+    }
+
+    public Orientation getCurrentOrientation(){
+        return currentOrientation;
+    }
     /*
      * returns a list of points on the snail in this order:
      * top left, top middle, top right, right middle, bottom right, bottom middle, bottom left, left middle
