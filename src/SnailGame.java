@@ -38,17 +38,11 @@ public class SnailGame {
             /*
              * evaluate a possible new position
              */
-            Point newPos = snail.testMove(canvas.getKeysPressed(), possibleDirections(hitPoints));
+            //Point newPos = snail.testMove(canvas.getKeysPressed(), possibleDirections(hitPoints));
 
             determineOrientation(hitPoints);
-            /*
-             * if the possible new position follows the rules of the game (is either attached to something
-             * or is falling), move the snail to the new position.
-             */
-            //determineOriengation
-           //if(remainsAttached(newPos.getX(), newPos.getY()) || snail.getCurrentMovement() == Snail.Movement.FALL){
-                snail.move(newPos.getX(), newPos.getY());
-            //}
+            
+            snail.move(canvas.getKeysPressed(), possibleDirections(hitPoints));
         });
     }
 

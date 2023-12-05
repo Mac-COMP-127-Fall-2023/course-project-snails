@@ -58,11 +58,7 @@ public class Snail {
         return currentMovement;
     }
 
-    /*
-     * returns a the theoretical position of the snail based on the keys pressed and 
-     * what obstacles are in the way
-     */
-    public Point testMove(Set<Key> keysPressed, List<Boolean> possibleDirections){ 
+    public void move(Set<Key> keysPressed, List<Boolean> possibleDirections){ 
         boolean canLeft = possibleDirections.get(0);
         boolean canUp = possibleDirections.get(1);
         boolean canDown = possibleDirections.get(2);
@@ -74,7 +70,6 @@ public class Snail {
         if(currentMovement == Movement.FALL && canDown){
             velocity += 2;
             nextY += velocity;
-            //graphic.setPosition(x,y);
         }
         else{
             if(keysPressed.contains(Key.RIGHT_ARROW) && canRight){
@@ -99,16 +94,9 @@ public class Snail {
                 currentMovement = Movement.FALL;
             }
         }
-        return new Point(nextX, nextY);
-    }
-
-    /*
-     * changes the snail's position to newX, newY
-     */
-    public void move(double newX, double newY){
-        x = newX;
-        y = newY;
-        graphic.setPosition(x,y);
+        x = nextX;
+        y = nextY;
+        graphic.setPosition(x, y);
     }
 
     public Rectangle getGraphics() {
