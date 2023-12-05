@@ -1,12 +1,10 @@
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.Point;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public class SnailGame {
     CanvasWindow canvas;
-   // int ticks = 0;
 
     int CANVAS_WIDTH = 800;
     int CANVAS_HEIGHT = 800;
@@ -31,12 +29,56 @@ public class SnailGame {
 
     private void handleSnailMovement(){
         canvas.animate(() -> {
-            snail.move(canvas.getKeysPressed(), 
-                        snail.getBoundaryPoints()
-                                .stream()
-                                .map(point -> currentLevel.checkCollision(point))
-                                .collect(Collectors.toList()), currentLevel);
+            Point newPos = snail.testMove(
+                            canvas.getKeysPressed(), 
+                            possibleDirections(snail.getBoundaryPoints()
+                                                    .stream()
+                                                    .map(point -> currentLevel.checkCollision(point))
+                                                    .collect(Collectors.toList()))
+                            );
+           if(remainsAttached(newPos.getX(), newPos.getY()) || snail.getCurrentMovement() == Snail.Movement.FALL){
+                snail.move(newPos.getX(), newPos.getY());
+            }
         });
+    }
+
+    /*
+     * returns a list of booleans representing the directions and whether or not
+     * the snail can currently go that way based on obstacles
+     */
+    private List<Boolean> possibleDirections(List<Boolean> hitPoints){
+        boolean canLeft = canMoveDirection(hitPoints, 0, 7, 6);
+        boolean canUp = canMoveDirection(hitPoints, 0, 1, 2);
+        boolean canDown = canMoveDirection(hitPoints, 6, 5, 4);
+        boolean canRight = canMoveDirection(hitPoints, 2, 3, 4);
+
+        return List.of(canLeft, canUp, canDown, canRight);
+    }
+
+    /*
+     * returns true if the snail would remain attached to an object if moved to 
+     * position (testX, testY)
+     */
+    private boolean remainsAttached(double testX, double testY){
+        List<Boolean> testHitPoints = snail.getTestBoundaryPoints(testX, testY).stream()
+                                                    .map(p -> currentLevel.checkCollision(p))
+                                                    .collect(Collectors.toList());
+        if(testHitPoints.contains(true)){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    private boolean canMoveDirection(List<Boolean> hitPoints, int side1, int middle, int side2){
+        boolean can = true;
+
+        if(hitPoints.get(middle)){
+            can = false;
+        }
+
+        return can;
     }
 
     public static void main(String[] args) {

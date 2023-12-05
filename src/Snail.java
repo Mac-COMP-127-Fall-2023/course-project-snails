@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 
@@ -10,7 +11,7 @@ import edu.macalester.graphics.events.Key;
 import java.util.stream.Collectors;
 
 public class Snail {
-    private int x, y;
+    private double x, y;
 
     private Rectangle graphic;
 
@@ -38,8 +39,8 @@ public class Snail {
     private int velocity = 0;
 
     public Snail(Point snailPos, double size) {
-        x = (int)snailPos.getX();
-        y = (int)snailPos.getY();
+        x = snailPos.getX();
+        y = snailPos.getY();
 
         graphic = new Rectangle(x, y, size, size);
         graphic.setFillColor(Color.ORANGE);
@@ -47,25 +48,31 @@ public class Snail {
         currentMovement = Movement.CRAWL;
     }
 
-    public int getX() {
+    public double getX() {
         return x;
     }
 
-    public int getY() {
+    public double getY() {
         return y;
     }
 
-    public void move(Set<Key> keysPressed, List<Boolean> hitPoints, Level level){ 
-        int nextX = x;
-        int nextY = y;
+    public Movement getCurrentMovement(){
+        return currentMovement;
+    }
 
-        boolean canLeft = canMoveDirection(hitPoints, 0, 7, 6);
-        boolean canUp = canMoveDirection(hitPoints, 0, 1, 2);
-        boolean canDown = canMoveDirection(hitPoints, 6, 5, 4);
-        boolean canRight = canMoveDirection(hitPoints, 2, 3, 4);
+    public Point testMove(Set<Key> keysPressed, List<Boolean> possibleDirections){ 
+        boolean canLeft = possibleDirections.get(0);
+        boolean canUp = possibleDirections.get(1);
+        boolean canDown = possibleDirections.get(2);
+        boolean canRight = possibleDirections.get(3);
+
+        double nextX = x;
+        double nextY = y;
 
         if(currentMovement == Movement.FALL && canDown){
-            fall();
+            velocity += 2;
+            nextY += velocity;
+            //graphic.setPosition(x,y);
         }
         else{
             if(keysPressed.contains(Key.RIGHT_ARROW) && canRight){
@@ -85,56 +92,30 @@ public class Snail {
                 currentMovement = Movement.CRAWL;
             }
             else if (keysPressed.contains(Key.SPACE) && canDown){
-                fall();
+                velocity += 2;
+                nextY += velocity;
                 currentMovement = Movement.FALL;
             }
-
-            if(remainsAttached(level, nextX, nextY)){
-                x = nextX;
-                y = nextY;
-                graphic.setPosition(x,y);
-            }
         }
+        return new Point(nextX, nextY);
     }
 
-    private boolean canMoveDirection(List<Boolean> hitPoints, int side1, int middle, int side2){
-        boolean can = true;
-
-        if(hitPoints.get(middle)){
-            can = false;
-        }
-
-        return can;
-    }
-
-    private boolean remainsAttached(Level level, int testX, int testY){
-        List<Boolean> testHitPoints = getTestBoundaryPoints(testX, testY).stream()
-                                                    .map(p -> level.checkCollision(p))
-                                                    .collect(Collectors.toList());
-        if(testHitPoints.contains(true)){
-            return true;
-        }
-        else{
-            return false;
-        }
-    }
-
-    private boolean allElseFalse(List<Boolean> hitPoints, int a, int b){
-        for(int i = 0; i < hitPoints.size(); i++){
-            if(i != a && i != b){
-                if(hitPoints.get(i)){
-                    return false;
-                }
-            }
-        }
-        return true;
-    }
-
-    private void fall() {
-        velocity += 2;
-        y += velocity;
+    public void move(double newX, double newY){
+        x = newX;
+        y = newY;
         graphic.setPosition(x,y);
     }
+
+    // private boolean allElseFalse(List<Boolean> hitPoints, int a, int b){
+    //     for(int i = 0; i < hitPoints.size(); i++){
+    //         if(i != a && i != b){
+    //             if(hitPoints.get(i)){
+    //                 return false;
+    //             }
+    //         }
+    //     }
+    //     return true;
+    // }
 
     public Rectangle getGraphics() {
         return graphic;
@@ -144,7 +125,7 @@ public class Snail {
         return getTestBoundaryPoints(x, y);
     }
 
-    private List<Point> getTestBoundaryPoints(int x, int y){
+    public List<Point> getTestBoundaryPoints(double x, double y){
         Point position = new Point (x, y);
 
         return List.of(
@@ -157,5 +138,16 @@ public class Snail {
             position.add(new Point(0, graphic.getHeight())), //bottom left
             position.add(new Point(0, graphic.getHeight()/2)) //left
          );
+
+         //TO DO: transfer to: 
+        // HashMap<String, Point> boundaryPoints = new HashMap<>();
+        // boundaryPoints.put("top left", position);
+        // boundaryPoints.put("top", new Point(graphic.getWidth()/2, 0));
+        // boundaryPoints.put("top right", new Point(graphic.getWidth(), 0));
+        // boundaryPoints.put("right", new Point(graphic.getWidth(), graphic.getHeight()/2));
+        // boundaryPoints.put("bottom right", new Point(graphic.getWidth(), graphic.getHeight()));
+        // boundaryPoints.put("bottom",new Point(graphic.getWidth()/2, graphic.getHeight()));
+        // boundaryPoints.put("bottom left", new Point(0, graphic.getHeight()));
+        // boundaryPoints.put("left",new Point(0, graphic.getHeight()/2));
     }
 }
