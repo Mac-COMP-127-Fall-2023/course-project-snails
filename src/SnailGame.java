@@ -29,6 +29,9 @@ public class SnailGame {
 
     private void handleSnailMovement(){
         canvas.animate(() -> {
+            /*
+             * evaluate a possible new position
+             */
             Point newPos = snail.testMove(
                             canvas.getKeysPressed(), 
                             possibleDirections(snail.getBoundaryPoints()
@@ -36,6 +39,11 @@ public class SnailGame {
                                                     .map(point -> currentLevel.checkCollision(point))
                                                     .collect(Collectors.toList()))
                             );
+
+            /*
+             * if the possible new position follows the rules of the game (is either attached to something
+             * or is falling), move the snail to the new position.
+             */
            if(remainsAttached(newPos.getX(), newPos.getY()) || snail.getCurrentMovement() == Snail.Movement.FALL){
                 snail.move(newPos.getX(), newPos.getY());
             }
@@ -71,6 +79,12 @@ public class SnailGame {
         }
     }
 
+    /*
+     * determines whether there is an obstacle preventing the snail from moving 
+     * in a certain direction
+     * @param int side1, int middle, and int side2 represent the indexes in hitPoints of the 
+     * 3 points on the particular side
+     */
     private boolean canMoveDirection(List<Boolean> hitPoints, int side1, int middle, int side2){
         boolean can = true;
 
@@ -81,6 +95,17 @@ public class SnailGame {
         return can;
     }
 
+    // private boolean allElseFalse(List<Boolean> hitPoints, int a, int b){
+    //     for(int i = 0; i < hitPoints.size(); i++){
+    //         if(i != a && i != b){
+    //             if(hitPoints.get(i)){
+    //                 return false;
+    //             }
+    //         }
+    //     }
+    //     return true;
+    // }
+    
     public static void main(String[] args) {
         SnailGame game = new SnailGame();
     }

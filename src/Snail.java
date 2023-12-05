@@ -60,6 +60,10 @@ public class Snail {
         return currentMovement;
     }
 
+    /*
+     * returns a the theoretical position of the snail based on the keys pressed and 
+     * what obstacles are in the way
+     */
     public Point testMove(Set<Key> keysPressed, List<Boolean> possibleDirections){ 
         boolean canLeft = possibleDirections.get(0);
         boolean canUp = possibleDirections.get(1);
@@ -100,31 +104,31 @@ public class Snail {
         return new Point(nextX, nextY);
     }
 
+    /*
+     * changes the snail's position to newX, newY
+     */
     public void move(double newX, double newY){
         x = newX;
         y = newY;
         graphic.setPosition(x,y);
     }
 
-    // private boolean allElseFalse(List<Boolean> hitPoints, int a, int b){
-    //     for(int i = 0; i < hitPoints.size(); i++){
-    //         if(i != a && i != b){
-    //             if(hitPoints.get(i)){
-    //                 return false;
-    //             }
-    //         }
-    //     }
-    //     return true;
-    // }
-
     public Rectangle getGraphics() {
         return graphic;
     }
 
+    /*
+     * returns a list of points on the snail in this order:
+     * top left, top middle, top right, right middle, bottom right, bottom middle, bottom left, left middle
+     */
     public List<Point> getBoundaryPoints(){
         return getTestBoundaryPoints(x, y);
     }
 
+    /*
+     * returns a list of points that correspond to points on the snail based on a
+     * theoretical position of the snail x, y
+     */
     public List<Point> getTestBoundaryPoints(double x, double y){
         Point position = new Point (x, y);
 
@@ -138,16 +142,5 @@ public class Snail {
             position.add(new Point(0, graphic.getHeight())), //bottom left
             position.add(new Point(0, graphic.getHeight()/2)) //left
          );
-
-         //TO DO: transfer to: 
-        // HashMap<String, Point> boundaryPoints = new HashMap<>();
-        // boundaryPoints.put("top left", position);
-        // boundaryPoints.put("top", new Point(graphic.getWidth()/2, 0));
-        // boundaryPoints.put("top right", new Point(graphic.getWidth(), 0));
-        // boundaryPoints.put("right", new Point(graphic.getWidth(), graphic.getHeight()/2));
-        // boundaryPoints.put("bottom right", new Point(graphic.getWidth(), graphic.getHeight()));
-        // boundaryPoints.put("bottom",new Point(graphic.getWidth()/2, graphic.getHeight()));
-        // boundaryPoints.put("bottom left", new Point(0, graphic.getHeight()));
-        // boundaryPoints.put("left",new Point(0, graphic.getHeight()/2));
     }
 }
