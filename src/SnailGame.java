@@ -3,8 +3,6 @@ import edu.macalester.graphics.Point;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//import Snail.Orientation;
-
 public class SnailGame {
     CanvasWindow canvas;
 
@@ -35,13 +33,8 @@ public class SnailGame {
                                                     .stream()
                                                     .map(point -> currentLevel.checkCollision(point))
                                                     .collect(Collectors.toList());
-            /*
-             * evaluate a possible new position
-             */
-            //Point newPos = snail.testMove(canvas.getKeysPressed(), possibleDirections(hitPoints));
 
             determineOrientation(hitPoints);
-            
             snail.move(canvas.getKeysPressed(), possibleDirections(hitPoints));
         });
     }

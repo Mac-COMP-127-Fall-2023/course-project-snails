@@ -115,15 +115,7 @@ public class Snail {
      * top left, top middle, top right, right middle, bottom right, bottom middle, bottom left, left middle
      */
     public List<Point> getBoundaryPoints(){
-        return getTestBoundaryPoints(x, y);
-    }
-
-    /*
-     * returns a list of points that correspond to points on the snail based on a
-     * theoretical position of the snail x, y
-     */
-    public List<Point> getTestBoundaryPoints(double x, double y){
-        Point position = new Point (x, y);
+       Point position = new Point (x, y);
 
         return List.of(
             position, //top left
