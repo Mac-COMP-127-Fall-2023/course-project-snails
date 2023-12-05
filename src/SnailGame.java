@@ -13,20 +13,19 @@ public class SnailGame {
 
     private Level currentLevel;
 
-    private static List<Level> levels = List.of(
-       new Level(" S    ")//, 
-//         new Level("""
-// 4-----------------+
-// [                  ]
-// [                  ]
-// [                  ]
-// [                  ]
-// [                  ]
-// [                  ]
-// [                  ]
-// [                  ]
-// [S    .            ]
-// \\__________________/""")
+    private static List<Level> levels = List.of( 
+        new Level("""
+4-----------------+
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[                  ]
+[S    .            ]
+\\__________________/""")
 );
 
 
