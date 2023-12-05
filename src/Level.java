@@ -1,74 +1,50 @@
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Point;
+import edu.macalester.graphics.Rectangle;
+
+import java.awt.Color;
 
 /*
- * DO TO: 
- * 1. add 2 layers (2 different graphics groups): the 
- *    background, and the top layer that the snail can interact with
- * 2. add a finishing point visual of some kind (** this will also
- *    be used in SnailGame to see if the snail should proceed to the 
- *    next level)
+ * DO TO:
+ * add a finishing point visual of some kind (** this will also
+ * be used in SnailGame to see if the snail should proceed to the 
+ * next level)
  */
 class Level {
-    GraphicsGroup collidableGroup = new GraphicsGroup();
-    GraphicsGroup background = new GraphicsGroup();
-    Map<Point, Tile> tileMap = new HashMap<>();
-
-    private final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
-
-    private List<Character> collidableKeys = List.of('-', '_', '[', ']', '\\', '/', '4', '+', '▘', '▝', '▝');
-
+    private GraphicsGroup foreground; 
+    private GraphicsGroup background; 
     private Point snailPos; 
 
-    public Level(String mapStr) {
-        int tileX = 0; //x position in the unit of tiles (16*16 game pixels, 96*96 screen pixels)
-        int tileY = 0; //y position in tiles
-        for (String tileRow : mapStr.split("\\r?\\n")) { //iterate through each line of the multiline string
-            for (char tileKey : tileRow.toCharArray()) { //iterate through each char in line
-                if (tileKey == 'S') {
-                    tileKey = ' '; //place an empty tile
-                    snailPos = new Point((tileX + .5) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, (tileY - 1) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO); //set the position of the snail to the bottom of the current tile
-                }
-                Tile newTile = new Tile(tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileKey); //create a new tile based on the character it reads
-                tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
-                
-                if(collidableKeys.contains(tileKey)){
-                     collidableGroup.add(newTile);
-                }
-                else{
-                    background.add(newTile);
-                }
-               
-                tileX++;
-            }
-            tileX = 0;
-            tileY++;
-        }   
+    public Level(double width, double height) {
+        foreground = new GraphicsGroup();
+        background = new GraphicsGroup();
+        
+        //sides
+        addLedge(0, 0, width, height/10);
+        addLedge(0, height-height/10, width, height/10);
+        addLedge(0, 0, width/10, height);
+        addLedge(width - width/10, 0, width/10, height);
 
-    }
+        //startingLedge
+        addLedge(width/2 - 40, height/2 + 40, 100, 30);
+    }   
 
-    /**
-     * @param screenX X coordinate within canvas
-     * @param screenY Y coordinate within canvas
-     * @return Tile object at given coordinates
-     */
-    public Tile getTile(int screenX, int screenY) {
-        return tileMap.get(new Point((int)(screenX / PIXELS_PER_TILE / SnailGame.SCREEN_PIXEL_RATIO), (int) (screenY / PIXELS_PER_TILE / SnailGame.SCREEN_PIXEL_RATIO))); //converts screen coordinates to tile coordinates, uses tile coords as key
+    private void addLedge(double x, double y, double width, double height){
+        Rectangle rect = new Rectangle(x, y, width, height);
+        rect.setFillColor(Color.GRAY);
+        rect.setStroked(false);
+        foreground.add(rect);
     }
 
     public GraphicsGroup getGraphics() {
         GraphicsGroup group = new GraphicsGroup();
         group.add(background);
-        group.add(collidableGroup);
+        group.add(foreground);
         return group;
     }
 
     public boolean checkCollision(Point p){
-        return collidableGroup.testHit(p.getX(), p.getY());
+        return foreground.testHit(p.getX(), p.getY());
     }
 
     public Point getSnailPos() {

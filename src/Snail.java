@@ -1,26 +1,18 @@
+import java.awt.Color;
 import java.util.List;
 import java.util.Set;
 
-import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
+import edu.macalester.graphics.Rectangle;
 import edu.macalester.graphics.events.Key;
+
+
+import java.util.stream.Collectors;
 
 public class Snail {
     private int x, y;
-    private boolean attached;
 
-    private Image currentImage;
-    private int currentFrame = 1;
-    private String currentPath;
-
-    //current animation state
-    public static enum Appearance {
-        CRAWLING,
-        ROLLING,
-        CURLING,
-        UNCURLING,
-        INSHELL
-    }
+    private Rectangle graphic;
 
     //current action state
     public static enum Movement{
@@ -41,25 +33,18 @@ public class Snail {
         RIGHT
     }
 
-    Appearance currentAppearance;
-    Appearance lastAppearance;
     Movement currentMovement;
-    Orientation snailBottomOrientation;
-    Direction facing; //TO DO: write into code
 
-    // current velocity while falling
     private int velocity = 0;
 
-    public Snail(Point snailPos) {
+    public Snail(Point snailPos, double size) {
         x = (int)snailPos.getX();
         y = (int)snailPos.getY();
-        currentImage = new Image(x, y);
-        currentAppearance = Appearance.CRAWLING;
-        facing = Direction.RIGHT;
+
+        graphic = new Rectangle(x, y, size, size);
+        graphic.setFillColor(Color.ORANGE);
+
         currentMovement = Movement.CRAWL;
-        snailBottomOrientation = Orientation.BOTTOM;
-        attached = true;
-        updateAnimation();
     }
 
     public int getX() {
@@ -70,131 +55,107 @@ public class Snail {
         return y;
     }
 
-    public boolean getAttached() {
-        return attached;
-    }
+    public void move(Set<Key> keysPressed, List<Boolean> hitPoints, Level level){ 
+        int nextX = x;
+        int nextY = y;
 
-    public Orientation getOrientation() {
-        return snailBottomOrientation;
-    }
+        boolean canLeft = canMoveDirection(hitPoints, 0, 7, 6);
+        boolean canUp = canMoveDirection(hitPoints, 0, 1, 2);
+        boolean canDown = canMoveDirection(hitPoints, 6, 5, 4);
+        boolean canRight = canMoveDirection(hitPoints, 2, 3, 4);
 
-    public void move(Set<Key> keysPressed){
-        if(currentMovement == Movement.FALL){
+        if(currentMovement == Movement.FALL && canDown){
             fall();
         }
         else{
-            if(keysPressed.contains(Key.RIGHT_ARROW)){
-                crawl(1);
+            if(keysPressed.contains(Key.RIGHT_ARROW) && canRight){
+                nextX += 1;
+                currentMovement = Movement.CRAWL;
             }
-            else if(keysPressed.contains(Key.LEFT_ARROW)){
-                crawl(-1);
-                
+            else if(keysPressed.contains(Key.LEFT_ARROW) && canLeft){
+                nextX -= 1;
+                currentMovement = Movement.CRAWL;
             }
-            else if (keysPressed.contains(Key.SPACE)){
-                curl();
+            else if(keysPressed.contains(Key.DOWN_ARROW) && canDown){
+                nextY +=1;
+                currentMovement = Movement.CRAWL;
+            }
+            else if(keysPressed.contains(Key.UP_ARROW)&& canUp){ //
+                nextY-= 1;
+                currentMovement = Movement.CRAWL;
+            }
+            else if (keysPressed.contains(Key.SPACE) && canDown){
+                fall();
+                currentMovement = Movement.FALL;
+            }
+
+            if(remainsAttached(level, nextX, nextY)){
+                x = nextX;
+                y = nextY;
+                graphic.setPosition(x,y);
             }
         }
     }
 
-    /**
-     * Moves the snail according to its orientation.
-     */
-    private void crawl(int m) {
-        m *= SnailGame.SCREEN_PIXEL_RATIO;
-        switch (snailBottomOrientation) {
-            case BOTTOM:
-                x+=m;
-                break;
-            case LEFT:
-                y+=m;
-                break;
-            case TOP:
-                x-=m;
-                break;
-            case RIGHT:
-                y-=m;
-                break;
+    private boolean canMoveDirection(List<Boolean> hitPoints, int side1, int middle, int side2){
+        boolean can = true;
+
+        if(hitPoints.get(middle)){
+            can = false;
         }
-        currentImage.setPosition(x,y);
 
-        updateAnimation();
-
-        currentMovement = Movement.CRAWL;
-        currentAppearance = Appearance.CRAWLING;
+        return can;
     }
 
-    public void curl() {
-        if (attached) {
-            currentAppearance = Appearance.CURLING;
-            currentMovement = Movement.FALL;
-            fall();
+    private boolean remainsAttached(Level level, int testX, int testY){
+        List<Boolean> testHitPoints = getTestBoundaryPoints(testX, testY).stream()
+                                                    .map(p -> level.checkCollision(p))
+                                                    .collect(Collectors.toList());
+        if(testHitPoints.contains(true)){
+            return true;
+        }
+        else{
+            return false;
         }
     }
-    /**
-     * Accelerates the snail downwards
-     */
+
+    private boolean allElseFalse(List<Boolean> hitPoints, int a, int b){
+        for(int i = 0; i < hitPoints.size(); i++){
+            if(i != a && i != b){
+                if(hitPoints.get(i)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     private void fall() {
         velocity += 2;
         y += velocity;
-        currentImage.setPosition(x,y);
-        updateAnimation();
+        graphic.setPosition(x,y);
     }
 
-    public void setAttached(boolean attached) {
-        this.attached = attached;
+    public Rectangle getGraphics() {
+        return graphic;
     }
 
-    public void updateAnimation() {
-        if ((currentAppearance == Appearance.CRAWLING)) {
-            currentPath = "Snail/Crawl/snail_crawl";
-        }
-
-        else if ((currentAppearance == Appearance.ROLLING)) {
-            currentPath = "Snail/Roll/snail_roll";
-        }
-        
-        else if ((currentAppearance == Appearance.CURLING)) {
-            currentPath = "Snail/Curl/snail_curl";
-        }
-        
-        else if ((currentAppearance == Appearance.UNCURLING)) {
-            currentPath = "Snail/Uncurl/snail_uncurl";
-        }
-
-        if(!(currentAppearance == Appearance.INSHELL)){
-            currentFrame = currentFrame >= 8|| currentAppearance != lastAppearance ? 1 : currentFrame + 1;
-            String newPath = currentPath + currentFrame + ".png";
-
-            if(newPath.equals("Snail/Curl/snail_curl8.png")){
-                currentAppearance = Appearance.INSHELL;
-            }
-            
-            currentImage.setImagePath(newPath);
-            lastAppearance = currentAppearance;
-        }
+    public List<Point> getBoundaryPoints(){
+        return getTestBoundaryPoints(x, y);
     }
 
-    public Image getGraphics() {
-        return currentImage;
-    }
+    private List<Point> getTestBoundaryPoints(int x, int y){
+        Point position = new Point (x, y);
 
-    public Direction getFacing(){
-        return facing;
-    }
-
-    public List<Point> getBoundryPoints(){
         return List.of(
-            currentImage.getPosition(), //top right
-            currentImage.getPosition().add(new Point(0, currentImage.getHeight()/2)), // right middle
-            currentImage.getPosition().add(new Point(0, currentImage.getHeight())), //bottom right
-            currentImage.getCenter().add(new Point(0, currentImage.getHeight()/2)), //bottom middle
-            currentImage.getCenter().add(new Point(currentImage.getWidth()/2, currentImage.getHeight()/2)),//bottom left
-            currentImage.getCenter().add(new Point(currentImage.getWidth()/2, 0)), //left middle
-            currentImage.getCenter().add(new Point(currentImage.getWidth()/2, - currentImage.getHeight()/2)) //top left
+            position, //top left
+            position.add(new Point(graphic.getWidth()/2, 0)), //top
+            position.add(new Point(graphic.getWidth(), 0)), //top right
+            position.add(new Point(graphic.getWidth(), graphic.getHeight()/2)), //right
+            position.add(new Point(graphic.getWidth(), graphic.getHeight())), //bottom right
+            position.add(new Point(graphic.getWidth()/2, graphic.getHeight())), //bottom
+            position.add(new Point(0, graphic.getHeight())), //bottom left
+            position.add(new Point(0, graphic.getHeight()/2)) //left
          );
-    }
-
-    public void setOrientation(Orientation newOrientation) {
-        this.snailBottomOrientation = newOrientation;
     }
 }
