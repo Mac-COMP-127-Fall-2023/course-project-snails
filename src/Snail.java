@@ -113,20 +113,20 @@ public class Snail {
     }
 
     private boolean canMoveDirection(List<Boolean> hitPoints, Snail.Orientation direction){
-       int midPoint;
+       // midPoint = middleBottom();
 
-        if(direction == Snail.Orientation.LEFT){
-            midPoint = 7;
-        }
-        else if (direction == Snail.Orientation.TOP){
-            midPoint = 1;
-        }
-        else if (direction == Snail.Orientation.RIGHT){
-            midPoint = 3;
-        }
-        else{
-            midPoint = 5;
-        }
+        // if(direction == Snail.Orientation.LEFT){
+        //     midPoint = 7;
+        // }
+        // else if (direction == Snail.Orientation.TOP){
+        //     midPoint = 1;
+        // }
+        // else if (direction == Snail.Orientation.RIGHT){
+        //     midPoint = 3;
+        // }
+        // else{
+        //     midPoint = 5;
+        // }
 
         if(currentOrientation == Snail.Orientation.BOTTOM){
             if(direction == Snail.Orientation.TOP){
@@ -156,7 +156,7 @@ public class Snail {
             return false;
         }
 
-        if(hitPoints.get(midPoint)){
+        if(hitPoints.get(getBoundaryPoints().indexOf(middleOfSide(direction)))){
             return false;
         }
 
@@ -169,7 +169,7 @@ public class Snail {
             currentOrientation = (Snail.Orientation.BOTTOM);
         }
 
-        else if(!hitPoints.get(getBoundaryPoints().indexOf(middleBottom()))){ //if the middle bottom is no longer hitting
+        else if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfSide(currentOrientation)))){ //if the middle bottom is no longer hitting
             if(currentOrientation == Orientation.BOTTOM){
                 if(facing == Orientation.RIGHT){
                     rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.LEFT);
@@ -186,14 +186,14 @@ public class Snail {
         }
     }
 
-  private Point middleBottom(){
-        if(currentOrientation == Orientation.BOTTOM){
+  private Point middleOfSide(Orientation orientation){
+        if(orientation == Orientation.BOTTOM){
             return new Point(x + graphic.getWidth()/2, y + graphic.getHeight());
         }
-        else if(currentOrientation == Orientation.TOP){
+        else if(orientation == Orientation.TOP){
             return new Point(x + graphic.getWidth()/2, y);
         }
-        else if(currentOrientation == Orientation.LEFT){
+        else if(orientation == Orientation.LEFT){
             return new Point(x, y + graphic.getHeight()/2);
         }
         else{
