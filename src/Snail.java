@@ -113,21 +113,6 @@ public class Snail {
     }
 
     private boolean canMoveDirection(List<Boolean> hitPoints, Snail.Orientation direction){
-       // midPoint = middleBottom();
-
-        // if(direction == Snail.Orientation.LEFT){
-        //     midPoint = 7;
-        // }
-        // else if (direction == Snail.Orientation.TOP){
-        //     midPoint = 1;
-        // }
-        // else if (direction == Snail.Orientation.RIGHT){
-        //     midPoint = 3;
-        // }
-        // else{
-        //     midPoint = 5;
-        // }
-
         if(currentOrientation == Snail.Orientation.BOTTOM){
             if(direction == Snail.Orientation.TOP){
                 return false;
