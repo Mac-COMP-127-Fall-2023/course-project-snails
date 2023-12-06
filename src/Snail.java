@@ -167,43 +167,6 @@ public class Snail {
         return true;
     }
 
-    public Rectangle getGraphics() {
-        return graphic;
-    }
-
-    // public void setOrientation(Orientation newOrientation){
-    //     currentOrientation = newOrientation;
-    // }
-
-    public Orientation getCurrentOrientation(){
-        return currentOrientation;
-    }
-
-    /*
-     * Move the snail according the the new orientation and midpoint, the newSideMidpoint
-     * being the midpoint of the side that is the newOrientation.
-     */
-    public void rotate(Point newSideMidpoint, Orientation newOrientation){
-        if(newOrientation == Orientation.LEFT && currentOrientation == Orientation.BOTTOM){
-            x = newSideMidpoint.getX();
-            y = newSideMidpoint.getY() - graphic.getHeight()/2;
-        }
-        else if(newOrientation == Orientation.BOTTOM && currentOrientation == Orientation.LEFT){
-            x = newSideMidpoint.getX() - graphic.getWidth()/2;
-            y = newSideMidpoint.getY() - graphic.getHeight();
-        }
-        else if (newOrientation == Orientation.TOP && currentOrientation == Orientation.LEFT){
-            x = newSideMidpoint.getX();
-            y = newSideMidpoint.getY() - graphic.getHeight()/2;
-        }
-        else if (newOrientation == Orientation.LEFT && currentOrientation == Orientation.TOP){
-            x = newSideMidpoint.getX() - graphic.getWidth()/2;
-            y = newSideMidpoint.getY();
-        }
-
-        graphic.setPosition(x,y);
-        currentOrientation = newOrientation;
-    }
 
     public void orientSnail(List<Boolean> hitPoints, GraphicsGroup levelGraphics){
         if (currentOrientation != Snail.Orientation.BOTTOM && hitPoints.get(5)){
@@ -225,6 +188,34 @@ public class Snail {
         //TO DO: add similar code for each corner
     }
 
+
+    /*
+     * Move the snail according the the new orientation and midpoint, the newSideMidpoint
+     * being the midpoint of the side that is the newOrientation.
+     */
+    private void rotate(Point newSideMidpoint, Orientation newOrientation){
+        if(newOrientation == Orientation.LEFT && currentOrientation == Orientation.BOTTOM){
+            x = newSideMidpoint.getX();
+            y = newSideMidpoint.getY() - graphic.getHeight()/2;
+        }
+        else if(newOrientation == Orientation.BOTTOM && currentOrientation == Orientation.LEFT){
+            x = newSideMidpoint.getX() - graphic.getWidth()/2;
+            y = newSideMidpoint.getY() - graphic.getHeight();
+        }
+        else if (newOrientation == Orientation.TOP && currentOrientation == Orientation.LEFT){
+            x = newSideMidpoint.getX();
+            y = newSideMidpoint.getY() - graphic.getHeight()/2;
+        }
+        else if (newOrientation == Orientation.LEFT && currentOrientation == Orientation.TOP){
+            x = newSideMidpoint.getX() - graphic.getWidth()/2;
+            y = newSideMidpoint.getY();
+        }
+
+        graphic.setPosition(x,y);
+        currentOrientation = newOrientation;
+    }
+
+   
     private boolean isOnlyHit(List<Boolean> hitPoints, int index){
         for(int i = 0; i < hitPoints.size(); i++){
             if(i != index && hitPoints.get(i)){
@@ -249,5 +240,17 @@ public class Snail {
         Point left = new Point(x, y+graphic.getHeight()/2);
 
         return List.of(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
+    }
+    
+    public Rectangle getGraphics() {
+        return graphic;
+    }
+
+    // public void setOrientation(Orientation newOrientation){
+    //     currentOrientation = newOrientation;
+    // }
+
+    public Orientation getCurrentOrientation(){
+        return currentOrientation;
     }
 }
