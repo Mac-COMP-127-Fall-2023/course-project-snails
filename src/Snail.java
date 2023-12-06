@@ -111,6 +111,10 @@ public class Snail {
         return currentOrientation;
     }
 
+    /*
+     * Move the snail according the the new orientation and midpoint, the newSideMidpoint
+     * being the midpoint of the side that is the newOrientation.
+     */
     public void rotate(Point newSideMidpoint, Orientation newOrientation){
         if(newOrientation == Orientation.LEFT && currentOrientation == Orientation.BOTTOM){
             x = newSideMidpoint.getX();
