@@ -17,7 +17,6 @@ class Level {
     GraphicsGroup collidableGroup = new GraphicsGroup();
     GraphicsGroup background = new GraphicsGroup();
     Map<Point, Tile> tileMap = new HashMap<>();
-    double scale = (double)SnailGame.SCREEN_PIXEL_RATIO / 6;
 
     private final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
 
@@ -34,18 +33,18 @@ class Level {
                     tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO,
                     tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO);
                     
-                if (tileKey == 'S') {
-                    tileKey = ' '; //place an empty tile
-                    snail = new Snail(topLeftPos, scale); //set the position of the snail to the bottom of the current tile
+                if (tileKey=='s'||tileKey == 'S') {
+                    if (tileKey=='S') {
+                        snail = new Snail(topLeftPos); //set the position of the snail to the top left of the current tile
+                    }
+                    tileKey = ' '; //place an empty tile in the bg
                 }
                 Tile newTile = new Tile(topLeftPos, tileKey); //create a new tile based on the character it reads
-                newTile.setScale(scale);
                 tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
                 
                 if(collidableKeys.contains(tileKey)){
                      collidableGroup.add(newTile);
-                }
-                else{
+                } else{
                     background.add(newTile);
                 }
                

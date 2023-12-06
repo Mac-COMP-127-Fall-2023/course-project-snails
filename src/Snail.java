@@ -7,7 +7,6 @@ import edu.macalester.graphics.events.Key;
 
 public class Snail {
     private int x, y;
-    private boolean attached;
 
     private Image currentImage;
     private int currentFrame = 0; // update animation increments by 1
@@ -34,33 +33,26 @@ public class Snail {
         TOP,
         RIGHT
     }
-
-    public static enum Direction {
-        LEFT,
-        RIGHT
-    }
-
     Appearance currentAppearance;
     Appearance lastAppearance;
     Movement currentMovement;
-    Orientation snailBottomOrientation;
-    Direction facing; //TO DO: write into code
+    Orientation snailBottomOrientation; //the side that the snail is attached to
+    Orientation facing; // the side that the snail is facing relative to it's surface
 
     // current velocity while falling
     private int velocity = 0;
 
-    public Snail(Point snailPos, double scale) {
+    public Snail(Point snailPos) {
         x = (int)snailPos.getX();
         y = (int)snailPos.getY();
-        currentImage = new Image(x, y);
-        currentImage.setScale(scale);
-        currentImage.setPosition(snailPos);
+        currentImage = new Image(0, 0);
+        currentImage.setPosition(x,y);
         currentAppearance = Appearance.CRAWLING;
-        facing = Direction.RIGHT;
+        facing = Orientation.RIGHT;
         currentMovement = Movement.CRAWL;
         snailBottomOrientation = Orientation.BOTTOM;
-        attached = true;
         updateAnimation();
+        System.out.println(""+ x +" "+ y);
     }
 
     public int getX() {
@@ -71,28 +63,43 @@ public class Snail {
         return y;
     }
 
-    public boolean getAttached() {
-        return attached;
-    }
-
     public Orientation getOrientation() {
         return snailBottomOrientation;
     }
 
+    /**
+     * we call this every animation frame, so this handles a bunch of the state logic.
+     * i ended up removing space and adding the thing i was talking about with it curling up to turn around
+     * i think it looks nice but we can change that if yall don't like it, no big deal
+     * @param keysPressed
+     */
+
     public void move(Set<Key> keysPressed){
-        if(currentMovement == Movement.FALL){
+        if (currentMovement==Movement.FALL) {
             fall();
-        }
-        else{
-            if(keysPressed.contains(Key.RIGHT_ARROW)){
-                crawl(1);
+        } else if (currentAppearance == Appearance.CURLING) {
+            updateAnimation();
+        } else if (currentAppearance == Appearance.UNCURLING) {
+            updateAnimation();
+        } else {
+            Orientation inputDirection = Orientation.BOTTOM; // idt this is necessary haha but it made my linter not mad, just using it as null
+            
+            if (keysPressed.contains(Key.RIGHT_ARROW)) {
+                inputDirection=Orientation.RIGHT;
+            } else if (keysPressed.contains(Key.LEFT_ARROW)) {
+                inputDirection=Orientation.LEFT;
             }
-            else if(keysPressed.contains(Key.LEFT_ARROW)){
-                crawl(-1);
-                
-            }
-            else if (keysPressed.contains(Key.SPACE)){
-                curl();
+
+            if (inputDirection!=Orientation.BOTTOM) {
+                if (currentAppearance == Appearance.INSHELL) {
+                    facing = inputDirection;
+                    snailBottomOrientation=Orientation.BOTTOM;
+                    currentAppearance = Appearance.UNCURLING;
+                } else if (facing == inputDirection) {
+                    crawl();
+                } else {
+                    curl();
+                }
             }
         }
     }
@@ -100,7 +107,11 @@ public class Snail {
     /**
      * Moves the snail according to its orientation.
      */
-    private void crawl(int m) {
+    private void crawl() {
+        if (currentMovement==Movement.FALL) {
+            return;
+        }
+        int m = (facing==Orientation.LEFT ? -1 : 1); //if it's facing left/right relative to its surface we move accordingly
         m *= SnailGame.SCREEN_PIXEL_RATIO;
         switch (snailBottomOrientation) {
             case BOTTOM:
@@ -124,12 +135,13 @@ public class Snail {
         currentAppearance = Appearance.CRAWLING;
     }
 
-    public void curl() {
-        if (attached) {
-            currentAppearance = Appearance.CURLING;
+    private void curl() {
+        currentAppearance = Appearance.CURLING;
+        if (snailBottomOrientation!=Orientation.BOTTOM) {
             currentMovement = Movement.FALL;
-            fall();
+            velocity=0;
         }
+        updateAnimation();
     }
     /**
      * Accelerates the snail downwards
@@ -139,10 +151,6 @@ public class Snail {
         y += velocity;
         currentImage.setPosition(x,y);
         updateAnimation();
-    }
-
-    public void setAttached(boolean attached) {
-        this.attached = attached;
     }
 
     public void updateAnimation() {
@@ -168,6 +176,9 @@ public class Snail {
                 break;
             case UNCURLING:
                 path += "Uncurl/";
+                if (currentFrame == 7) {
+                    currentAppearance = Appearance.CRAWLING;
+                }
                 break;
             case INSHELL:
                 path += "Curl/"; //inshell is a special case when fully curled up
@@ -176,6 +187,13 @@ public class Snail {
         }
         path += currentFrame + ".png";
         currentImage.setImagePath(path);
+        
+        if (facing==Orientation.LEFT) {
+            currentImage.setScale(-1, 1);
+        } else {
+            currentImage.setScale(1);
+        }
+
         lastAppearance = currentAppearance;
     }
 
@@ -183,7 +201,7 @@ public class Snail {
         return currentImage;
     }
 
-    public Direction getFacing(){
+    public Orientation getFacing(){
         return facing;
     }
 

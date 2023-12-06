@@ -1,15 +1,18 @@
 import edu.macalester.graphics.CanvasWindow;
+import edu.macalester.graphics.GraphicsGroup;
+
 import java.util.List;
 
 public class SnailGame {
     CanvasWindow canvas;
     int ticks = 0;
 
-    public static final int SCREEN_PIXEL_RATIO = 3; //the size, in screen pixels, of a single in-game pixel
+    public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
 
     private Snail snail;
 
     private Level currentLevel;
+    private GraphicsGroup graphics;
 
     private static List<Level> levels = List.of( 
         new Level("""
@@ -21,9 +24,9 @@ public class SnailGame {
 [                  ]
 [                  ]
 [               プ  ]
-[               ブ  ]
-[S    ラ   ロ     フ  ]
-\\__________________/""")
+[Ss             ブ  ]
+[ss   ラ   ロ     フ  ]
+\\__________________/""")//s is just the little part of the snail we need to be aware of
 );
 
 
@@ -42,9 +45,13 @@ public class SnailGame {
      */
     private boolean playRound(Level level){
         canvas.removeAll();
-        canvas.add(level.getGraphics());
+        graphics= level.getGraphics();
+        graphics.setPosition(0,0);
         snail = currentLevel.getSnail();
-        canvas.add(snail.getGraphics());
+        graphics.add(snail.getGraphics());
+        graphics.setAnchor(graphics.getPosition());
+        graphics.setScale(.5);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
+        canvas.add(graphics);
         canvas.draw();
 
         handleSnailMovement();
