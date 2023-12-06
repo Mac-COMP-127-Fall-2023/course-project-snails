@@ -25,10 +25,10 @@ public class Snail {
         RIGHT
     }
 
-    public static enum Direction {
-        LEFT,
-        RIGHT
-    }
+    // public static enum Direction {
+    //     LEFT,
+    //     RIGHT
+    // }
 
     Movement currentMovement;
     Orientation currentOrientation;

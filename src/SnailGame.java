@@ -37,10 +37,7 @@ public class SnailGame {
                                                     .collect(Collectors.toList());
 
             orientSnail(hitPoints);
-            //System.out.println("Orientation: " + snail.getCurrentOrientation());
             snail.move(canvas.getKeysPressed(), possibleDirections(hitPoints));
-
-            //System.out.println("is hitting just right of bottom left: " + hitPoints.get(13));
         });
     }
 
