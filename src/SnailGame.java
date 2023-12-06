@@ -61,11 +61,13 @@ public class SnailGame {
         }
         else if(isOnlyHit(hitPoints, 6)){
             GraphicsObject attachedObject = currentLevel.getGraphics().getElementAt(snail.getBoundaryPoints().get(6));
+           
+            //currently doesn't work
             if(snail.getCurrentOrientation() == Snail.Orientation.LEFT){
                snail.rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.BOTTOM);
             }
 
-            //currently doesn't work
+            //works
             else if(snail.getCurrentOrientation() == Snail.Orientation.BOTTOM){
                 snail.rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.LEFT);
             }
