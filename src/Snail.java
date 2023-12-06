@@ -115,17 +115,26 @@ public class Snail {
      * top left, top middle, top right, right middle, bottom right, bottom middle, bottom left, left middle
      */
     public List<Point> getBoundaryPoints(){
-       Point position = new Point (x, y);
+        Point topLeft = new Point (x, y);
+        Point top = new Point(x+graphic.getWidth()/2, y);
+        Point topRight = new Point(x+graphic.getWidth(), y);
+        Point right = new Point(x+graphic.getWidth(), y+graphic.getHeight()/2);
+        Point bottomRight = new Point(x+graphic.getWidth(), y+graphic.getHeight());
+        Point bottom = new Point(x+graphic.getWidth()/2, y+graphic.getHeight());
+        Point bottomLeft =  new Point(x, y+graphic.getHeight());
+        Point left = new Point(x, y+graphic.getHeight()/2);
 
-        return List.of(
-            position, //top left
-            position.add(new Point(graphic.getWidth()/2, 0)), //top
-            position.add(new Point(graphic.getWidth(), 0)), //top right
-            position.add(new Point(graphic.getWidth(), graphic.getHeight()/2)), //right
-            position.add(new Point(graphic.getWidth(), graphic.getHeight())), //bottom right
-            position.add(new Point(graphic.getWidth()/2, graphic.getHeight())), //bottom
-            position.add(new Point(0, graphic.getHeight())), //bottom left
-            position.add(new Point(0, graphic.getHeight()/2)) //left
+        double smallGap = 0.3;
+
+        return List.of(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left,
+            new Point(topLeft.getX() + smallGap, topLeft.getY()), // just to the right of top left (8)
+            new Point(topRight.getX()-smallGap, topRight.getY()), //just to the left of top right (9)
+            new Point(topRight.getX(), topRight.getY() + smallGap), //just below top right (10)
+            new Point(bottomRight.getX(), bottomRight.getY()-smallGap), //just above bottom right (11)
+            new Point(bottomRight.getX()-smallGap, bottomRight.getY()), //just to the left of bottom right (12)
+            new Point(bottomLeft.getX()+ smallGap, bottomLeft.getY()), //just to the right of bottom left (13)
+            new Point(bottomLeft.getX(), bottomLeft.getY()-smallGap), //just above bottom left
+            new Point(topLeft.getX(), topLeft.getY() + smallGap) //just below top left
          );
     }
 }
