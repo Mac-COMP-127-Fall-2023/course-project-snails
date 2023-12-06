@@ -71,12 +71,10 @@ public class Snail {
     }
 
     public void move(Set<Key> keysPressed, List<Boolean> hitPoints){ 
-        List<Boolean> possibleDirections = possibleDirections(hitPoints);
-
-        boolean canLeft = possibleDirections.get(0);
-        boolean canUp = possibleDirections.get(1);
-        boolean canDown = possibleDirections.get(2);
-        boolean canRight = possibleDirections.get(3);
+        boolean canLeft = canMoveDirection(hitPoints, Snail.Orientation.LEFT);
+        boolean canUp = canMoveDirection(hitPoints, Snail.Orientation.TOP);
+        boolean canDown = canMoveDirection(hitPoints, Snail.Orientation.BOTTOM);
+        boolean canRight = canMoveDirection(hitPoints, Snail.Orientation.RIGHT);
 
         double nextX = x;
         double nextY = y;
@@ -115,19 +113,6 @@ public class Snail {
         x = nextX;
         y = nextY;
         graphic.setPosition(x, y);
-    }
-
-     /*
-     * returns a list of booleans representing the directions and whether or not
-     * the snail can currently go that way based on obstacles
-     */
-    private List<Boolean> possibleDirections(List<Boolean> hitPoints){
-        boolean canLeft = canMoveDirection(hitPoints, Snail.Orientation.LEFT);
-        boolean canUp = canMoveDirection(hitPoints, Snail.Orientation.TOP);
-        boolean canDown = canMoveDirection(hitPoints, Snail.Orientation.BOTTOM);
-        boolean canRight = canMoveDirection(hitPoints, Snail.Orientation.RIGHT);
-
-        return List.of(canLeft, canUp, canDown, canRight);
     }
 
     private boolean canMoveDirection(List<Boolean> hitPoints, Snail.Orientation direction){
