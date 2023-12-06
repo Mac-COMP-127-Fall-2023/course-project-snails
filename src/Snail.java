@@ -185,7 +185,7 @@ public class Snail {
                 currentFrame = 7;
                 break;
         }
-        path += currentFrame + ".png";
+        path += "snail" + currentFrame + ".png";
         currentImage.setImagePath(path);
         
         if (facing==Orientation.LEFT) {

@@ -10,7 +10,7 @@ public class Tile extends Image{
     public Tile(Point topLeftPos, char key) {
         super(0,0);
         setupImagePathMap();
-        this.setImagePath(!IMAGE_PATH_MAP.get(key).isEmpty() ? IMAGE_PATH_MAP.get(key) : "Tile/empty.png");
+        this.setImagePath(!IMAGE_PATH_MAP.get(key).isEmpty() ? IMAGE_PATH_MAP.get(key) : "Tiles/empty.png");
         this.setPosition(topLeftPos);
     }
 
