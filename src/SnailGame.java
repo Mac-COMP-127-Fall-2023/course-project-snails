@@ -1,4 +1,5 @@
 import edu.macalester.graphics.CanvasWindow;
+import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.Point;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,11 +36,11 @@ public class SnailGame {
                                                     .map(point -> currentLevel.checkCollision(point))
                                                     .collect(Collectors.toList());
 
-            determineOrientation(hitPoints);
+            orientSnail(hitPoints);
             //System.out.println("Orientation: " + snail.getCurrentOrientation());
             snail.move(canvas.getKeysPressed(), possibleDirections(hitPoints));
 
-            System.out.println("is hitting just right of bottom left: " + hitPoints.get(13));
+            //System.out.println("is hitting just right of bottom left: " + hitPoints.get(13));
         });
     }
 
@@ -57,66 +58,30 @@ public class SnailGame {
     }
 
 
-    private void determineOrientation(List<Boolean> hitPoints){
-        // if(snail.getCurrentOrientation() != Snail.Orientation.TOP &&hitPoints.get(1)){ 
-        //    snail.setOrientation(Snail.Orientation.TOP);
-        // }
-        // else if (snail.getCurrentOrientation() != Snail.Orientation.RIGHT && hitPoints.get(3)){
-        //     snail.setOrientation(Snail.Orientation.RIGHT);
-        // }
-         if (snail.getCurrentOrientation() != Snail.Orientation.BOTTOM && hitPoints.get(5)){
+    private void orientSnail(List<Boolean> hitPoints){
+        if (snail.getCurrentOrientation() != Snail.Orientation.BOTTOM && hitPoints.get(5)){
             snail.setOrientation(Snail.Orientation.BOTTOM);
         }
-        // else if (snail.getCurrentOrientation() != Snail.Orientation.LEFT && hitPoints.get(7)){
-        //     snail.setOrientation(Snail.Orientation.LEFT);
-        // }
-
-         else if(isOnlyHit(hitPoints, 0)){
+        else if(isOnlyHit(hitPoints, 6)){
+            GraphicsObject attachedObject = currentLevel.getGraphics().getElementAt(snail.getBoundaryPoints().get(6));
             if(snail.getCurrentOrientation() == Snail.Orientation.LEFT){
-                snail.setOrientation(Snail.Orientation.TOP);
+               snail.rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.BOTTOM);
             }
-            else{
-                snail.setOrientation(Snail.Orientation.LEFT);
-            }
-        }
-        else if(isOnlyHit(hitPoints, 2)){
-            if(snail.getCurrentOrientation() == Snail.Orientation.RIGHT){
-                snail.setOrientation(Snail.Orientation.TOP);
-            }
-            else{
-                snail.setOrientation(Snail.Orientation.LEFT);
-            }
-        }
-        else if(isOnlyHit(hitPoints, 4)){
-             if(snail.getCurrentOrientation() == Snail.Orientation.RIGHT){
-                snail.setOrientation(Snail.Orientation.BOTTOM);
-            }
-            else{
-                snail.setOrientation(Snail.Orientation.RIGHT);
-            }
-        }
-         else if(isOnlyHit(hitPoints, 6)){
-             if(snail.getCurrentOrientation() == Snail.Orientation.LEFT){
-                snail.setOrientation(Snail.Orientation.BOTTOM);
-            }
-            else{
-                snail.setOrientation(Snail.Orientation.LEFT);
-            }
-        }
 
-        System.out.println("Orientation: " + snail.getCurrentOrientation());
+            //currently doesn't work
+            else if(snail.getCurrentOrientation() == Snail.Orientation.BOTTOM){
+                snail.rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.LEFT);
+            }
+        }
+        //TO DO: add similar code for each corner
     }
 
     private boolean isOnlyHit(List<Boolean> hitPoints, int index){
-        System.out.println("entering isOnlyHit()");
         for(int i = 0; i < hitPoints.size(); i++){
             if(i != index && hitPoints.get(i)){
-                System.out.println("there are multiple hits");
                 return false;
             }
         }
-        if (hitPoints.get(index) == true)System.out.println("something is the only hit");
-        else System.out.println("there are no hits");
         return hitPoints.get(index);
     }
 

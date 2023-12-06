@@ -110,6 +110,28 @@ public class Snail {
     public Orientation getCurrentOrientation(){
         return currentOrientation;
     }
+
+    public void rotate(Point newSideMidpoint, Orientation newOrientation){
+        if(newOrientation == Orientation.LEFT && currentOrientation == Orientation.BOTTOM){
+            x = newSideMidpoint.getX();
+            y = newSideMidpoint.getY() - graphic.getHeight()/2;
+        }
+        else if(newOrientation == Orientation.BOTTOM && currentOrientation == Orientation.LEFT){
+            x = newSideMidpoint.getX() - graphic.getWidth()/2;
+            y = newSideMidpoint.getY() - graphic.getHeight();
+        }
+        else if (newOrientation == Orientation.TOP && currentOrientation == Orientation.LEFT){
+            x = newSideMidpoint.getX();
+            y = newSideMidpoint.getY() - graphic.getHeight()/2;
+        }
+        else if (newOrientation == Orientation.LEFT && currentOrientation == Orientation.TOP){
+            x = newSideMidpoint.getX() - graphic.getWidth()/2;
+            y = newSideMidpoint.getY();
+        }
+
+        graphic.setPosition(x,y);
+        currentOrientation = newOrientation;
+    }
     /*
      * returns a list of points on the snail in this order:
      * top left, top middle, top right, right middle, bottom right, bottom middle, bottom left, left middle
@@ -124,17 +146,6 @@ public class Snail {
         Point bottomLeft =  new Point(x, y+graphic.getHeight());
         Point left = new Point(x, y+graphic.getHeight()/2);
 
-        double smallGap = 0.3;
-
-        return List.of(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left,
-            new Point(topLeft.getX() + smallGap, topLeft.getY()), // just to the right of top left (8)
-            new Point(topRight.getX()-smallGap, topRight.getY()), //just to the left of top right (9)
-            new Point(topRight.getX(), topRight.getY() + smallGap), //just below top right (10)
-            new Point(bottomRight.getX(), bottomRight.getY()-smallGap), //just above bottom right (11)
-            new Point(bottomRight.getX()-smallGap, bottomRight.getY()), //just to the left of bottom right (12)
-            new Point(bottomLeft.getX()+ smallGap, bottomLeft.getY()), //just to the right of bottom left (13)
-            new Point(bottomLeft.getX(), bottomLeft.getY()-smallGap), //just above bottom left
-            new Point(topLeft.getX(), topLeft.getY() + smallGap) //just below top left
-         );
+        return List.of(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
     }
 }
