@@ -10,8 +10,7 @@ public class Snail {
     private boolean attached;
 
     private Image currentImage;
-    private int currentFrame = 1;
-    private String currentPath;
+    private int currentFrame = 0; // update animation increments by 1
 
     //current animation state
     public static enum Appearance {
@@ -146,33 +145,37 @@ public class Snail {
     }
 
     public void updateAnimation() {
-        if ((currentAppearance == Appearance.CRAWLING)) {
-            currentPath = "Snail/Crawl/snail_crawl";
+        String path = "Snail/";
+        if (currentAppearance == lastAppearance) {
+            currentFrame = ( currentFrame + 1 ) % 8; //cycles the frame if state didn't change
+        } else {
+            currentFrame = 0;
         }
 
-        else if ((currentAppearance == Appearance.ROLLING)) {
-            currentPath = "Snail/Roll/snail_roll";
+        switch (currentAppearance) {
+            case CRAWLING:
+                path += "Crawl/";
+                break;
+            case ROLLING:
+                path += "Roll/";
+                break;
+            case CURLING:
+                path += "Curl/";
+                if (currentFrame == 7) {
+                    currentAppearance = Appearance.INSHELL;
+                }
+                break;
+            case UNCURLING:
+                path += "Uncurl/";
+                break;
+            case INSHELL:
+                path += "Curl/"; //inshell is a special case when fully curled up
+                currentFrame = 7;
+                break;
         }
-        
-        else if ((currentAppearance == Appearance.CURLING)) {
-            currentPath = "Snail/Curl/snail_curl";
-        }
-        
-        else if ((currentAppearance == Appearance.UNCURLING)) {
-            currentPath = "Snail/Uncurl/snail_uncurl";
-        }
-
-        if(!(currentAppearance == Appearance.INSHELL)){
-            currentFrame = currentFrame >= 8|| currentAppearance != lastAppearance ? 1 : currentFrame + 1;
-            String newPath = currentPath + currentFrame + ".png";
-
-            if(newPath.equals("Snail/Curl/snail_curl8.png")){
-                currentAppearance = Appearance.INSHELL;
-            }
-            
-            currentImage.setImagePath(newPath);
-            lastAppearance = currentAppearance;
-        }
+        path += currentFrame + ".png";
+        currentImage.setImagePath(path);
+        lastAppearance = currentAppearance;
     }
 
     public Image getGraphics() {
