@@ -29,11 +29,6 @@ public class Snail {
         RIGHT
     }
 
-    // public static enum Direction {
-    //     LEFT,
-    //     RIGHT
-    // }
-
     Movement currentMovement;
     Orientation currentOrientation;
     Orientation facing;
@@ -71,6 +66,8 @@ public class Snail {
     }
 
     public void move(Set<Key> keysPressed, List<Boolean> hitPoints){ 
+        orientSnail(hitPoints);
+
         boolean canLeft = canMoveDirection(hitPoints, Snail.Orientation.LEFT);
         boolean canUp = canMoveDirection(hitPoints, Snail.Orientation.TOP);
         boolean canDown = canMoveDirection(hitPoints, Snail.Orientation.BOTTOM);
@@ -167,7 +164,7 @@ public class Snail {
     }
 
 
-    public void orientSnail(List<Boolean> hitPoints, GraphicsGroup levelGraphics){
+    private void orientSnail(List<Boolean> hitPoints){
         if (currentOrientation != Snail.Orientation.BOTTOM && hitPoints.get(5)){
             currentOrientation = (Snail.Orientation.BOTTOM);
         }
@@ -261,10 +258,6 @@ public class Snail {
     public Rectangle getGraphics() {
         return graphic;
     }
-
-    // public void setOrientation(Orientation newOrientation){
-    //     currentOrientation = newOrientation;
-    // }
 
     public Orientation getCurrentOrientation(){
         return currentOrientation;

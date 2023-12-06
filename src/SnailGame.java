@@ -34,7 +34,6 @@ public class SnailGame {
                                                     .map(point -> currentLevel.checkCollision(point))
                                                     .collect(Collectors.toList());
 
-            snail.orientSnail(hitPoints, currentLevel.getGraphics());
             snail.move(canvas.getKeysPressed(), hitPoints);
         });
     }
