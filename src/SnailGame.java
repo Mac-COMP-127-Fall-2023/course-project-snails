@@ -5,7 +5,7 @@ public class SnailGame {
     CanvasWindow canvas;
     int ticks = 0;
 
-    public static final int SCREEN_PIXEL_RATIO = 5; //the size, in screen pixels, of a single in-game pixel
+    public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
 
     private Snail snail;
 
@@ -13,16 +13,16 @@ public class SnailGame {
 
     private static List<Level> levels = List.of( 
         new Level("""
-4-----------------+
+4------------------+
 [                  ]
 [                  ]
 [                  ]
+[花                 ]
 [                  ]
 [                  ]
-[                  ]
-[                  ]
-[                  ]
-[S    .            ]
+[               プ  ]
+[               ブ  ]
+[S    ラ   ロ     フ  ]
 \\__________________/""")
 );
 
