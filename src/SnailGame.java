@@ -22,7 +22,6 @@ public class SnailGame {
         canvas.add(currentLevel.getGraphics());
         
         snail = new Snail(new Point(CANVAS_WIDTH/2, CANVAS_HEIGHT/2), CANVAS_WIDTH/20);
-        snail.setOrientation(Snail.Orientation.BOTTOM);
         canvas.add(snail.getGraphics());
 
         canvas.draw();
@@ -37,73 +36,73 @@ public class SnailGame {
                                                     .collect(Collectors.toList());
 
             snail.orientSnail(hitPoints, currentLevel.getGraphics());
-            snail.move(canvas.getKeysPressed(), possibleDirections(hitPoints));
+            snail.move(canvas.getKeysPressed(), hitPoints);
         });
     }
 
-    /*
-     * returns a list of booleans representing the directions and whether or not
-     * the snail can currently go that way based on obstacles
-     */
-    private List<Boolean> possibleDirections(List<Boolean> hitPoints){
-        boolean canLeft = canMoveDirection(hitPoints, Snail.Orientation.LEFT);
-        boolean canUp = canMoveDirection(hitPoints, Snail.Orientation.TOP);
-        boolean canDown = canMoveDirection(hitPoints, Snail.Orientation.BOTTOM);
-        boolean canRight = canMoveDirection(hitPoints, Snail.Orientation.RIGHT);
+    // /*
+    //  * returns a list of booleans representing the directions and whether or not
+    //  * the snail can currently go that way based on obstacles
+    //  */
+    // private List<Boolean> possibleDirections(List<Boolean> hitPoints){
+    //     boolean canLeft = canMoveDirection(hitPoints, Snail.Orientation.LEFT);
+    //     boolean canUp = canMoveDirection(hitPoints, Snail.Orientation.TOP);
+    //     boolean canDown = canMoveDirection(hitPoints, Snail.Orientation.BOTTOM);
+    //     boolean canRight = canMoveDirection(hitPoints, Snail.Orientation.RIGHT);
 
-        return List.of(canLeft, canUp, canDown, canRight);
-    }
+    //     return List.of(canLeft, canUp, canDown, canRight);
+    // }
 
-    private boolean canMoveDirection(List<Boolean> hitPoints, Snail.Orientation direction){
-       int midPoint;
+    // private boolean canMoveDirection(List<Boolean> hitPoints, Snail.Orientation direction){
+    //    int midPoint;
 
-        if(direction == Snail.Orientation.LEFT){
-            midPoint = 7;
-        }
-        else if (direction == Snail.Orientation.TOP){
-            midPoint = 1;
-        }
-        else if (direction == Snail.Orientation.RIGHT){
-            midPoint = 3;
-        }
-        else{
-            midPoint = 5;
-        }
+    //     if(direction == Snail.Orientation.LEFT){
+    //         midPoint = 7;
+    //     }
+    //     else if (direction == Snail.Orientation.TOP){
+    //         midPoint = 1;
+    //     }
+    //     else if (direction == Snail.Orientation.RIGHT){
+    //         midPoint = 3;
+    //     }
+    //     else{
+    //         midPoint = 5;
+    //     }
 
-        if(snail.getCurrentOrientation() == Snail.Orientation.BOTTOM){
-            if(direction == Snail.Orientation.TOP){
-                return false;
-            }
-        }
+    //     if(snail.getCurrentOrientation() == Snail.Orientation.BOTTOM){
+    //         if(direction == Snail.Orientation.TOP){
+    //             return false;
+    //         }
+    //     }
 
-        if(snail.getCurrentOrientation() == Snail.Orientation.LEFT){
-            if(direction == Snail.Orientation.RIGHT){
-                return false;
-            }
-        }
+    //     if(snail.getCurrentOrientation() == Snail.Orientation.LEFT){
+    //         if(direction == Snail.Orientation.RIGHT){
+    //             return false;
+    //         }
+    //     }
 
-         if(snail.getCurrentOrientation() == Snail.Orientation.RIGHT){
-            if(direction == Snail.Orientation.LEFT){
-                return false;
-            }
-        }
+    //      if(snail.getCurrentOrientation() == Snail.Orientation.RIGHT){
+    //         if(direction == Snail.Orientation.LEFT){
+    //             return false;
+    //         }
+    //     }
 
-         if(snail.getCurrentOrientation() == Snail.Orientation.TOP){
-            if(direction == Snail.Orientation.BOTTOM){
-                return false;
-            }
-        }
+    //      if(snail.getCurrentOrientation() == Snail.Orientation.TOP){
+    //         if(direction == Snail.Orientation.BOTTOM){
+    //             return false;
+    //         }
+    //     }
 
-        if(snail.getCurrentOrientation() == direction){
-            return false;
-        }
+    //     if(snail.getCurrentOrientation() == direction){
+    //         return false;
+    //     }
 
-        if(hitPoints.get(midPoint)){
-            return false;
-        }
+    //     if(hitPoints.get(midPoint)){
+    //         return false;
+    //     }
 
-        return true;
-    }
+    //     return true;
+    // }
 
     public static void main(String[] args) {
         SnailGame game = new SnailGame();
