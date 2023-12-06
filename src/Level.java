@@ -17,12 +17,13 @@ class Level {
     GraphicsGroup collidableGroup = new GraphicsGroup();
     GraphicsGroup background = new GraphicsGroup();
     Map<Point, Tile> tileMap = new HashMap<>();
+    double scale = (double)SnailGame.SCREEN_PIXEL_RATIO / 6;
 
     private final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
 
     private List<Character> collidableKeys = List.of('-', '_', '[', ']', '\\', '/', '4', '+', '▘', '▝', '▝');
 
-    private Point snailPos; 
+    private Snail snail; 
 
     public Level(String mapStr) {
         int tileX = 0; //x position in the unit of tiles (16*16 game pixels, 96*96 screen pixels)
@@ -31,9 +32,10 @@ class Level {
             for (char tileKey : tileRow.toCharArray()) { //iterate through each char in line
                 if (tileKey == 'S') {
                     tileKey = ' '; //place an empty tile
-                    snailPos = new Point((tileX + .5) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, (tileY - 1) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO); //set the position of the snail to the bottom of the current tile
+                    snail = new Snail(new Point((tileX - 1 + Math.pow(scale, 2)) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, (tileY - 2 + Math.pow(scale, 2)) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO), scale); //set the position of the snail to the bottom of the current tile
                 }
-                Tile newTile = new Tile(tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileKey); //create a new tile based on the character it reads
+                Tile newTile = new Tile((tileX - 1 + scale) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, (tileY - 1 + scale) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileKey); //create a new tile based on the character it reads
+                newTile.setScale(scale);
                 tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
                 
                 if(collidableKeys.contains(tileKey)){
@@ -71,7 +73,7 @@ class Level {
         return collidableGroup.testHit(p.getX(), p.getY());
     }
 
-    public Point getSnailPos() {
-        return snailPos;
+    public Snail getSnail() {
+        return snail;
     }
 }

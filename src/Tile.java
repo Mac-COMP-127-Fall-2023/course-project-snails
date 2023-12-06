@@ -6,7 +6,7 @@ import edu.macalester.graphics.Image;
 public class Tile extends Image{
     private final Map<Character, String> IMAGE_PATH_MAP = new HashMap<>();
 
-    public Tile(int x, int y, char key) {
+    public Tile(double x, double y, char key) {
         super(x, y);
         setupImagePathMap();
         setImagePath(!IMAGE_PATH_MAP.get(key).isEmpty() ? IMAGE_PATH_MAP.get(key) : "Tile/empty.png");

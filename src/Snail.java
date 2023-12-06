@@ -50,10 +50,11 @@ public class Snail {
     // current velocity while falling
     private int velocity = 0;
 
-    public Snail(Point snailPos) {
+    public Snail(Point snailPos, double scale) {
         x = (int)snailPos.getX();
         y = (int)snailPos.getY();
         currentImage = new Image(x, y);
+        currentImage.setScale(scale);
         currentAppearance = Appearance.CRAWLING;
         facing = Direction.RIGHT;
         currentMovement = Movement.CRAWL;
