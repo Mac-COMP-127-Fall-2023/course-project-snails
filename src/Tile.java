@@ -2,14 +2,16 @@ import java.util.HashMap;
 import java.util.Map;
 
 import edu.macalester.graphics.Image;
+import edu.macalester.graphics.Point;
 
 public class Tile extends Image{
     private final Map<Character, String> IMAGE_PATH_MAP = new HashMap<>();
 
-    public Tile(double x, double y, char key) {
-        super(x, y);
+    public Tile(Point topLeftPos, char key) {
+        super(0,0);
         setupImagePathMap();
         setImagePath(!IMAGE_PATH_MAP.get(key).isEmpty() ? IMAGE_PATH_MAP.get(key) : "Tile/empty.png");
+        setPosition(topLeftPos);
     }
 
     private void setupImagePathMap() {

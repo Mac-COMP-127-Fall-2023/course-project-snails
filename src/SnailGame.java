@@ -5,7 +5,7 @@ public class SnailGame {
     CanvasWindow canvas;
     int ticks = 0;
 
-    public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
+    public static final int SCREEN_PIXEL_RATIO = 3; //the size, in screen pixels, of a single in-game pixel
 
     private Snail snail;
 
@@ -54,7 +54,7 @@ public class SnailGame {
 
     private void handleSnailMovement(){
         canvas.animate(() -> {
-            if (ticks % 5 == 0){ //animate at 12 fps instead of 60
+            if (ticks % 4 == 0){ //animate at 15 fps instead of 60
                 snail.move(canvas.getKeysPressed());
                 checkCollisions();
             }

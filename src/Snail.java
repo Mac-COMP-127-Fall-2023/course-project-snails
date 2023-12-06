@@ -54,6 +54,7 @@ public class Snail {
         y = (int)snailPos.getY();
         currentImage = new Image(x, y);
         currentImage.setScale(scale);
+        currentImage.setPosition(snailPos);
         currentAppearance = Appearance.CRAWLING;
         facing = Direction.RIGHT;
         currentMovement = Movement.CRAWL;

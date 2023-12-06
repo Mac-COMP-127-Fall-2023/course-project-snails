@@ -30,11 +30,15 @@ class Level {
         int tileY = 0; //y position in tiles
         for (String tileRow : mapStr.split("\\r?\\n")) { //iterate through each line of the multiline string
             for (char tileKey : tileRow.toCharArray()) { //iterate through each char in line
+                Point topLeftPos = new Point(
+                    tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO,
+                    tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO);
+                    
                 if (tileKey == 'S') {
                     tileKey = ' '; //place an empty tile
-                    snail = new Snail(new Point((tileX - 1 + Math.pow(scale, 2)) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, (tileY - 2 + Math.pow(scale, 2)) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO), scale); //set the position of the snail to the bottom of the current tile
+                    snail = new Snail(topLeftPos, scale); //set the position of the snail to the bottom of the current tile
                 }
-                Tile newTile = new Tile((tileX - 1 + scale) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, (tileY - 1 + scale) * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO, tileKey); //create a new tile based on the character it reads
+                Tile newTile = new Tile(topLeftPos, tileKey); //create a new tile based on the character it reads
                 newTile.setScale(scale);
                 tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
                 
