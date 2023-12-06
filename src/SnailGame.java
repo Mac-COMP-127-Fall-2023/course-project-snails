@@ -36,7 +36,7 @@ public class SnailGame {
                                                     .map(point -> currentLevel.checkCollision(point))
                                                     .collect(Collectors.toList());
 
-            orientSnail(hitPoints);
+            snail.orientSnail(hitPoints, currentLevel.getGraphics());
             snail.move(canvas.getKeysPressed(), possibleDirections(hitPoints));
         });
     }
@@ -54,40 +54,6 @@ public class SnailGame {
         return List.of(canLeft, canUp, canDown, canRight);
     }
 
-
-    private void orientSnail(List<Boolean> hitPoints){
-        if (snail.getCurrentOrientation() != Snail.Orientation.BOTTOM && hitPoints.get(5)){
-            snail.setOrientation(Snail.Orientation.BOTTOM);
-        }
-        else if(isOnlyHit(hitPoints, 6)){
-            GraphicsObject attachedObject = currentLevel.getGraphics().getElementAt(snail.getBoundaryPoints().get(6));
-           
-            //currently doesn't work
-            if(snail.getCurrentOrientation() == Snail.Orientation.LEFT){
-               snail.rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.BOTTOM);
-            }
-
-            //works
-            else if(snail.getCurrentOrientation() == Snail.Orientation.BOTTOM){
-                snail.rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.LEFT);
-            }
-        }
-        //TO DO: add similar code for each corner
-    }
-
-    private boolean isOnlyHit(List<Boolean> hitPoints, int index){
-        for(int i = 0; i < hitPoints.size(); i++){
-            if(i != index && hitPoints.get(i)){
-                return false;
-            }
-        }
-        return hitPoints.get(index);
-    }
-
-    /*
-     * determines whether there is an obstacle preventing the snail from moving 
-     * in a certain direction
-     */
     private boolean canMoveDirection(List<Boolean> hitPoints, Snail.Orientation direction){
        int midPoint;
 

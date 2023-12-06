@@ -2,6 +2,8 @@ import java.awt.Color;
 import java.util.List;
 import java.util.Set;
 
+import edu.macalester.graphics.GraphicsGroup;
+import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.Rectangle;
 import edu.macalester.graphics.events.Key;
@@ -136,6 +138,36 @@ public class Snail {
         graphic.setPosition(x,y);
         currentOrientation = newOrientation;
     }
+
+    public void orientSnail(List<Boolean> hitPoints, GraphicsGroup levelGraphics){
+        if (currentOrientation != Snail.Orientation.BOTTOM && hitPoints.get(5)){
+            currentOrientation = (Snail.Orientation.BOTTOM);
+        }
+        else if(isOnlyHit(hitPoints, 6)){
+            GraphicsObject attachedObject = levelGraphics.getElementAt(getBoundaryPoints().get(6));
+           
+            //currently doesn't work
+            if(currentOrientation == Snail.Orientation.LEFT){
+               rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.BOTTOM);
+            }
+
+            //works
+            else if(currentOrientation == Snail.Orientation.BOTTOM){
+                rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.LEFT);
+            }
+        }
+        //TO DO: add similar code for each corner
+    }
+
+    private boolean isOnlyHit(List<Boolean> hitPoints, int index){
+        for(int i = 0; i < hitPoints.size(); i++){
+            if(i != index && hitPoints.get(i)){
+                return false;
+            }
+        }
+        return hitPoints.get(index);
+    }
+
     /*
      * returns a list of points on the snail in this order:
      * top left, top middle, top right, right middle, bottom right, bottom middle, bottom left, left middle
