@@ -1,4 +1,5 @@
 import edu.macalester.graphics.GraphicsGroup;
+import edu.macalester.graphics.GraphicsObject;
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.Rectangle;
 
@@ -15,6 +16,8 @@ class Level {
     private GraphicsGroup background; 
     private Point snailPos; 
 
+    private GraphicsObject firstElementForSnail;
+
     public Level(double width, double height) {
         foreground = new GraphicsGroup();
         background = new GraphicsGroup();
@@ -26,14 +29,20 @@ class Level {
         addLedge(width - width/10, 0, width/10, height);
 
         //startingLedge
-        addLedge(width/2 - 40, height/2 + 40, 100, 30);
+        firstElementForSnail = addLedge(width/2 - 40, height/2 + 40, 100, 30);
     }   
 
-    private void addLedge(double x, double y, double width, double height){
+    private Rectangle addLedge(double x, double y, double width, double height){
         Rectangle rect = new Rectangle(x, y, width, height);
         rect.setFillColor(Color.GRAY);
         rect.setStroked(false);
         foreground.add(rect);
+
+        return rect;
+    }
+
+    public GraphicsObject getFirstElement(){
+        return firstElementForSnail;
     }
 
     public GraphicsGroup getGraphics() {

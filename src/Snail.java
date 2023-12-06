@@ -13,6 +13,8 @@ public class Snail {
 
     private Rectangle graphic;
 
+    GraphicsObject attachedObject;
+
     //current action state
     public static enum Movement{
         CRAWL,
@@ -34,10 +36,11 @@ public class Snail {
 
     Movement currentMovement;
     Orientation currentOrientation;
+    Orientation facing;
 
     private int velocity = 0;
 
-    public Snail(Point snailPos, double size) {
+    public Snail(Point snailPos, double size, GraphicsObject startingOnShape) {
         x = snailPos.getX();
         y = snailPos.getY();
 
@@ -46,6 +49,9 @@ public class Snail {
 
         currentMovement = Movement.CRAWL;
         currentOrientation = Orientation.BOTTOM;
+        facing = Orientation.RIGHT;
+
+        attachedObject = startingOnShape;
     }
 
     public double getX() {
@@ -54,6 +60,10 @@ public class Snail {
 
     public double getY() {
         return y;
+    }
+
+    public void updateAttachedObject(GraphicsGroup newAttachment){
+        attachedObject = newAttachment;
     }
 
     public Movement getCurrentMovement(){
@@ -79,18 +89,22 @@ public class Snail {
             if(keysPressed.contains(Key.RIGHT_ARROW) && canRight){
                 nextX += 1;
                 currentMovement = Movement.CRAWL;
+                facing = Orientation.RIGHT;
             }
             else if(keysPressed.contains(Key.LEFT_ARROW) && canLeft){
                 nextX -= 1;
                 currentMovement = Movement.CRAWL;
+                facing = Orientation.LEFT;
             }
             else if(keysPressed.contains(Key.DOWN_ARROW) && canDown){
                 nextY +=1;
                 currentMovement = Movement.CRAWL;
+                facing = Orientation.BOTTOM;
             }
             else if(keysPressed.contains(Key.UP_ARROW)&& canUp){ //
                 nextY-= 1;
                 currentMovement = Movement.CRAWL;
+                facing = Orientation.TOP;
             }
             else if (keysPressed.contains(Key.SPACE) && canDown){
                 velocity += 2;
@@ -172,57 +186,74 @@ public class Snail {
         if (currentOrientation != Snail.Orientation.BOTTOM && hitPoints.get(5)){
             currentOrientation = (Snail.Orientation.BOTTOM);
         }
-        else if(isOnlyHit(hitPoints, 6)){
-            GraphicsObject attachedObject = levelGraphics.getElementAt(getBoundaryPoints().get(6));
-           
-            //currently doesn't work
-            if(currentOrientation == Snail.Orientation.LEFT){
-               rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.BOTTOM);
-            }
 
-            //works
-            else if(currentOrientation == Snail.Orientation.BOTTOM){
-                rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.LEFT);
+        else if(!hitPoints.get(getBoundaryPoints().indexOf(middleBottom()))){ //if the middle bottom is no longer hitting
+            if(currentOrientation == Orientation.BOTTOM){
+                if(facing == Orientation.RIGHT){
+                    rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.LEFT);
+                }
+                else if(facing == Orientation.LEFT){
+                    rotate(attachedObject.getPosition(), Snail.Orientation.RIGHT);
+                }
+            }
+            if(currentOrientation == Orientation.LEFT){
+                if(facing == Orientation.TOP){
+                    rotate(new Point(attachedObject.getX() + attachedObject.getWidth(), attachedObject.getY()), Snail.Orientation.BOTTOM);
+                }
             }
         }
-        //TO DO: add similar code for each corner
+    }
+
+  private Point middleBottom(){
+        if(currentOrientation == Orientation.BOTTOM){
+            return new Point(x + graphic.getWidth()/2, y + graphic.getHeight());
+        }
+        else if(currentOrientation == Orientation.TOP){
+            return new Point(x + graphic.getWidth()/2, y);
+        }
+        else if(currentOrientation == Orientation.LEFT){
+            return new Point(x, y + graphic.getHeight()/2);
+        }
+        else{
+            return new Point(x + graphic.getWidth(), y + graphic.getHeight()/2);
+        }
     }
 
 
     /*
      * Move the snail according the the new orientation and midpoint, the newSideMidpoint
      * being the midpoint of the side that is the newOrientation.
+     * 
+     * @param newSideMidpoint should be the corner of the block snail is on
      */
     private void rotate(Point newSideMidpoint, Orientation newOrientation){
         if(newOrientation == Orientation.LEFT && currentOrientation == Orientation.BOTTOM){
             x = newSideMidpoint.getX();
             y = newSideMidpoint.getY() - graphic.getHeight()/2;
+           // facing = Orientation.BOTTOM;
         }
         else if(newOrientation == Orientation.BOTTOM && currentOrientation == Orientation.LEFT){
             x = newSideMidpoint.getX() - graphic.getWidth()/2;
             y = newSideMidpoint.getY() - graphic.getHeight();
+           // facing = Orientation.LEFT;
         }
         else if (newOrientation == Orientation.TOP && currentOrientation == Orientation.LEFT){
             x = newSideMidpoint.getX();
             y = newSideMidpoint.getY() - graphic.getHeight()/2;
+          //  facing = Orientation.LEFT;
         }
         else if (newOrientation == Orientation.LEFT && currentOrientation == Orientation.TOP){
             x = newSideMidpoint.getX() - graphic.getWidth()/2;
             y = newSideMidpoint.getY();
+          //  facing = Orientation.TOP;
+        }
+        else if (newOrientation == Orientation.RIGHT && currentOrientation == Orientation.BOTTOM){
+            x = newSideMidpoint.getX() - graphic.getWidth();
+            y = newSideMidpoint.getY() - graphic.getHeight()/2;
         }
 
         graphic.setPosition(x,y);
         currentOrientation = newOrientation;
-    }
-
-   
-    private boolean isOnlyHit(List<Boolean> hitPoints, int index){
-        for(int i = 0; i < hitPoints.size(); i++){
-            if(i != index && hitPoints.get(i)){
-                return false;
-            }
-        }
-        return hitPoints.get(index);
     }
 
     /*
