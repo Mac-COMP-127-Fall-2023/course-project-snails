@@ -11,6 +11,8 @@ public class Snail {
     private Image currentImage;
     private int currentFrame = 0; // update animation increments by 1
 
+    private Tile attachedTile;
+
     //current animation state
     public static enum Appearance {
         CRAWLING,
@@ -53,6 +55,10 @@ public class Snail {
         snailBottomOrientation = Orientation.BOTTOM;
         updateAnimation();
         System.out.println(""+ x +" "+ y);
+    }
+
+    public void setAttachedTile(Tile newTile){
+        attachedTile = newTile;
     }
 
     public int getX() {
