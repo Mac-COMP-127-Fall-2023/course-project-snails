@@ -5,6 +5,7 @@ import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.events.Key;
 
+//BUG: USING FACING WRONG!!!! ONLY LEFT OR RIGHT!!!!
 public class Snail {
     private int x, y;
 
@@ -61,8 +62,7 @@ public class Snail {
         currentAppearance = Appearance.CRAWLING;
         facing = Orientation.RIGHT;
         currentMovement = Movement.CRAWL;
-        snailBottomOrientation = Orientation.BOTTOM;
-        middleOfOrientation = middleOfSide(snailBottomOrientation);
+        turn(Orientation.BOTTOM);
         
         updateAnimation();
        // System.out.println(""+ x +" "+ y);
@@ -100,8 +100,6 @@ public class Snail {
      */
 
     public void move(Set<Key> keysPressed){
-        middleOfOrientation = middleOfSide(snailBottomOrientation);
-
         if (currentMovement==Movement.FALL && canMoveDirection(Orientation.BOTTOM)) {
             fall();
         } else if (currentAppearance == Appearance.CURLING) {
@@ -129,12 +127,14 @@ public class Snail {
                 }
             }
         }
+        turn(snailBottomOrientation);
     }
 
     /**
      * Moves the snail according to its orientation.
      */
     private void crawl() {
+        System.out.println("crawling");
         if (currentMovement==Movement.FALL) {
             return;
         }
@@ -145,11 +145,16 @@ public class Snail {
         switch (snailBottomOrientation) {
             case BOTTOM:
                 if(facing == Orientation.RIGHT){
+                    //if on the edge of something
                     if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
                         rotate(attachedTile.getTopRightCorner(), Orientation.LEFT);
                     }
                     else if(canMoveDirection(Orientation.RIGHT)){
                           x+=m;
+                    }
+                    //if hitting something, move onto it
+                    else{
+                        turn(Orientation.RIGHT);
                     }
                 }  
                 else if(facing == Orientation.LEFT){
@@ -159,34 +164,73 @@ public class Snail {
                     else if(canMoveDirection(Orientation.LEFT)){
                           x+=m;
                     }
+                    else{
+                        turn(Orientation.LEFT);
+                    }
                 }
                 break;
 
             case LEFT:
-                if(facing == Orientation.BOTTOM){
+                if(facing == Orientation.RIGHT){ //going down
                     if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
                         rotate(attachedTile.getBottomRightCorner(), Orientation.TOP);
                     }
                     else if(canMoveDirection(Orientation.BOTTOM)){
                             y+=m;
                     }
+                    else{
+                        turn(Orientation.BOTTOM);
+                    }
                 }
-                else if(facing == Orientation.TOP){
+                else if(facing == Orientation.LEFT){  //going up
                     if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
                         rotate(attachedTile.getTopRightCorner(), Orientation.BOTTOM);
                     }
                     else if(canMoveDirection(Orientation.TOP)){
                             y+=m;
                     }
+                    else{
+                        turn(Orientation.TOP);
+                    }
                 }
                 break;
 
             case TOP:
-                x-=m;
+                if(facing == Orientation.RIGHT){
+                    if(canMoveDirection(Orientation.LEFT)){
+                         x-=m;
+                    }
+                    else{
+                        turn(Orientation.LEFT);
+                    }
+                }
+                else if(facing == Orientation.LEFT){
+                    if(canMoveDirection(Orientation.RIGHT)){
+                        x-=m;
+                    }
+                    else{
+                        turn(Orientation.RIGHT);
+                    }
+                }
                 break;
-                
+
             case RIGHT:
-                y-=m;
+                if(facing == Orientation.RIGHT){ //going up
+                    if(canMoveDirection(Orientation.TOP)){
+                        y-=m;
+                    }
+                    else{
+                        turn(Orientation.TOP);
+                    }
+                }
+                else if(facing == Orientation.LEFT){
+                    if(canMoveDirection(Orientation.BOTTOM)){
+                        y-=m;
+                    }
+                    else{
+                        turn(Orientation.BOTTOM);
+                    }
+                }
                 break;
         }
         currentImage.setPosition(x,y);
@@ -213,6 +257,11 @@ public class Snail {
         y += velocity;
         currentImage.setPosition(x,y);
         updateAnimation();
+    }
+
+    private void turn(Orientation newOrientation){
+        this.middleOfOrientation = middleOfSide(newOrientation);
+        snailBottomOrientation = newOrientation;
     }
 
     private boolean canMoveDirection(Snail.Orientation direction){
@@ -373,7 +422,4 @@ public class Snail {
         return List.of(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
     }
 
-    public void setOrientation(Orientation newOrientation) {
-        this.snailBottomOrientation = newOrientation;
-    }
 }
