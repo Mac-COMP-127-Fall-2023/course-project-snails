@@ -13,6 +13,12 @@ public class Snail {
 
     private Tile attachedTile;
 
+    /*
+     * Corresponding to the 8 border points of the snail,
+     * true if hitting something.
+     */
+    private List<Boolean> hitPoints;
+
     //current animation state
     public static enum Appearance {
         CRAWLING,
@@ -39,6 +45,7 @@ public class Snail {
     Appearance lastAppearance;
     Movement currentMovement;
     Orientation snailBottomOrientation; //the side that the snail is attached to
+    Point middleOfOrientation;
     Orientation facing; // the side that the snail is facing relative to it's surface
 
     // current velocity while falling
@@ -47,14 +54,18 @@ public class Snail {
     public Snail(Point snailPos) {
         x = (int)snailPos.getX();
         y = (int)snailPos.getY();
+
         currentImage = new Image(0, 0);
         currentImage.setPosition(x,y);
+
         currentAppearance = Appearance.CRAWLING;
         facing = Orientation.RIGHT;
         currentMovement = Movement.CRAWL;
         snailBottomOrientation = Orientation.BOTTOM;
+        middleOfOrientation = middleOfSide(snailBottomOrientation);
+        
         updateAnimation();
-        System.out.println(""+ x +" "+ y);
+       // System.out.println(""+ x +" "+ y);
     }
 
     public void setAttachedTile(Tile newTile){
@@ -73,6 +84,14 @@ public class Snail {
         return snailBottomOrientation;
     }
 
+    public void setHitPoints(List<Boolean> hitPoints){
+        this.hitPoints = hitPoints;
+    }
+
+    public Point getMiddleOfOrientation(){
+        return middleOfOrientation;
+    }
+
     /**
      * we call this every animation frame, so this handles a bunch of the state logic.
      * i ended up removing space and adding the thing i was talking about with it curling up to turn around
@@ -81,7 +100,9 @@ public class Snail {
      */
 
     public void move(Set<Key> keysPressed){
-        if (currentMovement==Movement.FALL) {
+        middleOfOrientation = middleOfSide(snailBottomOrientation);
+
+        if (currentMovement==Movement.FALL && canMoveDirection(Orientation.BOTTOM)) {
             fall();
         } else if (currentAppearance == Appearance.CURLING) {
             updateAnimation();
@@ -117,18 +138,53 @@ public class Snail {
         if (currentMovement==Movement.FALL) {
             return;
         }
+
         int m = (facing==Orientation.LEFT ? -1 : 1); //if it's facing left/right relative to its surface we move accordingly
         m *= SnailGame.SCREEN_PIXEL_RATIO;
+        
         switch (snailBottomOrientation) {
             case BOTTOM:
-                x+=m;
+                if(facing == Orientation.RIGHT){
+                    if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
+                        rotate(attachedTile.getTopRightCorner(), Orientation.LEFT);
+                    }
+                    else if(canMoveDirection(Orientation.RIGHT)){
+                          x+=m;
+                    }
+                }  
+                else if(facing == Orientation.LEFT){
+                   if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
+                        rotate(attachedTile.getTopLeftCorner(), Orientation.RIGHT);
+                    }
+                    else if(canMoveDirection(Orientation.LEFT)){
+                          x+=m;
+                    }
+                }
                 break;
+
             case LEFT:
-                y+=m;
+                if(facing == Orientation.BOTTOM){
+                    if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
+                        rotate(attachedTile.getBottomRightCorner(), Orientation.TOP);
+                    }
+                    else if(canMoveDirection(Orientation.BOTTOM)){
+                            y+=m;
+                    }
+                }
+                else if(facing == Orientation.TOP){
+                    if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
+                        rotate(attachedTile.getTopRightCorner(), Orientation.BOTTOM);
+                    }
+                    else if(canMoveDirection(Orientation.TOP)){
+                            y+=m;
+                    }
+                }
                 break;
+
             case TOP:
                 x-=m;
                 break;
+                
             case RIGHT:
                 y-=m;
                 break;
@@ -158,6 +214,58 @@ public class Snail {
         currentImage.setPosition(x,y);
         updateAnimation();
     }
+
+    private boolean canMoveDirection(Snail.Orientation direction){
+        if(snailBottomOrientation == Snail.Orientation.BOTTOM){
+            if(direction == Snail.Orientation.TOP){
+                return false;
+            }
+        }
+
+        if(snailBottomOrientation == Snail.Orientation.LEFT){
+            if(direction == Snail.Orientation.RIGHT){
+                return false;
+            }
+        }
+
+         if(snailBottomOrientation == Snail.Orientation.RIGHT){
+            if(direction == Snail.Orientation.LEFT){
+                return false;
+            }
+        }
+
+         if(snailBottomOrientation == Snail.Orientation.TOP){
+            if(direction == Snail.Orientation.BOTTOM){
+                return false;
+            }
+        }
+
+        if(snailBottomOrientation == direction){
+            return false;
+        }
+
+        if(hitPoints.get(getBoundaryPoints().indexOf(middleOfSide(direction)))){
+            return false;
+        }
+
+        return true;
+    }
+
+    private Point middleOfSide(Orientation orientation){
+        if(orientation == Orientation.BOTTOM){
+            return getBoundaryPoints().get(5);
+        }
+        else if(orientation == Orientation.TOP){
+            return getBoundaryPoints().get(1);
+        }
+        else if(orientation == Orientation.LEFT){
+            return getBoundaryPoints().get(7);
+        }
+        else{
+            return getBoundaryPoints().get(3);
+        }
+    }
+
 
     public void updateAnimation() {
         String path = "Snail/";
@@ -203,6 +311,43 @@ public class Snail {
         lastAppearance = currentAppearance;
     }
 
+     /*
+     * Move the snail according the the new orientation and midpoint, the newSideMidpoint
+     * being the midpoint of the side that is the newOrientation.
+     * 
+     * @param newSideMidpoint should be the corner of the block snail is on
+     */
+    private void rotate(Point newSideMidpoint, Orientation newOrientation){
+        if(newOrientation == Orientation.LEFT && snailBottomOrientation == Orientation.BOTTOM){
+            x = (int)newSideMidpoint.getX();
+            y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
+           // facing = Orientation.BOTTOM;
+        }
+        else if(newOrientation == Orientation.BOTTOM && snailBottomOrientation == Orientation.LEFT){
+            x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
+            y = (int)(newSideMidpoint.getY() - currentImage.getHeight());
+           // facing = Orientation.LEFT;
+        }
+        else if (newOrientation == Orientation.TOP && snailBottomOrientation == Orientation.LEFT){
+            x = (int)newSideMidpoint.getX();
+            y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
+          //  facing = Orientation.LEFT;
+        }
+        else if (newOrientation == Orientation.LEFT && snailBottomOrientation == Orientation.TOP){
+            x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
+            y = (int)newSideMidpoint.getY();
+          //  facing = Orientation.TOP;
+        }
+        else if (newOrientation == Orientation.RIGHT && snailBottomOrientation == Orientation.BOTTOM){
+            x = (int)(newSideMidpoint.getX() - currentImage.getWidth());
+            y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
+        }
+
+        currentImage.setPosition(x,y);
+        snailBottomOrientation = newOrientation;
+        middleOfOrientation = middleOfSide(snailBottomOrientation);
+    }
+
     public Image getGraphics() {
         return currentImage;
     }
@@ -211,16 +356,21 @@ public class Snail {
         return facing;
     }
 
-    public List<Point> getBoundryPoints(){
-        return List.of(
-            currentImage.getPosition(), //top right
-            currentImage.getPosition().add(new Point(0, currentImage.getHeight()/2)), // right middle
-            currentImage.getPosition().add(new Point(0, currentImage.getHeight())), //bottom right
-            currentImage.getCenter().add(new Point(0, currentImage.getHeight()/2)), //bottom middle
-            currentImage.getCenter().add(new Point(currentImage.getWidth()/2, currentImage.getHeight()/2)),//bottom left
-            currentImage.getCenter().add(new Point(currentImage.getWidth()/2, 0)), //left middle
-            currentImage.getCenter().add(new Point(currentImage.getWidth()/2, - currentImage.getHeight()/2)) //top left
-         );
+    /*
+     * returns a list of points on the snail in this order:
+     * top left, top middle, top right, right middle, bottom right, bottom middle, bottom left, left middle
+     */
+    public List<Point> getBoundaryPoints(){
+        Point topLeft = new Point (x, y);
+        Point top = new Point(x+currentImage.getWidth()/2, y);
+        Point topRight = new Point(x+currentImage.getWidth(), y);
+        Point right = new Point(x+currentImage.getWidth(), y+currentImage.getHeight()/2);
+        Point bottomRight = new Point(x+currentImage.getWidth(), y+currentImage.getHeight());
+        Point bottom = new Point(x+currentImage.getWidth()/2, y+currentImage.getHeight());
+        Point bottomLeft =  new Point(x, y+currentImage.getHeight());
+        Point left = new Point(x, y+currentImage.getHeight()/2);
+
+        return List.of(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
     }
 
     public void setOrientation(Orientation newOrientation) {

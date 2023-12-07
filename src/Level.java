@@ -79,4 +79,8 @@ class Level {
     public Snail getSnail() {
         return snail;
     }
+
+    public void updateAttachedTileOfSnail(){
+        snail.setAttachedTile(getTile((int)snail.getMiddleOfOrientation().getX(), (int)snail.getMiddleOfOrientation().getY()));
+    }
 }

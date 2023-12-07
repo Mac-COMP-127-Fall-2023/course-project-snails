@@ -2,6 +2,7 @@ import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.GraphicsGroup;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class SnailGame {
     CanvasWindow canvas;
@@ -53,6 +54,7 @@ public class SnailGame {
         graphics.setScale(.5);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
         canvas.add(graphics);
         canvas.draw();
+        currentLevel.updateAttachedTileOfSnail();
 
         handleSnailMovement();
 
@@ -62,8 +64,13 @@ public class SnailGame {
     private void handleSnailMovement(){
         canvas.animate(() -> {
             if (ticks % 4 == 0){ //animate at 15 fps instead of 60
+                currentLevel.updateAttachedTileOfSnail();
+                snail.setHitPoints(snail.getBoundaryPoints()
+                                    .stream()
+                                    .map(point -> currentLevel.checkCollision(point))
+                                    .collect(Collectors.toList()));
                 snail.move(canvas.getKeysPressed());
-                checkCollisions();
+                //checkCollisions();
             }
             ticks++;
         });
@@ -79,8 +86,10 @@ public class SnailGame {
      * idk if im explaining that poorly lol and there's probably a 
      * better way to do that
      * 
+     * I don't think we need this
+     * 
      */
-    private void checkCollisions() {
+   // private void checkCollisions() {
         //order: top right, right middle, bottom right, bottom middle, bottom left, left middle, top left
         // List<Point> snailBoundaries = snail.getBoundryPoints();
         // boolean[] hitPoints = new boolean[snailBoundaries.size()];
@@ -99,7 +108,7 @@ public class SnailGame {
         //         snail.setOrientation(Snail.Orientation.LEFT);
         //     }
         // }
-    }
+  //  }
 
     /*
      * return true if the snail has reached the endpoint
