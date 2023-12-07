@@ -283,12 +283,6 @@ public class Snail {
             }
         }
 
-         if(snailBottomOrientation == Snail.Orientation.TOP){
-            if(direction == Snail.Orientation.BOTTOM){
-                return false;
-            }
-        }
-
         if(snailBottomOrientation == direction){
             return false;
         }
