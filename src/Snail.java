@@ -5,7 +5,6 @@ import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.events.Key;
 
-//BUG: USING FACING WRONG!!!! ONLY LEFT OR RIGHT!!!!
 public class Snail {
     private int x, y;
 
@@ -65,7 +64,6 @@ public class Snail {
         turn(Orientation.BOTTOM);
         
         updateAnimation();
-       // System.out.println(""+ x +" "+ y);
     }
 
     public void setAttachedTile(Tile newTile){
@@ -364,22 +362,18 @@ public class Snail {
         if(newOrientation == Orientation.LEFT && snailBottomOrientation == Orientation.BOTTOM){
             x = (int)newSideMidpoint.getX();
             y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
-           // facing = Orientation.BOTTOM;
         }
         else if(newOrientation == Orientation.BOTTOM && snailBottomOrientation == Orientation.LEFT){
             x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
             y = (int)(newSideMidpoint.getY() - currentImage.getHeight());
-           // facing = Orientation.LEFT;
         }
         else if (newOrientation == Orientation.TOP && snailBottomOrientation == Orientation.LEFT){
             x = (int)newSideMidpoint.getX();
             y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
-          //  facing = Orientation.LEFT;
         }
         else if (newOrientation == Orientation.LEFT && snailBottomOrientation == Orientation.TOP){
             x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
             y = (int)newSideMidpoint.getY();
-          //  facing = Orientation.TOP;
         }
         else if (newOrientation == Orientation.RIGHT && snailBottomOrientation == Orientation.BOTTOM){
             x = (int)(newSideMidpoint.getX() - currentImage.getWidth());
