@@ -12,6 +12,7 @@ public class Tile extends Image{
         setupImagePathMap();
         this.setImagePath(!IMAGE_PATH_MAP.get(key).isEmpty() ? IMAGE_PATH_MAP.get(key) : "Tiles/empty.png");
         this.setPosition(topLeftPos);
+        this.setScale((double)SnailGame.SCREEN_PIXEL_RATIO / 6);
     }
 
     public Point getTopLeftCorner(){

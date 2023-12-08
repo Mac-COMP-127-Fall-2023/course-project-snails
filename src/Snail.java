@@ -58,6 +58,7 @@ public class Snail {
 
         currentImage = new Image(0, 0);
         currentImage.setPosition(x,y);
+        currentImage.setScale((double)SnailGame.SCREEN_PIXEL_RATIO / 6);
 
         currentAppearance = Appearance.CRAWLING;
         facing = Orientation.RIGHT;
