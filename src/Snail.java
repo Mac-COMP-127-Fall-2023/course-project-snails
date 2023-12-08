@@ -62,6 +62,8 @@ public class Snail {
         currentAppearance = Appearance.CRAWLING;
         facing = Orientation.RIGHT;
         currentMovement = Movement.CRAWL;
+
+        snailBottomOrientation = Orientation.BOTTOM;
         setOrientation(Orientation.BOTTOM);
         
         updateAnimation();
@@ -269,6 +271,15 @@ public class Snail {
      */
     private void setOrientation(Orientation newOrientation){
         this.middleOfOrientation = middleOfSide(newOrientation);
+
+        if(snailBottomOrientation != newOrientation){
+            if(facing == Orientation.RIGHT){
+                currentImage.rotateBy(-90);
+            }
+            else{
+                currentImage.rotateBy(90);
+            }
+        }
         snailBottomOrientation = newOrientation;
     }
 
