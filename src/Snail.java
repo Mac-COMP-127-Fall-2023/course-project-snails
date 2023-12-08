@@ -106,8 +106,8 @@ public class Snail {
                 fall();
             }
            else{
-                currentMovement = Movement.CRAWL;
                 setOrientation(Orientation.BOTTOM);
+                currentMovement = Movement.CRAWL;
            }
         } else if (currentAppearance == Appearance.CURLING) {
             updateAnimation();
@@ -272,7 +272,18 @@ public class Snail {
     private void setOrientation(Orientation newOrientation){
         this.middleOfOrientation = middleOfSide(newOrientation);
 
-        if(snailBottomOrientation != newOrientation){
+        if(currentMovement == Movement.FALL && !canMoveDirection(Orientation.BOTTOM)){
+            if(snailBottomOrientation == Orientation.LEFT){
+                currentImage.rotateBy(-90);
+            }
+            else if(snailBottomOrientation == Orientation.RIGHT){
+                currentImage.rotateBy(90);
+            }
+            else if(snailBottomOrientation == Orientation.TOP){
+                currentImage.rotateBy(180);
+            }
+        }
+        else if(snailBottomOrientation != newOrientation){
             if(facing == Orientation.RIGHT){
                 currentImage.rotateBy(-90);
             }
