@@ -93,13 +93,6 @@ class Level {
         Tile newTile = getCollidableTileAt(new Point(snail.getMiddleOfOrientation().getX(), snail.getMiddleOfOrientation().getY()));
         if(newTile != null){
              snail.setAttachedTile(newTile);
-              Ellipse bottomLeft = new Ellipse(newTile.getBottomLeftCorner().getX(), newTile.getBottomLeftCorner().getY(), 10, 10);
-        bottomLeft.setFillColor(Color.BLACK);
-        collidableGroup.add(bottomLeft);
         }
-       
-
-        //testing
-       
     }
 }

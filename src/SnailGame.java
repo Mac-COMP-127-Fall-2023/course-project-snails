@@ -71,7 +71,6 @@ public class SnailGame {
                 snail.move(canvas.getKeysPressed());
                 //checkCollisions();
                 currentLevel.updateAttachedTileOfSnail();
-                System.out.println(snail.getOrientation());
             }
             ticks++;
         });
