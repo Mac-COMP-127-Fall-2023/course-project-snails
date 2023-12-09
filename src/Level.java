@@ -44,13 +44,13 @@ class Level {
                     }
                     tileKey = ' '; //place an empty tile in the bg
                 }
-                Tile newTile = new Tile(topLeftPos, tileKey); //create a new tile based on the character it reads
+                Tile newTile = new Block(topLeftPos, tileKey); //create a new tile based on the character it reads
                 tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
                 
                 if(collidableKeys.contains(tileKey)){
-                     collidableGroup.add(newTile);
+                     collidableGroup.add(newTile.getImage());
                 } else{
-                    background.add(newTile);
+                    background.add(newTile.getImage());
                 }
                
                 tileX++;
