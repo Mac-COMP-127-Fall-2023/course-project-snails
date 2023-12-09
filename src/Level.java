@@ -61,15 +61,6 @@ class Level {
         snail.setOrientation(Snail.Orientation.BOTTOM);
     }
 
-    /**
-     * @param screenX X coordinate within canvas
-     * @param screenY Y coordinate within canvas
-     * @return Tile object at given coordinates
-     */
-    public Tile getTile(int screenX, int screenY) {
-        return tileMap.get(new Point((int)(screenX / PIXELS_PER_TILE / SnailGame.SCREEN_PIXEL_RATIO), (int) (screenY / PIXELS_PER_TILE / SnailGame.SCREEN_PIXEL_RATIO))); //converts screen coordinates to tile coordinates, uses tile coords as key
-    }
-
     public GraphicsGroup getGraphics() {
         GraphicsGroup group = new GraphicsGroup();
         group.add(background);
@@ -85,21 +76,22 @@ class Level {
         return snail;
     }
 
-    private Tile getCollidableTileAt(Point p){
-        return (Tile)collidableGroup.getElementAt(p);
-    }
-
-    public void updateAttachedTileOfSnail(){
-        Tile newTile = getCollidableTileAt(new Point(snail.getMiddleOfOrientation().getX(), snail.getMiddleOfOrientation().getY()));
-        if(newTile != null){
-             snail.setAttachedTile(newTile);
-              Ellipse bottomLeft = new Ellipse(newTile.getBottomLeftCorner().getX(), newTile.getBottomLeftCorner().getY(), 10, 10);
-        bottomLeft.setFillColor(Color.BLACK);
-        collidableGroup.add(bottomLeft);
+    public Tile getCollidableTileAt(Point p){
+        for (Tile tile : tileMap.values()) {
+            if (tile.checkCollision(p)) {
+                return tile;
+            }
         }
-       
-
-        //testing
-       
+        return null;
     }
+
+    // public void updateAttachedTileOfSnail(){
+    //     Tile newTile = getCollidableTileAt(new Point(snail.getMiddleOfOrientation().getX(), snail.getMiddleOfOrientation().getY()));
+    //     if(newTile != null){
+    //          snail.setAttachedTile(newTile);
+    //           Ellipse bottomLeft = new Ellipse(newTile.getBottomLeftCorner().getX(), newTile.getBottomLeftCorner().getY(), 10, 10);
+    //     bottomLeft.setFillColor(Color.BLACK);
+    //     collidableGroup.add(bottomLeft);
+    //     }
+    // }
 }

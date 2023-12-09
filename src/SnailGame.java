@@ -8,7 +8,7 @@ public class SnailGame {
     CanvasWindow canvas;
     int ticks = 0;
 
-    public static final int SCREEN_PIXEL_RATIO = 10; //the size, in screen pixels, of a single in-game pixel
+    public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
 
     private Snail snail;
 
@@ -49,12 +49,12 @@ public class SnailGame {
         graphics= level.getGraphics();
         graphics.setPosition(0,0);
         snail = currentLevel.getSnail();
+        snail.updateAttachedTile(level);
         graphics.add(snail.getGraphics());
         graphics.setAnchor(graphics.getPosition());
         graphics.setScale(.5);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
         canvas.add(graphics);
         canvas.draw();
-        currentLevel.updateAttachedTileOfSnail();
 
         handleSnailMovement();
 
@@ -68,9 +68,8 @@ public class SnailGame {
                                     .stream()
                                     .map(point -> currentLevel.checkCollision(point))
                                     .collect(Collectors.toList()));
+                snail.updateAttachedTile(currentLevel);
                 snail.move(canvas.getKeysPressed());
-                //checkCollisions();
-                currentLevel.updateAttachedTileOfSnail();
                 System.out.println(snail.getOrientation());
             }
             ticks++;

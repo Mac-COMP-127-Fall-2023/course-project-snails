@@ -56,8 +56,7 @@ public class Snail {
         x = (int)snailPos.getX();
         y = (int)snailPos.getY();
 
-        currentImage = new Image(0, 0);
-        currentImage.setPosition(x,y);
+        currentImage = new Image(x, y);
         currentImage.setScale((double)SnailGame.SCREEN_PIXEL_RATIO / 6);
 
         currentAppearance = Appearance.CRAWLING;
@@ -69,8 +68,8 @@ public class Snail {
         updateAnimation();
     }
 
-    public void setAttachedTile(Tile newTile){
-        attachedTile = newTile;
+    public void updateAttachedTile(Level level){
+        attachedTile = level.getCollidableTileAt(middleOfOrientation);
     }
 
     public int getX() {
@@ -101,7 +100,7 @@ public class Snail {
      */
 
     public void move(Set<Key> keysPressed){
-        if (currentMovement==Movement.FALL) {
+        if (currentMovement==Movement.FALL || attachedTile == null) {
             if(canMoveDirection(Orientation.BOTTOM)){
                 fall();
             }
