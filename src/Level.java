@@ -21,7 +21,9 @@ class Level {
     GraphicsGroup background = new GraphicsGroup();
     Map<Point, Tile> tileMap = new HashMap<>();
 
-    private final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
+    public static final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
+
+    public static final int SCREEN_PIXELS_PER_TILE = PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO;
 
     private List<Character> collidableKeys = List.of('-', '_', '[', ']', '\\', '/', '4', '+', '▘', '▝', '▝');
 
@@ -33,8 +35,8 @@ class Level {
         for (String tileRow : mapStr.split("\\r?\\n")) { //iterate through each line of the multiline string
             for (char tileKey : tileRow.toCharArray()) { //iterate through each char in line
                 Point topLeftPos = new Point(
-                    tileX * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO,
-                    tileY * PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO);
+                    tileX * SCREEN_PIXELS_PER_TILE,
+                    tileY * SCREEN_PIXELS_PER_TILE);
                     
                 if (tileKey=='s'||tileKey == 'S') {
                     if (tileKey=='S') {
