@@ -2,8 +2,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import edu.macalester.graphics.Ellipse;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Point;
+
+import java.awt.Color;
 
 /*
  * DO TO: 
@@ -53,7 +56,7 @@ class Level {
             tileX = 0;
             tileY++;
         }   
-
+        snail.setOrientation(Snail.Orientation.BOTTOM);
     }
 
     /**
@@ -80,7 +83,21 @@ class Level {
         return snail;
     }
 
+    private Tile getCollidableTileAt(Point p){
+        return (Tile)collidableGroup.getElementAt(p);
+    }
+
     public void updateAttachedTileOfSnail(){
-        snail.setAttachedTile(getTile((int)snail.getMiddleOfOrientation().getX(), (int)snail.getMiddleOfOrientation().getY()));
+        Tile newTile = getCollidableTileAt(new Point(snail.getMiddleOfOrientation().getX(), snail.getMiddleOfOrientation().getY()));
+        if(newTile != null){
+             snail.setAttachedTile(newTile);
+              Ellipse bottomLeft = new Ellipse(newTile.getBottomLeftCorner().getX(), newTile.getBottomLeftCorner().getY(), 10, 10);
+        bottomLeft.setFillColor(Color.BLACK);
+        collidableGroup.add(bottomLeft);
+        }
+       
+
+        //testing
+       
     }
 }

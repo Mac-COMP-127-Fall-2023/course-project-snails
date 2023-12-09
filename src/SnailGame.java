@@ -22,11 +22,11 @@ public class SnailGame {
 [                  ]
 [                  ]
 [花                 ]
-[                  ]
-[                  ]
+[  Ss           ブ  ]
+[  ss ラ   ロ     フ  ]
+[  ___             ]
 [               プ  ]
-[Ss             ブ  ]
-[ss   ラ   ロ     フ  ]
+[                  ]
 \\__________________/""")//s is just the little part of the snail we need to be aware of
 );
 
@@ -64,13 +64,13 @@ public class SnailGame {
     private void handleSnailMovement(){
         canvas.animate(() -> {
             if (ticks % 4 == 0){ //animate at 15 fps instead of 60
-                currentLevel.updateAttachedTileOfSnail();
                 snail.setHitPoints(snail.getBoundaryPoints()
                                     .stream()
                                     .map(point -> currentLevel.checkCollision(point))
                                     .collect(Collectors.toList()));
                 snail.move(canvas.getKeysPressed());
                 //checkCollisions();
+                currentLevel.updateAttachedTileOfSnail();
                 System.out.println(snail.getOrientation());
             }
             ticks++;

@@ -31,6 +31,10 @@ public class Tile extends Image{
         return new Point(getX(), getY() + getHeight());
     }
 
+    public boolean checkCollision(Point p){
+        return testHit(p.getX(), p.getY());
+    }
+
     private void setupImagePathMap() {
         IMAGE_PATH_MAP.put(' ', "Tiles/empty.png"); //not a space, \u0020
         IMAGE_PATH_MAP.put('-', "Tiles/block_i_dirt_b.png");

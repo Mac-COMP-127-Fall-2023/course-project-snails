@@ -64,7 +64,6 @@ public class Snail {
         facing = Orientation.RIGHT;
         currentMovement = Movement.CRAWL;
 
-        snailBottomOrientation = Orientation.BOTTOM;
         setOrientation(Orientation.BOTTOM);
         
         updateAnimation();
@@ -107,7 +106,7 @@ public class Snail {
                 fall();
             }
            else{
-                setOrientation(Orientation.BOTTOM);
+                turn(Orientation.BOTTOM);
                 currentMovement = Movement.CRAWL;
            }
         } else if (currentAppearance == Appearance.CURLING) {
@@ -140,6 +139,7 @@ public class Snail {
 
     /**
      * Moves the snail according to its orientation.
+     * TO DO: fix rotate()
      */
     private void crawl() {
         if (currentMovement==Movement.FALL) {
@@ -153,7 +153,7 @@ public class Snail {
             case BOTTOM:
                 if(facing == Orientation.RIGHT){
                     //if on the edge of something, rotate to stay on
-                    if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
+                    if(!attachedTile.checkCollision(middleOfOrientation)){
                         rotate(attachedTile.getTopRightCorner(), Orientation.LEFT);
                     }
                     else if(canMoveDirection(Orientation.RIGHT)){
@@ -161,81 +161,93 @@ public class Snail {
                     }
                     //if hitting something, move onto it
                     else{
-                        setOrientation(Orientation.RIGHT);
+                        turn(Orientation.RIGHT);
                     }
                 }  
                 else if(facing == Orientation.LEFT){
-                   if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
+                   if(!attachedTile.checkCollision(middleOfOrientation)){
                         rotate(attachedTile.getTopLeftCorner(), Orientation.RIGHT);
                     }
                     else if(canMoveDirection(Orientation.LEFT)){
                           x+=m;
                     }
                     else{
-                        setOrientation(Orientation.LEFT);
+                        turn(Orientation.LEFT);
                     }
                 }
                 break;
 
             case LEFT:
                 if(facing == Orientation.RIGHT){ //going down
-                    if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
+                    if(!attachedTile.checkCollision(middleOfOrientation)){
                         rotate(attachedTile.getBottomRightCorner(), Orientation.TOP);
                     }
                     else if(canMoveDirection(Orientation.BOTTOM)){
                             y+=m;
                     }
                     else{
-                        setOrientation(Orientation.BOTTOM);
+                        turn(Orientation.BOTTOM);
                     }
                 }
                 else if(facing == Orientation.LEFT){  //going up
-                    if(!hitPoints.get(getBoundaryPoints().indexOf(middleOfOrientation))){
+                    if(!attachedTile.checkCollision(middleOfOrientation)){
                         rotate(attachedTile.getTopRightCorner(), Orientation.BOTTOM);
                     }
                     else if(canMoveDirection(Orientation.TOP)){
                             y+=m;
                     }
                     else{
-                        setOrientation(Orientation.TOP);
+                        turn(Orientation.TOP);
                     }
                 }
                 break;
             //to do: add rotations to the rest
             case TOP:
                 if(facing == Orientation.RIGHT){
-                    if(canMoveDirection(Orientation.LEFT)){
+                    if(!attachedTile.checkCollision(middleOfOrientation)){
+                        rotate(attachedTile.getBottomLeftCorner(), Orientation.RIGHT);
+                    }
+                    else if(canMoveDirection(Orientation.LEFT)){
                          x-=m;
                     }
                     else{
-                        setOrientation(Orientation.LEFT);
+                        turn(Orientation.LEFT);
                     }
                 }
                 else if(facing == Orientation.LEFT){
-                    if(canMoveDirection(Orientation.RIGHT)){
+                    if(!attachedTile.checkCollision(middleOfOrientation)){
+                        rotate(attachedTile.getBottomRightCorner(), Orientation.LEFT);
+                    }
+                    else if(canMoveDirection(Orientation.RIGHT)){
                         x-=m;
                     }
                     else{
-                        setOrientation(Orientation.RIGHT);
+                        turn(Orientation.RIGHT);
                     }
                 }
                 break;
 
             case RIGHT:
                 if(facing == Orientation.RIGHT){ //going up
-                    if(canMoveDirection(Orientation.TOP)){
+                    if(!attachedTile.checkCollision(middleOfOrientation)){
+                        rotate(attachedTile.getBottomLeftCorner(), Orientation.TOP);
+                    }
+                    else if(canMoveDirection(Orientation.BOTTOM)){
                         y-=m;
                     }
                     else{
-                        setOrientation(Orientation.TOP);
+                        turn(Orientation.TOP);
                     }
                 }
                 else if(facing == Orientation.LEFT){
+                     if(!attachedTile.checkCollision(middleOfOrientation)){
+                        rotate(attachedTile.getTopLeftCorner(), Orientation.TOP);
+                    }
                     if(canMoveDirection(Orientation.BOTTOM)){
                         y-=m;
                     }
                     else{
-                        setOrientation(Orientation.BOTTOM);
+                        turn(Orientation.BOTTOM);
                     }
                 }
                 break;
@@ -270,9 +282,12 @@ public class Snail {
      * Updates middleOfOrientation and snailBottomOrientation based on
      * @param newOrientation
      */
-    private void setOrientation(Orientation newOrientation){
+    public void setOrientation(Orientation newOrientation){
         this.middleOfOrientation = middleOfSide(newOrientation);
+        snailBottomOrientation = newOrientation;
+    }
 
+    private void turn(Orientation newOrientation){
         if(currentMovement == Movement.FALL && !canMoveDirection(Orientation.BOTTOM)){
             if(snailBottomOrientation == Orientation.LEFT){
                 currentImage.rotateBy(-90);
@@ -291,8 +306,8 @@ public class Snail {
             else{
                 currentImage.rotateBy(90);
             }
+        setOrientation(newOrientation);
         }
-        snailBottomOrientation = newOrientation;
     }
 
     /*
@@ -397,32 +412,56 @@ public class Snail {
      * being the midpoint of the side that is the newOrientation.
      * 
      * @param newSideMidpoint should be the corner of the block snail is on
+     * 
+     * TO DO: fix. very very buggy
      */
     private void rotate(Point newSideMidpoint, Orientation newOrientation){
         if(newOrientation == Orientation.LEFT && snailBottomOrientation == Orientation.BOTTOM){
             x = (int)newSideMidpoint.getX();
             y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
+            currentImage.rotateBy(90);
         }
         else if(newOrientation == Orientation.BOTTOM && snailBottomOrientation == Orientation.LEFT){
             x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
             y = (int)(newSideMidpoint.getY() - currentImage.getHeight());
+            currentImage.rotateBy(-90);
         }
         else if (newOrientation == Orientation.TOP && snailBottomOrientation == Orientation.LEFT){
-            x = (int)newSideMidpoint.getX();
-            y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
+            x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
+            y = (int)(newSideMidpoint.getY());
+            currentImage.rotateBy(90);
         }
         else if (newOrientation == Orientation.LEFT && snailBottomOrientation == Orientation.TOP){
             x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
             y = (int)newSideMidpoint.getY();
+            currentImage.rotateBy(-90);
         }
         else if (newOrientation == Orientation.RIGHT && snailBottomOrientation == Orientation.BOTTOM){
             x = (int)(newSideMidpoint.getX() - currentImage.getWidth());
             y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
+            currentImage.rotateBy(-90);
         }
+        else if (newOrientation == Orientation.BOTTOM && snailBottomOrientation == Orientation.RIGHT){
+            x = (int)(newSideMidpoint.getX() - currentImage.getWidth());
+            y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
+            currentImage.rotateBy(90);
+        }
+        else if(newOrientation == Orientation.TOP && snailBottomOrientation == Orientation.RIGHT){
+            x = (int)(newSideMidpoint.getX());
+            y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
+            currentImage.rotateBy(-90);
+        }
+        else if(newOrientation == Orientation.RIGHT && snailBottomOrientation == Orientation.TOP){
+            x = (int)(newSideMidpoint.getX());
+            y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
+            currentImage.rotateBy(90);
+        }
+       // else if (newOrientation == Orientation.)
 
+      //  middleOfOrientation = newSideMidpoint;
         currentImage.setPosition(x,y);
-        snailBottomOrientation = newOrientation;
-        middleOfOrientation = middleOfSide(snailBottomOrientation);
+        setOrientation(newOrientation);
+       //turn(newOrientation);
     }
 
     public Image getGraphics() {
