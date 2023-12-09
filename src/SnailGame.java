@@ -8,7 +8,7 @@ public class SnailGame {
     CanvasWindow canvas;
     int ticks = 0;
 
-    public static final int SCREEN_PIXEL_RATIO = 10; //the size, in screen pixels, of a single in-game pixel
+    public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
 
     private Snail snail;
 

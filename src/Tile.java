@@ -1,18 +1,20 @@
+import java.util.HashMap;
 import java.util.Map;
-import static java.util.Map.entry;
 
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
-public interface Tile{
-    public Point getTopRightCorner();
-    public Point getBottomRightCorner();
-    public Point getTopLeftCorner();
-    public Point getBottomLeftCorner();
+public class Tile extends Image{
+    private final Map<Character, String> IMAGE_PATH_MAP = new HashMap<>();
 
-    public Image getImage();
+    public Tile(Point topLeftPos, char key) {
+        super(0,0);
+        setupImagePathMap();
+        this.setImagePath(!IMAGE_PATH_MAP.get(key).isEmpty() ? IMAGE_PATH_MAP.get(key) : "Tiles/empty.png");
+        this.setPosition(topLeftPos);
+        this.setScale((double)SnailGame.SCREEN_PIXEL_RATIO / 6);
+    }
 
-<<<<<<< Updated upstream
     public Point getTopLeftCorner(){
         return getPosition();
     }
@@ -51,25 +53,4 @@ public interface Tile{
         IMAGE_PATH_MAP.put('ロ', "Tiles/rocks_large.png"); 
         IMAGE_PATH_MAP.put('花', "Tiles/flower_wall_left.png"); 
     }
-=======
-    public static final Map<Character, String> IMAGE_PATH_MAP = Map.ofEntries(
-        entry(' ', "Tiles/empty.png"), //not a space, \u0020
-        entry('-', "Tiles/block_i_dirt_b.png"),
-        entry('_', "Tiles/block_i_dirt_t.png"),
-        entry('[', "Tiles/block_i_dirt_r.png"),
-        entry(']', "Tiles/block_i_dirt_l.png"),
-        entry('\\', "Tiles/block_i_dirt_tr.png"),
-        entry('/', "Tiles/block_i_dirt_lt.png"),
-        entry('4', "Tiles/block_i_dirt_rb.png"),
-        entry('+', "Tiles/block_i_dirt_lb.png"),
-        entry('フ', "Tiles/mushroom1.png"),
-        entry('ブ', "Tiles/mushroom2.png"),
-        entry('プ', "Tiles/mushroom3.png"),
-        entry('ラ', "Tiles/rocks_small1.png"),
-        entry('ル', "Tiles/rocks_small2.png"),
-        entry('ロ', "Tiles/rocks_large.png"),
-        entry('花', "Tiles/flower_wall_left.png"),
-        entry('F', "Tiles/finish.png")
-    );
->>>>>>> Stashed changes
 }
