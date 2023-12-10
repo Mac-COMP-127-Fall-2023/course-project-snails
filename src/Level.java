@@ -39,15 +39,17 @@ class Level {
                     }
                     tileKey = ' '; //place an empty tile in the bg
                 }
-                Tile newTile = new Block(topLeftPos, tileKey); //create a new tile based on the character it reads
-                tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
+    
                 
+                Tile newTile;
                 if(collidableKeys.contains(tileKey)){
-                     collidableGroup.add(newTile.getImage());
+                    newTile = new Block(topLeftPos, tileKey, true); //create a new tile based on the character it reads
+                    collidableGroup.add(newTile.getImage());
                 } else{
+                    newTile = new Block(topLeftPos, tileKey, false); 
                     background.add(newTile.getImage());
                 }
-               
+                tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
                 tileX++;
             }
             tileX = 0;
@@ -55,6 +57,7 @@ class Level {
         }   
         snail.setOrientation(Snail.Orientation.BOTTOM);
     }
+
 
     public GraphicsGroup getGraphics() {
         GraphicsGroup group = new GraphicsGroup();
@@ -81,11 +84,10 @@ class Level {
     
     private Tile getCollidableTileAt(Point p){
         for (Tile tile : tileMap.values()) {
-            if (tile.checkCollision(p)) {
+            if (tile.checkCollision(p) && tile.isCollidable()) {
                 return tile;
             }
         }
-       // return collidableGroup.getElementAt(p);
-       return null;
+      return null;
     }
 }

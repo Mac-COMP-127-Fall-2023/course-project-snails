@@ -39,4 +39,8 @@ public class Finish implements Tile{
     public Image getImage() {
         return image;
     }
+    
+    public boolean isCollidable(){
+        return true;
+    }
 }

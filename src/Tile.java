@@ -11,6 +11,7 @@ public interface Tile{
     public Point getBottomLeftCorner();
     
     public boolean checkCollision(Point point);
+    public boolean isCollidable();
 
     public Image getImage();
 
