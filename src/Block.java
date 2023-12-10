@@ -36,7 +36,7 @@ class Block implements Tile{
     }
 
     public Point getBottomLeftCorner(){
-        return new Point(x, y + height);
+        return new Point(x, y + height - SnailGame.SCREEN_PIXEL_RATIO);
     }
 
     public boolean checkCollision(Point point) {

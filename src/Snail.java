@@ -154,7 +154,6 @@ public class Snail {
                     //if on the edge of something, rotate to stay on
                     if(!attachedTile.checkCollision(middleOfOrientation)){
                         rotate(attachedTile.getTopRightCorner(), Orientation.LEFT);
-                       // System.out.println("rotatinggg");
                     }
                     else if(canMoveDirection(Orientation.RIGHT)){
                           x+=m;
@@ -201,7 +200,6 @@ public class Snail {
                     }
                 }
                 break;
-            //to do: add rotations to the rest
             case TOP:
                 if(facing == Orientation.RIGHT){
                     if(!attachedTile.checkCollision(middleOfOrientation)){
@@ -239,6 +237,7 @@ public class Snail {
                         turn(Orientation.TOP);
                     }
                 }
+                //TODO: issue
                 else if(facing == Orientation.LEFT){
                      if(!attachedTile.checkCollision(middleOfOrientation)){
                         rotate(attachedTile.getBottomLeftCorner(), Orientation.TOP); //messed up
@@ -306,7 +305,7 @@ public class Snail {
             else{
                 currentImage.rotateBy(90);
             }
-        setOrientation(newOrientation);
+            setOrientation(newOrientation);
         }
     }
 
@@ -315,10 +314,6 @@ public class Snail {
      * being the midpoint of the side that is the newOrientation.
      * 
      * @param newSideMidpoint should be the corner of the block snail is on
-     * 
-     * TO DO: fix bug: when going counterclockwise, when the snail rotates on the lower left
-     * corner of the tile, it ends up just slightly under (disconnected) and therefore doesn't
-     * work properly
      */
     private void rotate(Point newSideMidpoint, Orientation newOrientation){
         if(newOrientation == Orientation.LEFT && snailBottomOrientation == Orientation.BOTTOM){
@@ -351,8 +346,6 @@ public class Snail {
             y = (int)(newSideMidpoint.getY() - currentImage.getHeight());
             currentImage.rotateBy(90);
         }
-
-        //THIS IS WHERE THE ISSUE IS (somehow; probably deeper in the code somewhere)
         else if(newOrientation == Orientation.TOP && snailBottomOrientation == Orientation.RIGHT){
             x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
             y = (int)(newSideMidpoint.getY());
