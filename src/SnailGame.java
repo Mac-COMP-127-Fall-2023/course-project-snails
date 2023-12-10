@@ -68,8 +68,8 @@ public class SnailGame {
                                     .stream()
                                     .map(point -> currentLevel.checkCollision(point))
                                     .collect(Collectors.toList()));
-                currentLevel.updateAttachedTileOfSnail();
                 snail.move(canvas.getKeysPressed()); 
+                currentLevel.updateAttachedTileOfSnail();
             }
             ticks++;
         });

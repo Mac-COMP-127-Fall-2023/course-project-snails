@@ -100,13 +100,7 @@ public class Snail {
      */
 
     public void move(Set<Key> keysPressed){
-        System.out.println("in move()");
-        System.out.println("Orientation: " + snailBottomOrientation);
-        System.out.println("facing: " + facing);
-        System.out.println("current movement: " + currentMovement);
         if (currentMovement==Movement.FALL || attachedTile == null) {
-            System.out.println("first (shouldn't be here)");
-            
             if(canMoveDirection(Orientation.BOTTOM)){
                 fall();
             }
@@ -115,17 +109,14 @@ public class Snail {
                 currentMovement = Movement.CRAWL;
            }
         } else if (currentAppearance == Appearance.CURLING) {
-             System.out.println("second (shouldn't be here)");
             updateAnimation();
         } else if (currentAppearance == Appearance.UNCURLING) {
-             System.out.println("third (shouldn't be here)");
             updateAnimation();
         } else {
             Orientation inputDirection = Orientation.BOTTOM; // idt this is necessary haha but it made my linter not mad, just using it as null
             
             if (keysPressed.contains(Key.RIGHT_ARROW)) {
                 inputDirection=Orientation.RIGHT;
-                System.out.println("input right arrow");
             } else if (keysPressed.contains(Key.LEFT_ARROW)) {
                 inputDirection=Orientation.LEFT;
             }
@@ -150,7 +141,6 @@ public class Snail {
      * TO DO: fix rotate()
      */
     private void crawl() {
-        System.out.println("in crawl()");
         if (currentMovement==Movement.FALL) {
             return;
         }
@@ -161,13 +151,12 @@ public class Snail {
         switch (snailBottomOrientation) {
             case BOTTOM:
                 if(facing == Orientation.RIGHT){
-                    System.out.println("Case bottom, facing right");
                     //if on the edge of something, rotate to stay on
                     if(!attachedTile.checkCollision(middleOfOrientation)){
                         rotate(attachedTile.getTopRightCorner(), Orientation.LEFT);
+                       // System.out.println("rotatinggg");
                     }
                     else if(canMoveDirection(Orientation.RIGHT)){
-                        System.out.println("x+=m");
                           x+=m;
                     }
                     //if hitting something, move onto it
@@ -217,7 +206,6 @@ public class Snail {
                 if(facing == Orientation.RIGHT){
                     if(!attachedTile.checkCollision(middleOfOrientation)){
                         rotate(attachedTile.getBottomLeftCorner(), Orientation.RIGHT);
-                        System.out.println("here");
                     }
                     else if(canMoveDirection(Orientation.LEFT)){
                          x-=m;
