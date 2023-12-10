@@ -20,7 +20,7 @@ class Level {
 
     public static final int SCREEN_PIXELS_PER_TILE = PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO;
 
-    private List<Character> collidableKeys = List.of('-', '_', '[', ']', '\\', '/', '4', '+', '▘', '▝', '▝');
+    private List<Character> collidableKeys = List.of('ー', '＿', '「', '」', '・', '／', '４', '＋', 'ヒ', 'ビ', 'ピ');
 
     private Snail snail; 
 
@@ -33,19 +33,18 @@ class Level {
                     tileX * SCREEN_PIXELS_PER_TILE,
                     tileY * SCREEN_PIXELS_PER_TILE);
                     
-                if (tileKey=='s'||tileKey == 'S') {
-                    if (tileKey=='S') {
+                if (tileKey=='す'||tileKey == 'ず') {
+                    if (tileKey=='ず') {
                         snail = new Snail(topLeftPos); //set the position of the snail to the top left of the current tile
                     }
                     tileKey = ' '; //place an empty tile in the bg
                 }
-    
-                
                 Tile newTile;
-                if(collidableKeys.contains(tileKey)){
+                if (collidableKeys.contains(tileKey)) {
                     newTile = new Block(topLeftPos, tileKey, true); //create a new tile based on the character it reads
                     collidableGroup.add(newTile.getImage());
-                } else{
+                } 
+                else {
                     newTile = new Block(topLeftPos, tileKey, false); 
                     background.add(newTile.getImage());
                 }
@@ -88,5 +87,9 @@ class Level {
             }
         }
       return null;
+    }
+
+    public boolean getCompleted(){
+        return checkCollision(new Point(snail.getX(), snail.getY()));
     }
 }

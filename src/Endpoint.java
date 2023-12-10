@@ -1,15 +1,15 @@
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
-public class Finish implements Tile{
+public class Endpoint implements Tile{
     Image image;
     int x;
     int y;
     int width = Level.SCREEN_PIXELS_PER_TILE;
     int height = Level.SCREEN_PIXELS_PER_TILE;
 
-    public Finish(Point topLeftPos, char key) {
-        image = new Image(topLeftPos.getX(), topLeftPos.getY(), !IMAGE_PATH_MAP.get(key).isEmpty() ? IMAGE_PATH_MAP.get(key) : "Tiles/empty.png");
+    public Endpoint(Point topLeftPos) {
+        image = new Image("Tiles/rocks_small2.png"); //temp
         image.setScale((double)SnailGame.SCREEN_PIXEL_RATIO / 6);
 
         x = (int)topLeftPos.getX();

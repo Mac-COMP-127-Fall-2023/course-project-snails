@@ -17,17 +17,17 @@ public class SnailGame {
 
     private static List<Level> levels = List.of( 
         new Level("""
-4------------------+
-[                  ]
-[                  ]
-[                  ]
-[花                 ]
-[  Ss           ブ  ]
-[  ss ラ   ロ     フ  ]
-[  ___             ]
-[               プ  ]
-[                  ]
-\\__________________/""")//s is just the little part of the snail we need to be aware of
+４ーーーーーーーーーーーーーーーーーー＋
+「　　　　　　　　　　　　　　　　　　」
+「　　　　　　　　　　　　　　　　　　」
+「　　　　　　　　　　　　　　　　　　」
+「花　　　　　　　ひび　　　　　　　　」
+「　　ずす　　　　　　　　　　　　　　」
+「　　すすラ　　　　　　　　　　　　　」
+「　　ヒビピ　　　　　　　　　プ　　　」
+「　　　　　　　　　　　　　　ブ　　　」
+「　　　　　　　　ロ　　　　　フ　　　」
+・＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿／""")//s is just the little part of the snail we need to be aware of
 );
 
 
