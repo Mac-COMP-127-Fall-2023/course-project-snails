@@ -32,6 +32,10 @@ public class Finish implements Tile{
         return new Point(x, y + height);
     }
 
+    public boolean checkCollision(Point point) {
+        return point.getX() > x && point.getX() < x + width && point.getY() > x && point.getY() < x + height;
+    }
+
     public Image getImage() {
         return image;
     }

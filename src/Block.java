@@ -1,10 +1,7 @@
-import java.util.HashMap;
-import java.util.Map;
-
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
-public class Block implements Tile{
+class Block implements Tile{
     Image image;
     int x;
     int y;
@@ -33,6 +30,10 @@ public class Block implements Tile{
 
     public Point getBottomLeftCorner(){
         return new Point(x, y + height);
+    }
+
+    public boolean checkCollision(Point point) {
+        return point.getX() > x && point.getX() < x + width && point.getY() > x && point.getY() < x + height;
     }
 
     public Image getImage() {
