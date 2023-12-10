@@ -58,7 +58,6 @@ class Level {
         snail.setOrientation(Snail.Orientation.BOTTOM);
     }
 
-
     public GraphicsGroup getGraphics() {
         GraphicsGroup group = new GraphicsGroup();
         group.add(background);

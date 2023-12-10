@@ -107,6 +107,8 @@ public class Snail {
            else{
                 turn(Orientation.BOTTOM);
                 currentMovement = Movement.CRAWL;
+                
+                currentImage.setPosition(x,y);
            }
         } else if (currentAppearance == Appearance.CURLING) {
             updateAnimation();
@@ -138,7 +140,6 @@ public class Snail {
 
     /**
      * Moves the snail according to its orientation.
-     * TO DO: fix rotate()
      */
     private void crawl() {
         if (currentMovement==Movement.FALL) {
@@ -153,7 +154,7 @@ public class Snail {
                 if(facing == Orientation.RIGHT){
                     //if on the edge of something, rotate to stay on
                     if(!attachedTile.checkCollision(middleOfOrientation)){
-                        rotate(attachedTile.getTopRightCorner(), Orientation.LEFT);
+                        rotateToNewTile(attachedTile.getTopRightCorner(), Orientation.LEFT);
                     }
                     else if(canMoveDirection(Orientation.RIGHT)){
                           x+=m;
@@ -165,7 +166,7 @@ public class Snail {
                 }  
                 else if(facing == Orientation.LEFT){
                    if(!attachedTile.checkCollision(middleOfOrientation)){
-                        rotate(attachedTile.getTopLeftCorner(), Orientation.RIGHT);
+                        rotateToNewTile(attachedTile.getTopLeftCorner(), Orientation.RIGHT);
                     }
                     else if(canMoveDirection(Orientation.LEFT)){
                           x+=m;
@@ -179,7 +180,7 @@ public class Snail {
             case LEFT:
                 if(facing == Orientation.RIGHT){ //going down
                     if(!attachedTile.checkCollision(middleOfOrientation)){
-                        rotate(attachedTile.getBottomRightCorner(), Orientation.TOP);
+                        rotateToNewTile(attachedTile.getBottomRightCorner(), Orientation.TOP);
                     }
                     else if(canMoveDirection(Orientation.BOTTOM)){
                             y+=m;
@@ -190,7 +191,7 @@ public class Snail {
                 }
                 else if(facing == Orientation.LEFT){  //going up
                     if(!attachedTile.checkCollision(middleOfOrientation)){
-                        rotate(attachedTile.getTopRightCorner(), Orientation.BOTTOM);
+                        rotateToNewTile(attachedTile.getTopRightCorner(), Orientation.BOTTOM);
                     }
                     else if(canMoveDirection(Orientation.TOP)){
                             y+=m;
@@ -203,7 +204,7 @@ public class Snail {
             case TOP:
                 if(facing == Orientation.RIGHT){
                     if(!attachedTile.checkCollision(middleOfOrientation)){
-                        rotate(attachedTile.getBottomLeftCorner(), Orientation.RIGHT);
+                        rotateToNewTile(attachedTile.getBottomLeftCorner(), Orientation.RIGHT);
                     }
                     else if(canMoveDirection(Orientation.LEFT)){
                          x-=m;
@@ -214,7 +215,7 @@ public class Snail {
                 }
                 else if(facing == Orientation.LEFT){
                     if(!attachedTile.checkCollision(middleOfOrientation)){
-                        rotate(attachedTile.getBottomRightCorner(), Orientation.LEFT);
+                        rotateToNewTile(attachedTile.getBottomRightCorner(), Orientation.LEFT);
                     }
                     else if(canMoveDirection(Orientation.RIGHT)){
                         x-=m;
@@ -228,7 +229,7 @@ public class Snail {
             case RIGHT:
                 if(facing == Orientation.RIGHT){ //going up
                     if(!attachedTile.checkCollision(middleOfOrientation)){
-                        rotate(attachedTile.getTopLeftCorner(), Orientation.BOTTOM);
+                        rotateToNewTile(attachedTile.getTopLeftCorner(), Orientation.BOTTOM);
                     }
                     else if(canMoveDirection(Orientation.TOP)){
                         y-=m;
@@ -237,10 +238,9 @@ public class Snail {
                         turn(Orientation.TOP);
                     }
                 }
-                //TODO: issue
                 else if(facing == Orientation.LEFT){
                      if(!attachedTile.checkCollision(middleOfOrientation)){
-                        rotate(attachedTile.getBottomLeftCorner(), Orientation.TOP); //messed up
+                        rotateToNewTile(attachedTile.getBottomLeftCorner(), Orientation.TOP);
                     }
                     if(canMoveDirection(Orientation.BOTTOM)){
                         y-=m;
@@ -277,7 +277,7 @@ public class Snail {
         updateAnimation();
     }
 
-    /*
+    /**
      * Updates middleOfOrientation and snailBottomOrientation based on
      * @param newOrientation
      */
@@ -286,6 +286,10 @@ public class Snail {
         snailBottomOrientation = newOrientation;
     }
 
+    /**
+     * Rotates currentImage depending on the current orientation
+     * and @param newOrientation
+     */
     private void turn(Orientation newOrientation){
         if(currentMovement == Movement.FALL && !canMoveDirection(Orientation.BOTTOM)){
             if(snailBottomOrientation == Orientation.LEFT){
@@ -309,13 +313,13 @@ public class Snail {
         }
     }
 
-     /*
+     /**
      * Move the snail according the the new orientation and midpoint, the newSideMidpoint
      * being the midpoint of the side that is the newOrientation.
      * 
      * @param newSideMidpoint should be the corner of the block snail is on
      */
-    private void rotate(Point newSideMidpoint, Orientation newOrientation){
+    private void rotateToNewTile(Point newSideMidpoint, Orientation newOrientation){
         if(newOrientation == Orientation.LEFT && snailBottomOrientation == Orientation.BOTTOM){
             x = (int)newSideMidpoint.getX();
             y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
@@ -360,9 +364,11 @@ public class Snail {
         setOrientation(newOrientation);
     }
 
-    /*
+    /**
      * determines if the snail can move in the given direction, based
      * on obstacles and rules of the game (e.g., if you're on the bottom you can't move up)
+     * @return whether or not the snail is able to move in @param direction based on 
+     * snailBottomOrientation, such that the snail stays attached to a Tile (unless falling)
      */
     private boolean canMoveDirection(Snail.Orientation direction){
         if(snailBottomOrientation == Snail.Orientation.BOTTOM){
@@ -394,8 +400,8 @@ public class Snail {
         return true;
     }
 
-    /*
-     * returns the midpoint of the given side of the snail
+    /**
+     * @return the midpoint of @param orientation, the given side of the snail
      */
     private Point middleOfSide(Orientation orientation){
         if(orientation == Orientation.BOTTOM){
@@ -457,7 +463,6 @@ public class Snail {
         lastAppearance = currentAppearance;
     }
 
-
     public Image getGraphics() {
         return currentImage;
     }
@@ -466,8 +471,8 @@ public class Snail {
         return facing;
     }
 
-    /*
-     * returns a list of points on the snail in this order:
+    /**
+     * @return a list of points on the snail in this order:
      * top left, top middle, top right, right middle, bottom right, bottom middle, bottom left, left middle
      */
     public List<Point> getBoundaryPoints(){
