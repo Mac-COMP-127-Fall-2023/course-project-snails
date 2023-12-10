@@ -36,7 +36,7 @@ public class SnailGame {
 
         for(Level level : levels){
             currentLevel = level;
-            playRound(currentLevel);
+            playRound();
         }     
     }
 
@@ -44,12 +44,12 @@ public class SnailGame {
      * plays the game for 1 level
      * returns true if won
      */
-    private boolean playRound(Level level){
+    private boolean playRound(){
         canvas.removeAll();
-        graphics= level.getGraphics();
+        graphics = currentLevel.getGraphics();
         graphics.setPosition(0,0);
         snail = currentLevel.getSnail();
-        snail.updateAttachedTile(level);
+        currentLevel.updateAttachedTileOfSnail();
         graphics.add(snail.getGraphics());
         graphics.setAnchor(graphics.getPosition());
         graphics.setScale(.5);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
@@ -68,10 +68,8 @@ public class SnailGame {
                                     .stream()
                                     .map(point -> currentLevel.checkCollision(point))
                                     .collect(Collectors.toList()));
-                snail.updateAttachedTile(currentLevel);
-                snail.move(canvas.getKeysPressed());
-                //checkCollisions();
                 currentLevel.updateAttachedTileOfSnail();
+                snail.move(canvas.getKeysPressed()); 
             }
             ticks++;
         });

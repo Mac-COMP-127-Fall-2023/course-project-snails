@@ -2,19 +2,14 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import edu.macalester.graphics.Ellipse;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Point;
 
-import java.awt.Color;
-
 /*
  * DO TO: 
- * 1. add 2 layers (2 different graphics groups): the 
- *    background, and the top layer that the snail can interact with
- * 2. add a finishing point visual of some kind (** this will also
- *    be used in SnailGame to see if the snail should proceed to the 
- *    next level)
+ *  add a finishing point visual of some kind (** this will also
+ *  be used in SnailGame to see if the snail should proceed to the 
+ *  next level)
  */
 class Level {
     GraphicsGroup collidableGroup = new GraphicsGroup();
@@ -78,28 +73,19 @@ class Level {
 
 
     public void updateAttachedTileOfSnail(){
-        Tile newTile = getCollidableTileAt(new Point(snail.getMiddleOfOrientation().getX(), snail.getMiddleOfOrientation().getY()));
+        Tile newTile = getCollidableTileAt(snail.getMiddleOfOrientation());
         if(newTile != null){
-             snail.setAttachedTile(newTile);
+             snail.updateAttachedTile(newTile);
         }
     }
     
-    public Tile getCollidableTileAt(Point p){
+    private Tile getCollidableTileAt(Point p){
         for (Tile tile : tileMap.values()) {
             if (tile.checkCollision(p)) {
                 return tile;
             }
         }
-        return null;
+       // return collidableGroup.getElementAt(p);
+       return null;
     }
-
-    // public void updateAttachedTileOfSnail(){
-    //     Tile newTile = getCollidableTileAt(new Point(snail.getMiddleOfOrientation().getX(), snail.getMiddleOfOrientation().getY()));
-    //     if(newTile != null){
-    //          snail.setAttachedTile(newTile);
-    //           Ellipse bottomLeft = new Ellipse(newTile.getBottomLeftCorner().getX(), newTile.getBottomLeftCorner().getY(), 10, 10);
-    //     bottomLeft.setFillColor(Color.BLACK);
-    //     collidableGroup.add(bottomLeft);
-    //     }
-    // }
 }

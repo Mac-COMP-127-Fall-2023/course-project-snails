@@ -33,7 +33,7 @@ class Block implements Tile{
     }
 
     public boolean checkCollision(Point point) {
-        return point.getX() > x && point.getX() < x + width && point.getY() > x && point.getY() < x + height;
+       return image.testHit(point.getX(), point.getY());
     }
 
     public Image getImage() {
