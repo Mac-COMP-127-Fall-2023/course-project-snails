@@ -96,7 +96,7 @@ class Level {
     }
 
     public boolean getCompleted(){
-        for(Point p : snail.getBoundaryPoints()){
+        for(Point p : snail.getInnerBoundaryPoints()){
             if(endpoint.getImage().testHit(p.getX(), p.getY())){
                 return true;
             }

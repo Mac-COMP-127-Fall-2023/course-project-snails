@@ -489,4 +489,17 @@ public class Snail {
         return List.of(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
     }
 
+    public List<Point> getInnerBoundaryPoints(){
+        Point topLeft = new Point (x+10, y/2);
+        Point top = new Point(x+currentImage.getWidth()/2, y/2);
+        Point topRight = new Point(x+currentImage.getWidth()-10, y/2);
+        Point right = new Point(x+currentImage.getWidth()-10, y+currentImage.getHeight()/2);
+        Point bottomRight = new Point(x+currentImage.getWidth()-10, y+currentImage.getHeight());
+        Point bottom = new Point(x+currentImage.getWidth()/2, y+currentImage.getHeight());
+        Point bottomLeft =  new Point(x+10, y+currentImage.getHeight());
+        Point left = new Point(x+10, y+currentImage.getHeight()/2);
+
+        return List.of(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
+    }
+
 }

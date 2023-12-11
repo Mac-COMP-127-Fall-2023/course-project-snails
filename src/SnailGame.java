@@ -23,12 +23,12 @@ public class SnailGame {
 「　　　　　　　　　　　　　　　　　　」
 「　　　　　　　　　　　　　　　　　　」
 「　　　　　　　　　　　　　　　　　　」
-「花　　　　　　　ひび　　　　　　　　」
-「　　ずす　　　　　　　　　　　　　　」
-「　　すすラ　　　　　　　　　　　　　」
-「　　ヒビピ　　　　　　　　　プ　　　」
-「　　　　　　　　　　　　　　ブ　　　」
-「　　　　　　　　ロ　X　　　フ　　　」
+「花　　　　　　　＿＿　　　　　　　　」
+「　　ずす　＿　　　　　　　　　　　　」
+「　　すすラ＿　　　　　　　　　　　　」
+「　　＿＿＿＿　＿　　　　　　プ　　　」
+「　　　　　　　＿　　　　　　ブ　　　」
+「　　　　　　　＿ロ　X　　　フ　　　」
 ・＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿／""")//s is just the little part of the snail we need to be aware of
 );
 
