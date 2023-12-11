@@ -490,34 +490,54 @@ public class Snail {
     }
 
     public List<Point> getInnerBoundaryPoints(){
-         Point topLeft = new Point (x+20, y+20);
-         Point top = new Point(x+currentImage.getWidth()/2, y+20);
-         Point topRight = new Point(x+currentImage.getWidth()-20, y+20);
-         Point right = new Point(x+currentImage.getWidth()-20, y+currentImage.getHeight()/2);
-         Point bottomRight = new Point(x+currentImage.getWidth()-20, y+currentImage.getHeight());
-         Point bottom = new Point(x+currentImage.getWidth()/2, y+currentImage.getHeight());
-         Point bottomLeft =  new Point(x+20, y+currentImage.getHeight());
-         Point left = new Point(x+20, y+currentImage.getHeight()/2);
+         Point topLeft;
+         Point top;
+         Point topRight;
+         Point right;
+         Point bottomRight;
+         Point bottom;
+         Point bottomLeft;
+         Point left;
 
         if(snailBottomOrientation == Orientation.TOP){
-            bottomRight = right;
-            bottom = new Point(x+currentImage.getWidth()/2, y+currentImage.getHeight()/2);
-            bottomLeft =  left;
+            topLeft = new Point(x + currentImage.getWidth()/3, y);
+            top = new Point(x + currentImage.getWidth()/2, y);
+            topRight = new Point(x + currentImage.getWidth()*2/3, y);
+            right = new Point(x + currentImage.getWidth()*2/3, y + currentImage.getHeight()*1/6);
+            bottomRight = new Point(x + currentImage.getWidth()*2/3, y + currentImage.getHeight()/3);
+            bottom = new Point(x + currentImage.getWidth()/2, y + currentImage.getHeight()/3);
+            bottomLeft = new Point(x + currentImage.getWidth()/3, y + currentImage.getHeight()/3);
+            left = new Point(x + currentImage.getWidth()/3, y + currentImage.getHeight()*1/6);
         }
         else if(snailBottomOrientation == Orientation.LEFT){
-            topRight = top;
-            right = new Point(x+currentImage.getWidth()/2, y+currentImage.getHeight());
-            bottomRight = bottom;
+            topLeft = new Point(x, y + currentImage.getHeight()/3);
+            top = new Point(x + currentImage.getWidth()/6, y + currentImage.getHeight()/3);
+            topRight = new Point(x + currentImage.getWidth()/3, y + currentImage.getHeight()/3);
+            right = new Point(x + currentImage.getWidth()/3, y + currentImage.getHeight()/2);
+            bottomRight = new Point(x + currentImage.getWidth()/3, y + currentImage.getHeight()*2/3);
+            bottom = new Point(x + currentImage.getWidth()/6, y + currentImage.getHeight()*2/3);
+            bottomLeft = new Point(x, y + currentImage.getHeight()*2/3);
+            left = new Point(x, y + currentImage.getHeight()/2);
         }
         else if(snailBottomOrientation == Orientation.RIGHT){
-            topLeft = top;
-            bottomLeft = bottom;
-            left = new Point(x+currentImage.getWidth(), y+currentImage.getHeight()/2);
+            topLeft = new Point(x + currentImage.getWidth()*2/3, y + currentImage.getHeight()/3);
+            top = new Point(x + currentImage.getWidth()*5/6, y + currentImage.getHeight()/3);
+            topRight = new Point(x + currentImage.getWidth(), y + currentImage.getHeight()/3);
+            right = new Point(x + currentImage.getWidth(), y + currentImage.getHeight()/2);
+            bottomRight = new Point(x + currentImage.getWidth(), y + currentImage.getHeight()*2/3);
+            bottom = new Point(x + currentImage.getWidth()*5/6, y + currentImage.getHeight()*2/3);
+            bottomLeft = new Point(x + currentImage.getWidth()*2/3, y + currentImage.getHeight()*2/3);
+            left = new Point(x + currentImage.getWidth()*2/3, y + currentImage.getHeight()/2);
         }
         else{
-            topLeft = left;
-            top = new Point(x+currentImage.getWidth()/2, y/2);
-            topRight = right;
+            topLeft = new Point(x + currentImage.getWidth()/3, y + currentImage.getHeight()*2/3);
+            top = new Point(x + currentImage.getWidth()/2, y + currentImage.getHeight()*2/3);
+            topRight = new Point(x + currentImage.getWidth()*2/3, y + currentImage.getHeight()*2/3);
+            right = new Point(x + currentImage.getWidth()*2/3, y + currentImage.getHeight()*5/6);
+            bottomRight = new Point(x + currentImage.getWidth()*2/3, y + currentImage.getHeight());
+            bottom = new Point(x + currentImage.getWidth()/2, y + currentImage.getHeight());
+            bottomLeft = new Point(x + currentImage.getWidth()/3, y + currentImage.getHeight());
+            left = new Point(x + currentImage.getWidth()/3, y + currentImage.getHeight()*5/6);
         }
 
         return List.of(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);

@@ -27,8 +27,8 @@ public class SnailGame {
 「　　ずす　＿　　　　　　＿＿＿　　　」
 「　　すす　@　　　　　　　　　　　　」
 @＿＿＿＿＿@　　　＿　　　　プ　　　」
-「　　　　　　　　　@　X　　ブ　　　」
-「　　　　　　　　ロ@　　　　フ　　　」
+「　　　　　　　　　@　　　　ブ　　　」
+「　　　　　　　　ロ@　　X　フ　　　」
 ・＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿／""")//s is just the little part of the snail we need to be aware of
 );
 
