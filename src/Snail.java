@@ -404,7 +404,7 @@ public class Snail {
     /**
      * @return the midpoint of @param orientation, the given side of the snail
      */
-    private Point middleOfSide(Orientation orientation){
+    public Point middleOfSide(Orientation orientation){
         if(orientation == Orientation.BOTTOM){
             return getBoundaryPoints().get(5);
         }

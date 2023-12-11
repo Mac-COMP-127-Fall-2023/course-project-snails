@@ -9,11 +9,12 @@ public class Endpoint implements Tile{
     int height = Level.SCREEN_PIXELS_PER_TILE;
 
     public Endpoint(Point topLeftPos) {
-        image = new Image("Tiles/rocks_small2.png"); //temp
+        image = new Image("Tiles/grass2.png"); //temp
         image.setScale((double)SnailGame.SCREEN_PIXEL_RATIO / 6);
 
         x = (int)topLeftPos.getX();
         y = (int)topLeftPos.getY();
+        image.setPosition(x,y);
     }
 
     public Point getTopLeftCorner() {
@@ -41,6 +42,6 @@ public class Endpoint implements Tile{
     }
     
     public boolean isCollidable(){
-        return true;
+        return false;
     }
 }

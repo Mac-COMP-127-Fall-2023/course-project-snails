@@ -12,15 +12,17 @@ import edu.macalester.graphics.Point;
  *  next level)
  */
 class Level {
-    GraphicsGroup collidableGroup = new GraphicsGroup();
-    GraphicsGroup background = new GraphicsGroup();
-    Map<Point, Tile> tileMap = new HashMap<>();
+    private GraphicsGroup collidableGroup = new GraphicsGroup();
+    private  GraphicsGroup background = new GraphicsGroup();
+    private Endpoint endpoint;
+    private Map<Point, Tile> tileMap = new HashMap<>();
 
     public static final int PIXELS_PER_TILE = 16; //the number of pixels that make up one tile/unit
 
     public static final int SCREEN_PIXELS_PER_TILE = PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO;
 
     private List<Character> collidableKeys = List.of('ー', '＿', '「', '」', '・', '／', '４', '＋', 'ヒ', 'ビ', 'ピ');
+   private Character endpointKey = 'X';
 
     private Snail snail; 
 
@@ -40,7 +42,11 @@ class Level {
                     tileKey = ' '; //place an empty tile in the bg
                 }
                 Tile newTile;
-                if (collidableKeys.contains(tileKey)) {
+                if (tileKey == endpointKey){
+                    newTile = new Endpoint(topLeftPos);
+                    endpoint = (Endpoint)newTile;
+                }
+                else if (collidableKeys.contains(tileKey)) {
                     newTile = new Block(topLeftPos, tileKey, true); //create a new tile based on the character it reads
                     collidableGroup.add(newTile.getImage());
                 } 
@@ -61,6 +67,7 @@ class Level {
         GraphicsGroup group = new GraphicsGroup();
         group.add(background);
         group.add(collidableGroup);
+        group.add(endpoint.getImage());
         return group;
     }
 
@@ -71,7 +78,6 @@ class Level {
     public Snail getSnail() {
         return snail;
     }
-
 
     public void updateAttachedTileOfSnail(){
         Tile newTile = getCollidableTileAt(snail.getMiddleOfOrientation());
@@ -90,6 +96,11 @@ class Level {
     }
 
     public boolean getCompleted(){
-        return checkCollision(new Point(snail.getX(), snail.getY()));
+        for(Point p : snail.getBoundaryPoints()){
+            if(endpoint.getImage().testHit(p.getX(), p.getY())){
+                return true;
+            }
+        }
+        return false;
     }
 }

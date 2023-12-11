@@ -1,5 +1,7 @@
 import edu.macalester.graphics.CanvasWindow;
+import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsGroup;
+import edu.macalester.graphics.GraphicsText;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,25 +28,22 @@ public class SnailGame {
 「　　すすラ　　　　　　　　　　　　　」
 「　　ヒビピ　　　　　　　　　プ　　　」
 「　　　　　　　　　　　　　　ブ　　　」
-「　　　　　　　　ロ　　　　　フ　　　」
+「　　　　　　　　ロ　X　　　フ　　　」
 ・＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿／""")//s is just the little part of the snail we need to be aware of
 );
 
 
     public SnailGame() {
         canvas = new CanvasWindow("Snails", 1920, 1080);
-
-        for(Level level : levels){
-            currentLevel = level;
-            playRound();
-        }     
+        currentLevel = levels.get(0);
+        playRound();
     }
 
     /*
      * plays the game for 1 level
      * returns true if won
      */
-    private boolean playRound(){
+    private void playRound(){
         canvas.removeAll();
         graphics = currentLevel.getGraphics();
         graphics.setPosition(0,0);
@@ -57,8 +56,6 @@ public class SnailGame {
         canvas.draw();
 
         handleSnailMovement();
-
-        return false; //temporary
     }
 
     private void handleSnailMovement(){
@@ -72,6 +69,15 @@ public class SnailGame {
                 currentLevel.updateAttachedTileOfSnail();
             }
             ticks++;
+            if(winRound()){
+                GraphicsText win = new GraphicsText("You win!");
+                win.setCenter(canvas.getWidth()/4, canvas.getHeight()/5);
+                win.setFont(FontStyle.BOLD, 30);
+                canvas.add(win);
+                canvas.draw();
+                canvas.pause(4000);
+                canvas.closeWindow();
+            }
         });
     }
 
@@ -79,7 +85,12 @@ public class SnailGame {
      * return true if the snail has reached the endpoint
      */
     private boolean winRound(){
-        return false; //temporary
+        if(currentLevel.getCompleted()){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public static void main(String[] args) {
