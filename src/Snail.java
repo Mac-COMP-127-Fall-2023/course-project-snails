@@ -93,24 +93,25 @@ public class Snail {
     }
 
     /**
-     * we call this every animation frame, so this handles a bunch of the state logic.
-     * i ended up removing space and adding the thing i was talking about with it curling up to turn around
-     * i think it looks nice but we can change that if yall don't like it, no big deal
-     * @param keysPressed
+     * Update the snail's position and movement based on 
+     * @param keysPressed and its current orientation, ways it can move, etc.
      */
-
     public void move(Set<Key> keysPressed){
-        if (currentMovement==Movement.FALL || attachedTile == null) {
+        //this ensures that the snail does not fall *into* a Tile more than it should
+        if(snailBottomOrientation == Orientation.BOTTOM && !canMoveDirection(Orientation.BOTTOM)){
+            y = (int)(attachedTile.getTopLeftCorner().getY() - currentImage.getHeight());
+            currentImage.setPosition(x,y);
+        }
+        if(currentMovement==Movement.FALL) {
             if(canMoveDirection(Orientation.BOTTOM)){
                 fall();
             }
            else{
                 turn(Orientation.BOTTOM);
                 currentMovement = Movement.CRAWL;
-                
-                currentImage.setPosition(x,y);
            }
-        } else if (currentAppearance == Appearance.CURLING) {
+        } 
+        else if (currentAppearance == Appearance.CURLING) {
             updateAnimation();
         } else if (currentAppearance == Appearance.UNCURLING) {
             updateAnimation();
@@ -291,7 +292,7 @@ public class Snail {
      * and @param newOrientation
      */
     private void turn(Orientation newOrientation){
-        if(currentMovement == Movement.FALL && !canMoveDirection(Orientation.BOTTOM)){
+        if(currentMovement == Movement.FALL && !canMoveDirection(Orientation.BOTTOM)){   
             if(snailBottomOrientation == Orientation.LEFT){
                 currentImage.rotateBy(-90);
             }
@@ -309,8 +310,8 @@ public class Snail {
             else{
                 currentImage.rotateBy(90);
             }
-            setOrientation(newOrientation);
         }
+        setOrientation(newOrientation);
     }
 
      /**
