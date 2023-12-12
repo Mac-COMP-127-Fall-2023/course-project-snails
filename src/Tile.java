@@ -17,7 +17,7 @@ public interface Tile{
 
     public static final Map<Character, String> IMAGE_PATH_MAP = Map.ofEntries(
         entry('　', "Tiles/empty.png"), //not a space, \u0020
-        entry('@', "Tiles/block_e_dirt.png"),
+        entry('あ', "Tiles/block_e_dirt.png"),
         entry('ー', "Tiles/block_i_dirt_b.png"),
         entry('＿', "Tiles/block_i_dirt_t.png"),
         entry('「', "Tiles/block_i_dirt_r.png"),
@@ -38,6 +38,6 @@ public interface Tile{
         entry('ル', "Tiles/rocks_small2.png"),
         entry('ロ', "Tiles/rocks_large.png"),
         entry('花', "Tiles/flower_wall_left.png"),
-        entry('ｆ', "Tiles/finish.png")
+        entry('え', "Tiles/finish.png")
     );
 }
