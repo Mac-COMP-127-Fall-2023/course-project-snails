@@ -8,7 +8,11 @@ class Platform implements Tile{
     int width = Level.SCREEN_PIXELS_PER_TILE;
     int height = Level.SCREEN_PIXELS_PER_TILE;
     public Platform(Point topLeftPos, char key) {
-        image = new Image(topLeftPos.getX(), topLeftPos.getY(), IMAGE_PATH_MAP.get(key) == null ? "Tiles/empty.png" : IMAGE_PATH_MAP.get(key));
+        String imagePath = IMAGE_PATH_MAP.get(key);
+        if (imagePath.substring(imagePath.length() - 5, imagePath.length() - 4) == "l") {
+            topLeftPos = new Point((int)topLeftPos.getX() - Level.SCREEN_PIXELS_PER_TILE + width, topLeftPos.getX());
+        }
+        image = new Image(topLeftPos.getX(), topLeftPos.getY(), IMAGE_PATH_MAP.get(key));
         image.setScale((double)SnailGame.SCREEN_PIXEL_RATIO / 6);
         x = (int)topLeftPos.getX();
         y = (int)topLeftPos.getY();

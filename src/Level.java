@@ -12,8 +12,8 @@ import edu.macalester.graphics.Point;
  *  next level)
  */
 class Level {
-    private GraphicsGroup collidableGroup = new GraphicsGroup();
-    private  GraphicsGroup background = new GraphicsGroup();
+    private GraphicsGroup terrainLayer = new GraphicsGroup();
+    private  GraphicsGroup decorationLayer = new GraphicsGroup();
     private Endpoint endpoint;
     private Map<Point, Tile> tileMap = new HashMap<>();
 
@@ -22,6 +22,7 @@ class Level {
     public static final int SCREEN_PIXELS_PER_TILE = PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO;
 
     private List<Character> blockKeys = List.of('￣', '＿', '「', '」', '・', '／', '４', '＋', '～','＝','｛','｝','⊕','⊛','✚','＊', 'あ');
+    private List<Character> decorationKeys = List.of('フ','ブ','プ','ラ','ル','ロ');
     private List<Character> platformKeys = List.of('ヒ', 'ビ', 'ピ', 'ひ', 'び');
     private Character endpointKey = 'Ⓕ';
 
@@ -49,15 +50,19 @@ class Level {
                 }
                 else if (platformKeys.contains(tileKey)) {
                     newTile = new Platform(topLeftPos, tileKey); //create a new tile based on the character it reads
-                    collidableGroup.add(newTile.getImage());
+                    terrainLayer.add(newTile.getImage());
                 } 
                 else if (blockKeys.contains(tileKey)) {
                     newTile = new Block(topLeftPos, tileKey); 
-                    background.add(newTile.getImage());
+                    terrainLayer.add(newTile.getImage());
+                }
+                else if (decorationKeys.contains(tileKey)) {
+                    newTile = new Decoration(topLeftPos, tileKey);
+                    decorationLayer.add(newTile.getImage());
                 }
                 else {
                     newTile = new Empty(topLeftPos);
-                    collidableGroup.add(background);
+                    terrainLayer.add(decorationLayer);
                 }
                 tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
                 tileX++;
@@ -70,14 +75,14 @@ class Level {
 
     public GraphicsGroup getGraphics() {
         GraphicsGroup group = new GraphicsGroup();
-        group.add(background);
-        group.add(collidableGroup);
+        group.add(decorationLayer);
+        group.add(terrainLayer);
         group.add(endpoint.getImage());
         return group;
     }
 
     public boolean checkCollision(Point p){
-        return collidableGroup.testHit(p.getX(), p.getY());
+        return terrainLayer.testHit(p.getX(), p.getY());
     }
 
     public Snail getSnail() {
@@ -93,7 +98,7 @@ class Level {
     
     private Tile getCollidableTileAt(Point p){
         for (Tile tile : tileMap.values()) {
-            if (tile.checkCollision(p) && tile.isCollidable()) {
+            if (tile.checkCollision(p)) {
                 return tile;
             }
         }

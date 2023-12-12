@@ -20,8 +20,8 @@ public class SnailGame {
     private static List<Level> levels = List.of( 
         new Level("""
 ４＿＿あ＿＿＿あ＿＿＿＿＿＿あ＿＿＿＿＋
-「　　あ　　　ー　　　　　　あ　　　　」
-「　　ー　　　　　　　　　　あ　　　　」
+「　　あ　　　＿　　　　　　あ　　　　」
+「　　＿　　　　　　　　　　あ　　　　」
 「　　　　　　　　　ひび　　ー　　　」あ
 「花　　　　＿＿　　　　　　　　　　　」
 「　ずす　　　あ　　　　　　　　　　　」
@@ -29,7 +29,7 @@ public class SnailGame {
 あ＿＿＿＿＿＿あ　　　ー　　　　」　　」
 「　　　　　　　　　　　　　　　　　　」
 「　　　　　　　　　　　　Ⓕ　　　　　」
-「　　　あ　　　　　あ　　　　　　　　」
+「　　　あ　　　　　ヒピ　　　　　　　」
 「　　　あ　　あ　　　　　　　　　　　」
 「　　　　　あ　　　　　　　　あ　　　」
 「　　　　　あ　　　　　　　　あ　　　」
