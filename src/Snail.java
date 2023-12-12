@@ -52,6 +52,10 @@ public class Snail {
     // current velocity while falling
     private int velocity = 0;
 
+    /**
+     * Create a snail, initializing it as crawling right-side-up, facing right, at
+     * @param snailPos
+     */
     public Snail(Point snailPos) {
         x = (int)snailPos.getX();
         y = (int)snailPos.getY();
@@ -260,6 +264,9 @@ public class Snail {
         currentAppearance = Appearance.CRAWLING;
     }
 
+    /**
+     * 
+     */
     private void curl() {
         currentAppearance = Appearance.CURLING;
         if (snailBottomOrientation!=Orientation.BOTTOM) {
@@ -268,6 +275,7 @@ public class Snail {
         }
         updateAnimation();
     }
+
     /**
      * Accelerates the snail downwards
      */
