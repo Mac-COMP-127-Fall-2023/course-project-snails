@@ -19,17 +19,21 @@ public class SnailGame {
 
     private static List<Level> levels = List.of( 
         new Level("""
-４ーーーーー@ーーーーーーーーーーーー＋
-「　　　　　@　　　　　　　　　　　　」
-「　　　　　@　　＿＿　　　　＿　　　」
-「　　ー　　　　　　　　　　　@　　＿@
-「花　　　　　　　＿＿　　　　　　　　」
-「　　ずす　＿　　　　　　＿＿＿　　　」
-「　　すす　@　　　　　　　　　　　　」
-@＿＿＿＿＿@　　　＿　　　　プ　　　」
-「　　　　　　　　　@　　　　ブ　　　」
-「　　　　　　　　ロ@　　X　フ　　　」
-・＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿／""")//s is just the little part of the snail we need to be aware of
+４ーー@ーーー@ーーーーーー@ーーーー＋
+「　　@　　　ー　　　　　　@　　　　」
+「　　ー　　　　　　　　　　@　　　　」
+「　　　　　　　　　ーー　　ー　　　」@
+「花　　　　＿＿　　　　　　　　　　　」
+「　ずす　　　@　　　　　　　　　　　」
+「　すす　　　@　　　＿　　　　＿＿＿@
+@＿＿＿＿＿＿@　　　ー　　　　」　　」
+「　　　　　　　　　　　　　　　　　　」
+「　　　　　　　　　　　　X　　　　　」
+「　　　@　　　　　@　　　　　　　　」
+「　　　@@@@@@@@@　　@　　　」
+「　　　　　@　　　　　　　　@　　　」
+「　　　　　@　　　　　　　　@　　　」
+・＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿／""")
 );
 
 
@@ -76,7 +80,7 @@ public class SnailGame {
                 canvas.add(win);
                 canvas.draw();
                 canvas.pause(10000);
-               // canvas.closeWindow();
+               canvas.closeWindow();
             }
         });
     }
