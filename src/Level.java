@@ -22,7 +22,7 @@ class Level {
     public static final int SCREEN_PIXELS_PER_TILE = PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO;
 
     private List<Character> collidableKeys = List.of('￣', '＿', '「', '」', '・', '／', '４', '＋', '～','＝','｛','｝','⊕','⊛','✚','＊','ヒ', 'ビ', 'ピ', 'ひ', 'び');
-   private Character endpointKey = 'Ⓕ';
+    private Character endpointKey = 'Ⓕ';
 
     private Snail snail; 
 
