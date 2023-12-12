@@ -7,20 +7,16 @@ class Block implements Tile{
     int y;
     int width = Level.SCREEN_PIXELS_PER_TILE;
     int height = Level.SCREEN_PIXELS_PER_TILE;
-    boolean isCollidable;
 
-    public Block(Point topLeftPos, char key, boolean isCollidable) {
+    public Block(Point topLeftPos, char key) {
         image = new Image(topLeftPos.getX(), topLeftPos.getY(), IMAGE_PATH_MAP.get(key) == null ? "Tiles/empty.png" : IMAGE_PATH_MAP.get(key));
         image.setScale((double)SnailGame.SCREEN_PIXEL_RATIO / 6);
-
-        this.isCollidable = isCollidable;
-
         x = (int)topLeftPos.getX();
         y = (int)topLeftPos.getY();
     }
 
     public boolean isCollidable(){
-        return isCollidable;
+        return true;
     }
 
     public Point getTopLeftCorner(){

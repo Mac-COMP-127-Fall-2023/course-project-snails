@@ -21,7 +21,8 @@ class Level {
 
     public static final int SCREEN_PIXELS_PER_TILE = PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO;
 
-    private List<Character> collidableKeys = List.of('￣', '＿', '「', '」', '・', '／', '４', '＋', '～','＝','｛','｝','⊕','⊛','✚','＊','ヒ', 'ビ', 'ピ', 'ひ', 'び');
+    private List<Character> blockKeys = List.of('￣', '＿', '「', '」', '・', '／', '４', '＋', '～','＝','｛','｝','⊕','⊛','✚','＊', 'あ');
+    private List<Character> platformKeys = List.of('ヒ', 'ビ', 'ピ', 'ひ', 'び');
     private Character endpointKey = 'Ⓕ';
 
     private Snail snail; 
@@ -34,25 +35,29 @@ class Level {
                 Point topLeftPos = new Point(
                     tileX * SCREEN_PIXELS_PER_TILE,
                     tileY * SCREEN_PIXELS_PER_TILE);
-                    
+                Tile newTile;
+
                 if (tileKey=='す'||tileKey == 'ず') {
                     if (tileKey=='ず') {
                         snail = new Snail(topLeftPos); //set the position of the snail to the top left of the current tile
                     }
                     tileKey = ' '; //place an empty tile in the bg
                 }
-                Tile newTile;
-                if (tileKey == endpointKey){
+                if (tileKey == endpointKey) {
                     newTile = new Endpoint(topLeftPos);
                     endpoint = (Endpoint)newTile;
                 }
-                else if (collidableKeys.contains(tileKey)) {
-                    newTile = new Block(topLeftPos, tileKey, true); //create a new tile based on the character it reads
+                else if (platformKeys.contains(tileKey)) {
+                    newTile = new Platform(topLeftPos, tileKey); //create a new tile based on the character it reads
                     collidableGroup.add(newTile.getImage());
                 } 
-                else {
-                    newTile = new Block(topLeftPos, tileKey, false); 
+                else if (blockKeys.contains(tileKey)) {
+                    newTile = new Block(topLeftPos, tileKey); 
                     background.add(newTile.getImage());
+                }
+                else {
+                    newTile = new Empty(topLeftPos);
+                    collidableGroup.add(background);
                 }
                 tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
                 tileX++;
