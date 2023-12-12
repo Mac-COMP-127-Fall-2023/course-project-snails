@@ -19,7 +19,7 @@ public class SnailGame {
 
     private static List<Level> levels = List.of( 
         new Level("""
-４ーーあーーーあーーーーーーあーーーー＋
+４＿＿あ＿＿＿あ＿＿＿＿＿＿あ＿＿＿＿＋
 「　　あ　　　ー　　　　　　あ　　　　」
 「　　ー　　　　　　　　　　あ　　　　」
 「　　　　　　　　　ひび　　ー　　　」あ
@@ -33,7 +33,7 @@ public class SnailGame {
 「　　　あ　　あ　　　　　　　　　　　」
 「　　　　　あ　　　　　　　　あ　　　」
 「　　　　　あ　　　　　　　　あ　　　」
-・＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿＿／""")
+・￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣／""")
 );
 
 
