@@ -20,7 +20,8 @@ public class SnailGame {
     private GraphicsGroup graphics;
 
     int transitionIndex = 6;
-    boolean won = true;
+    boolean won = false;
+    boolean beginningOfRound = true;
 
     private List<String> transitionAnimPaths = List.of("GUI/Transition/screenwipe1.png", 
                                                     "GUI/Transition/screenwipe2.png", 
@@ -89,6 +90,7 @@ public class SnailGame {
         canvas.draw();
     }
 
+    //TODO: debug. Currently doesn't go onto the next level when win, instead looping in Exit
     private void handleSnailMovement(){
         canvas.animate(() -> {
             if (ticks % 4 == 0){ //animate at 15 fps instead of 60
@@ -98,24 +100,24 @@ public class SnailGame {
                                     .collect(Collectors.toList()));
                 snail.move(canvas.getKeysPressed()); 
                 currentLevel.updateAttachedTileOfSnail();
-                if(winRound()){
+
+                //Transition in at the beginning
+                if(beginningOfRound == true){
+                    if(transitionIndex == 5){
+                        beginningOfRound = false; //once transition is over, stop
+                    }
+                    else{
+                        transition();
+                    }
+                }
+                else if(winRound()){
                     transitionIndex = 0;
                     transition.setScale(1);
                     won = true;
                 }
                 if (won) {
                     snail.exit();
-                    if (transitionIndex == 5) {
-                        levelIndex++;
-                        currentLevel = levels.get(levelIndex);
-                        playRound();
-                    }
-                    if (transitionIndex >= 13) {
-                        transition.setScale(0);
-                        won = false;
-                        transitionIndex = 0;
-                    }
-                    transitionIndex++;
+                    transition();
                 }
                 canvas.draw();
             }
@@ -123,6 +125,21 @@ public class SnailGame {
             ticks++;
 
         });
+    }
+
+    private void transition(){
+        if (transitionIndex == 5) { //why is 5 the magic number?
+            currentLevel = levels.get(levelIndex);
+            levelIndex++;
+            playRound();
+        }
+         if (transitionIndex >= 13) {
+            transition.setScale(0);
+            won = false;
+            transitionIndex = 0;
+        }
+        transitionIndex++;
+        canvas.draw();
     }
 
     /*

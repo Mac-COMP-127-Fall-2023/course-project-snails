@@ -21,7 +21,7 @@ public class Snail {
     private List<Boolean> hitPoints;
 
     //current animation state
-    public static enum Appearance { //TODO: add Exiting
+    public static enum Appearance {
         CRAWLING,
         ROLLING,
         CURLING,
@@ -31,7 +31,7 @@ public class Snail {
     }
 
     //current action state
-    public static enum Movement{ //TODO: maybe add Exiting
+    public static enum Movement{
         CRAWL,
         FALL,
         EXIT
@@ -448,12 +448,10 @@ public class Snail {
     }
 
     public void exit(){
-        //TODO: set appearance, (&movement?) to exiting
         currentAppearance = Appearance.EXITING;
         currentMovement = Movement.EXIT;
     }
 
-    //TODO: add Exit
     public void updateAnimation() {
         String path = "Snail/";
         if (currentAppearance == lastAppearance) {
@@ -487,7 +485,7 @@ public class Snail {
                 break;
             case EXITING:
                 path += "Exit/";
-                if(currentFrame == 8){
+                if(currentFrame == 7){
                     currentAppearance = Appearance.CRAWLING;
                     currentMovement = Movement.CRAWL;
                 }
