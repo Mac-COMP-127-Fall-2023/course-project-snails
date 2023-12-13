@@ -12,6 +12,7 @@ public interface Tile{
     
     public boolean checkCollision(Point point);
     public boolean isCollidable();
+    public boolean canStickToSide();
 
     public Image getImage();
 

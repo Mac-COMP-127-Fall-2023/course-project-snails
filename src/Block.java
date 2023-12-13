@@ -18,7 +18,10 @@ class Block implements Tile{
     public boolean isCollidable(){
         return true;
     }
-
+    @Override
+    public boolean canStickToSide(){
+        return true;
+    }
     public Point getTopLeftCorner(){
         return new Point(x, y);
     }

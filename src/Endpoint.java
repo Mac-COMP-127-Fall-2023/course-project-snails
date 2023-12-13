@@ -16,32 +16,36 @@ public class Endpoint implements Tile{
         y = (int)topLeftPos.getY();
         image.setPosition(x,y);
     }
-
+    @Override
     public Point getTopLeftCorner() {
         return new Point(x, y);
     }
-
+    @Override
     public Point getTopRightCorner() {
         return new Point(x + width, y);
     }
-
+    @Override
     public Point getBottomRightCorner() {
         return new Point(x + width, y + height);
     }
-
+    @Override
     public Point getBottomLeftCorner() {
         return new Point(x, y + height);
     }
-
+    @Override
     public boolean checkCollision(Point point) {
         return image.testHit(point.getX(), point.getY());
     }
-
+    @Override
     public Image getImage() {
         return image;
     }
-    
+    @Override
     public boolean isCollidable(){
+        return false;
+    }
+    @Override
+    public boolean canStickToSide(){
         return false;
     }
 }
