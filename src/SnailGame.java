@@ -1,7 +1,5 @@
 import edu.macalester.graphics.CanvasWindow;
-import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsGroup;
-import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Image;
 
 import java.util.List;
@@ -18,8 +16,8 @@ public class SnailGame {
     private Level currentLevel;
     private GraphicsGroup graphics;
 
-    int transitionIndex = 0;
-    boolean won = false;
+    int transitionIndex = 6;
+    boolean won = true;
 
     private List<String> transitionAnimPaths = List.of("GUI\\Transition\\screenwipe1.png", 
                                                     "GUI\\Transition\\screenwipe2.png", 
@@ -40,12 +38,12 @@ public class SnailGame {
     private static List<Level> levels = List.of( 
         new Level("""
 ４＿＿あ＿＿＿あ＿＿＿＿＿＿あ＿＿＿＿＋
-「　　あ　　　＿　　ずす　　あ　　　　」
-「　　＿　　　　　　すす　　あ　　　　」
+「　　あ　　　＿　　　　　　あ　　　　」
+「　　＿　　　　　　　　　　あ　　　　」
 「　　　　　　　　　ひび　　ー　　　」あ
 「花　　　　＿＿　　　　　　　　　　　」
-「　　　　　　あ　　　　　　　　　　　」
-「　　　　　　あ　　　＿　　　　＿＿＿あ
+「　ずす　　　あ　　　　　　　　　　　」
+「　すす　　　あ　　　＿　　　　＿＿＿あ
 あ＿＿＿＿＿＿あ　　　ー　　　　」　　」
 「　　　　　　　　　　　　　　　　　　」
 「　　　　　　　　　　　　Ⓕ　　　　　」
