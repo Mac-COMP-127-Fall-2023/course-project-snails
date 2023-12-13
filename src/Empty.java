@@ -15,30 +15,40 @@ public class Empty implements Tile{
         y = (int)topLeftPos.getY();
     }
 
+    @Override
     public boolean isCollidable(){
-        return true;
+        return false;
     }
-
+    @Override
+    public boolean canStickToSide(){
+        return false;
+    }
+    @Override
     public Point getTopLeftCorner(){
         return new Point(x, y);
     }
 
+    @Override
     public Point getTopRightCorner(){
         return new Point(x + width, y);
     }
 
+    @Override
     public Point getBottomRightCorner(){
         return new Point(x + width, y + height);
     }
 
+    @Override
     public Point getBottomLeftCorner(){
         return new Point(x, y + height - SnailGame.SCREEN_PIXEL_RATIO);
     }
 
+    @Override
     public boolean checkCollision(Point point) {
        return false;
     }
 
+    @Override
     public Image getImage() {
         return image;
     }
