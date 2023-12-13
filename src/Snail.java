@@ -101,6 +101,8 @@ public class Snail {
      * @param keysPressed and its current orientation, ways it can move, etc.
      */
     public void move(Set<Key> keysPressed){
+        System.out.println("Orientation: " + snailBottomOrientation + ", Movement: " + currentMovement + ", Appearance: "+currentAppearance);
+
         //this ensures that the snail does not fall *into* a Tile more than it should
         if(snailBottomOrientation == Orientation.BOTTOM && !canMoveDirection(Orientation.BOTTOM)){
             y = (int)(attachedTile.getTopLeftCorner().getY() - currentImage.getHeight());
@@ -151,6 +153,9 @@ public class Snail {
             return;
         }
 
+        currentMovement = Movement.CRAWL;
+        currentAppearance = Appearance.CRAWLING;
+
         int m = (facing==Orientation.LEFT ? -1 : 1); //if it's facing left/right relative to its surface we move accordingly
         m *= SnailGame.SCREEN_PIXEL_RATIO;
         
@@ -183,9 +188,12 @@ public class Snail {
                 break;
 
             case LEFT:
-                if(facing == Orientation.RIGHT){ //going down
+                if(!attachedTile.canStickToSide()){
+                    curl();
+                }
+                else if(facing == Orientation.RIGHT){ //going down
                     if(!attachedTile.checkCollision(middleOfOrientation)){
-                             rotateOnTile(attachedTile.getBottomRightCorner(), Orientation.TOP);
+                        rotateOnTile(attachedTile.getBottomRightCorner(), Orientation.TOP);
                     }
                     else if(canMoveDirection(Orientation.BOTTOM)){
                             y+=m;
@@ -232,7 +240,10 @@ public class Snail {
                 break;
 
             case RIGHT:
-                if(facing == Orientation.RIGHT){ //going up
+                if(!attachedTile.canStickToSide()){
+                    curl();
+                }
+                else if(facing == Orientation.RIGHT){ //going up
                     if(!attachedTile.checkCollision(middleOfOrientation)){
                              rotateOnTile(attachedTile.getTopLeftCorner(), Orientation.BOTTOM);
                     }
@@ -257,11 +268,7 @@ public class Snail {
                 break;
         }
         currentImage.setPosition(x,y);
-
         updateAnimation();
-
-        currentMovement = Movement.CRAWL;
-        currentAppearance = Appearance.CRAWLING;
     }
 
     /**
@@ -269,10 +276,11 @@ public class Snail {
      */
     private void curl() {
         currentAppearance = Appearance.CURLING;
-        if (snailBottomOrientation!=Orientation.BOTTOM) {
+       // if (snailBottomOrientation!=Orientation.BOTTOM) {
             currentMovement = Movement.FALL;
             velocity=0;
-        }
+            //fall();
+       // }
         updateAnimation();
     }
 
@@ -284,6 +292,8 @@ public class Snail {
         y += velocity;
         currentImage.setPosition(x,y);
         updateAnimation();
+
+        System.out.println("falling");
     }
 
     /**
@@ -371,10 +381,6 @@ public class Snail {
         }
         currentImage.setPosition(x,y);
         setOrientation(newOrientation);
-
-        if(!attachedTile.canStickToSide()){
-            curl();
-        }
     }
 
     /**
