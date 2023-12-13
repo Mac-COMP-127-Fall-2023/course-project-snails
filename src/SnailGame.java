@@ -4,10 +4,13 @@ import edu.macalester.graphics.Image;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.awt.Toolkit;
 
 public class SnailGame {
     CanvasWindow canvas;
     int ticks = 0;
+
+    public static final double scale = Math.min(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 1920, Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 1080);
 
     public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
 
@@ -40,14 +43,14 @@ public class SnailGame {
 ４＿＿あ＿＿＿あ＿＿＿＿＿＿あ＿＿＿＿＋
 「　　あ　　　＿　　　　　　あ　　　　」
 「　　＿　　　　　　　　　　あ　　　　」
-「　　　　　　　　　ひび　　ー　　　」あ
-「花　　　　＿＿　　　　　　　　　　　」
-「　ずす　　　あ　　　　　　　　　　　」
-「　すす　　　あ　　　＿　　　　＿＿＿あ
+「　　　　　　　　　ひび　　ー　　　プ」
+「花　　　　＿＿　　　　　　　　　　ブ」
+「　ずす　　　あ　　　　　　　　　ルフ」
+「　すす　　ロあ　　　＿　　　　＿＿＿あ
 あ＿＿＿＿＿＿あ　　　ー　　　　」　　」
 「　　　　　　　　　　　　　　　　　　」
 「　　　　　　　　　　　　Ⓕ　　　　　」
-「　　　あ　　　　　　　　　　　　　　」
+「　　　あ　　　　　　　　￣　　　　　」
 「　　　あ　　あ　　　　　　　　　　　」
 「　　　　　あ　　　　　　　　あ　　　」
 「　　　　　あ　　　　　　　　あ　　　」
@@ -81,7 +84,7 @@ public class SnailGame {
         graphics.add(snail.getGraphics());
         graphics.setAnchor(graphics.getPosition());
         graphics.add(transition);
-        graphics.setScale(0.5);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
+        graphics.setScale(scale);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
         canvas.add(graphics);
         canvas.draw();
     }

@@ -9,7 +9,7 @@ public class Endpoint implements Tile{
     int height = Level.SCREEN_PIXELS_PER_TILE;
 
     public Endpoint(Point topLeftPos) {
-        image = new Image("Tiles/grass2.png"); //temp
+        image = new Image("Tiles/endpoint.png"); //temp
         image.setScale((double)SnailGame.SCREEN_PIXEL_RATIO / 6);
 
         x = (int)topLeftPos.getX();
