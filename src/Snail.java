@@ -105,6 +105,10 @@ public class Snail {
     public void move(Set<Key> keysPressed){
         System.out.println("Orientation: " + snailBottomOrientation + ", Movement: " + currentMovement + ", Appearance: "+currentAppearance);
 
+        if(currentMovement == Movement.EXIT){
+            updateAnimation();
+        }
+
         //this ensures that the snail does not fall *into* a Tile more than it should
         if(snailBottomOrientation == Orientation.BOTTOM && !canMoveDirection(Orientation.BOTTOM)){
             y = (int)(attachedTile.getTopLeftCorner().getY() - currentImage.getHeight());
@@ -483,6 +487,10 @@ public class Snail {
                 break;
             case EXITING:
                 path += "Exit/";
+                if(currentFrame == 8){
+                    currentAppearance = Appearance.CRAWLING;
+                    currentMovement = Movement.CRAWL;
+                }
         }
         path += "snail" + currentFrame + ".png";
         currentImage.setImagePath(path);
