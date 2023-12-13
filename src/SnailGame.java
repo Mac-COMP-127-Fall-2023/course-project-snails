@@ -19,20 +19,20 @@ public class SnailGame {
     int transitionIndex = 6;
     boolean won = true;
 
-    private List<String> transitionAnimPaths = List.of("GUI\\Transition\\screenwipe1.png", 
-                                                    "GUI\\Transition\\screenwipe2.png", 
-                                                    "GUI\\Transition\\screenwipe3.png",
-                                                    "GUI\\Transition\\screenwipe4.png", 
-                                                    "GUI\\Transition\\screenwipe5.png", 
-                                                    "GUI\\Transition\\screenwipe6.png", 
-                                                    "GUI\\Transition\\screenwipe7.png", 
-                                                    "GUI\\Transition\\screenwipe8.png",
-                                                    "GUI\\Transition\\screenwipe9.png", 
-                                                    "GUI\\Transition\\screenwipe10.png", 
-                                                    "GUI\\Transition\\screenwipe11.png",
-                                                    "GUI\\Transition\\screenwipe12.png", 
-                                                    "GUI\\Transition\\screenwipe13.png", 
-                                                    "GUI\\Transition\\screenwipe14.png");
+    private List<String> transitionAnimPaths = List.of("GUI/Transition/screenwipe1.png", 
+                                                    "GUI/Transition/screenwipe2.png", 
+                                                    "GUI/Transition/screenwipe3.png",
+                                                    "GUI/Transition/screenwipe4.png", 
+                                                    "GUI/Transition/screenwipe5.png", 
+                                                    "GUI/Transition/screenwipe6.png", 
+                                                    "GUI/Transition/screenwipe7.png", 
+                                                    "GUI/Transition/screenwipe8.png",
+                                                    "GUI/Transition/screenwipe9.png", 
+                                                    "GUI/Transition/screenwipe10.png", 
+                                                    "GUI/Transition/screenwipe11.png",
+                                                    "GUI/Transition/screenwipe12.png", 
+                                                    "GUI/Transition/screenwipe13.png", 
+                                                    "GUI/Transition/screenwipe14.png");
     private Image transition = new Image(transitionAnimPaths.get(0));
 
     private static List<Level> levels = List.of( 
@@ -81,7 +81,7 @@ public class SnailGame {
         graphics.add(snail.getGraphics());
         graphics.setAnchor(graphics.getPosition());
         graphics.add(transition);
-        graphics.setScale(1);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
+        graphics.setScale(0.5);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
         canvas.add(graphics);
         canvas.draw();
     }
