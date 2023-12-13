@@ -450,6 +450,7 @@ public class Snail {
     public void exit(){
         currentAppearance = Appearance.EXITING;
         currentMovement = Movement.EXIT;
+        updateAnimation();
     }
 
     public void updateAnimation() {

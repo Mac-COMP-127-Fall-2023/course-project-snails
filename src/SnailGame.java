@@ -90,50 +90,57 @@ public class SnailGame {
         canvas.draw();
     }
 
-    //TODO: debug. Currently doesn't go onto the next level when win, instead looping in Exit
+    //TODO: debug so it doesn't do the transition animation twice when you win
+    //TODO: move snail to center of endpoint when win
     private void handleSnailMovement(){
         canvas.animate(() -> {
             if (ticks % 4 == 0){ //animate at 15 fps instead of 60
-                snail.setHitPoints(snail.getBoundaryPoints()
-                                    .stream()
-                                    .map(point -> currentLevel.checkCollision(point))
-                                    .collect(Collectors.toList()));
-                snail.move(canvas.getKeysPressed()); 
-                currentLevel.updateAttachedTileOfSnail();
-
                 //Transition in at the beginning
                 if(beginningOfRound == true){
                     if(transitionIndex == 5){
                         beginningOfRound = false; //once transition is over, stop
+                        transitionIndex = 0;
                     }
                     else{
                         transition();
                     }
+                    won = false;
                 }
                 else if(winRound()){
-                    transitionIndex = 0;
-                    transition.setScale(1);
                     won = true;
                 }
-                if (won) {
+                if(won){
+                    transition.setScale(1);
                     snail.exit();
                     transition();
+                }
+                else{
+                    snail.setHitPoints(snail.getBoundaryPoints()
+                                    .stream()
+                                    .map(point -> currentLevel.checkCollision(point))
+                                    .collect(Collectors.toList()));
+                    snail.move(canvas.getKeysPressed()); 
+                    currentLevel.updateAttachedTileOfSnail();
                 }
                 canvas.draw();
             }
             transition.setImagePath(transitionAnimPaths.get(transitionIndex));
             ticks++;
 
+            System.out.println("Round: " + levels.indexOf(currentLevel));
+
         });
     }
 
     private void transition(){
+        System.out.println(transitionIndex);
         if (transitionIndex == 5) { //why is 5 the magic number?
             currentLevel = levels.get(levelIndex);
             levelIndex++;
             playRound();
+            System.out.println("here");
         }
-         if (transitionIndex >= 13) {
+        if (transitionIndex >= 13) {
             transition.setScale(0);
             won = false;
             transitionIndex = 0;
