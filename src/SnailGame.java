@@ -1,7 +1,6 @@
 import edu.macalester.graphics.CanvasWindow;
-import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsGroup;
-import edu.macalester.graphics.GraphicsText;
+import edu.macalester.graphics.Image;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +15,25 @@ public class SnailGame {
 
     private Level currentLevel;
     private GraphicsGroup graphics;
+
+    int transitionIndex = 6;
+    boolean won = true;
+
+    private List<String> transitionAnimPaths = List.of("GUI\\Transition\\screenwipe1.png", 
+                                                    "GUI\\Transition\\screenwipe2.png", 
+                                                    "GUI\\Transition\\screenwipe3.png",
+                                                    "GUI\\Transition\\screenwipe4.png", 
+                                                    "GUI\\Transition\\screenwipe5.png", 
+                                                    "GUI\\Transition\\screenwipe6.png", 
+                                                    "GUI\\Transition\\screenwipe7.png", 
+                                                    "GUI\\Transition\\screenwipe8.png",
+                                                    "GUI\\Transition\\screenwipe9.png", 
+                                                    "GUI\\Transition\\screenwipe10.png", 
+                                                    "GUI\\Transition\\screenwipe11.png",
+                                                    "GUI\\Transition\\screenwipe12.png", 
+                                                    "GUI\\Transition\\screenwipe13.png", 
+                                                    "GUI\\Transition\\screenwipe14.png");
+    private Image transition = new Image(transitionAnimPaths.get(0));
 
     private static List<Level> levels = List.of( 
         new Level("""
@@ -33,14 +51,21 @@ public class SnailGame {
 「　　　あ　　あ　　　　　　　　　　　」
 「　　　　　あ　　　　　　　　あ　　　」
 「　　　　　あ　　　　　　　　あ　　　」
-・￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣／""")
-);
-
+・￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣／"""),
+        new Level("""
+　　ずす　　
+　　すす　Ⓕ
+￣￣￣￣￣￣
+        """)
+    );
+    
+    int levelIndex = 0;
 
     public SnailGame() {
         canvas = new CanvasWindow("Snails", 1920, 1080);
-        currentLevel = levels.get(0);
+        currentLevel = levels.get(levelIndex);
         playRound();
+        handleSnailMovement();
     }
 
     /*
@@ -55,11 +80,10 @@ public class SnailGame {
         currentLevel.updateAttachedTileOfSnail();
         graphics.add(snail.getGraphics());
         graphics.setAnchor(graphics.getPosition());
-        graphics.setScale(.5);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
+        graphics.add(transition);
+        graphics.setScale(1);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
         canvas.add(graphics);
         canvas.draw();
-
-        handleSnailMovement();
     }
 
     private void handleSnailMovement(){
@@ -71,17 +95,29 @@ public class SnailGame {
                                     .collect(Collectors.toList()));
                 snail.move(canvas.getKeysPressed()); 
                 currentLevel.updateAttachedTileOfSnail();
-            }
-            ticks++;
-            if(winRound()){
-                GraphicsText win = new GraphicsText("You win!");
-                win.setCenter(canvas.getWidth()/4, canvas.getHeight()/5);
-                win.setFont(FontStyle.BOLD, 30);
-                canvas.add(win);
+                if(winRound()){
+                    transitionIndex = 0;
+                    transition.setScale(1);
+                    won = true;
+                }
+                if (won) {
+                    if (transitionIndex == 5) {
+                        levelIndex++;
+                        currentLevel = levels.get(levelIndex);
+                        playRound();
+                    }
+                    if (transitionIndex >= 13) {
+                        transition.setScale(0);
+                        won = false;
+                        transitionIndex = 0;
+                    }
+                    transitionIndex++;
+                }
                 canvas.draw();
-                canvas.pause(10000);
-               canvas.closeWindow();
             }
+            transition.setImagePath(transitionAnimPaths.get(transitionIndex));
+            ticks++;
+
         });
     }
 
@@ -99,5 +135,6 @@ public class SnailGame {
 
     public static void main(String[] args) {
         SnailGame game = new SnailGame();
+        
     }
-}
+} 
