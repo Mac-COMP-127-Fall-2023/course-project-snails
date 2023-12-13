@@ -105,6 +105,7 @@ public class SnailGame {
                 }
                 if (won) {
                     //TODO: set snail's appearance, movement to Exiting
+                    snail.exit();
                     if (transitionIndex == 5) {
                         levelIndex++;
                         currentLevel = levels.get(levelIndex);

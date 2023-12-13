@@ -26,13 +26,15 @@ public class Snail {
         ROLLING,
         CURLING,
         UNCURLING,
-        INSHELL
+        INSHELL,
+        EXITING
     }
 
     //current action state
     public static enum Movement{ //TODO: maybe add Exiting
         CRAWL,
-        FALL
+        FALL,
+        EXIT
     }
 
     // the side that the snail is attached to
@@ -390,6 +392,10 @@ public class Snail {
      * snailBottomOrientation, such that the snail stays attached to a Tile (unless falling)
      */
     private boolean canMoveDirection(Snail.Orientation direction){
+        if(currentMovement == Movement.EXIT){
+            return false;
+        }
+
         if(snailBottomOrientation == Snail.Orientation.BOTTOM){
             if(direction == Snail.Orientation.TOP){
                 return false;
@@ -439,6 +445,8 @@ public class Snail {
 
     public void exit(){
         //TODO: set appearance, (&movement?) to exiting
+        currentAppearance = Appearance.EXITING;
+        currentMovement = Movement.EXIT;
     }
 
     //TODO: add Exit
@@ -473,6 +481,8 @@ public class Snail {
                 path += "Curl/"; //inshell is a special case when fully curled up
                 currentFrame = 7;
                 break;
+            case EXITING:
+                path += "Exit/";
         }
         path += "snail" + currentFrame + ".png";
         currentImage.setImagePath(path);
