@@ -120,11 +120,9 @@ public class SnailGame {
                     snail.move(canvas.getKeysPressed()); 
                     currentLevel.updateAttachedTileOfSnail();
                 }
-               // canvas.draw();
             }
             transition.setImagePath(transitionAnimPaths.get(transitionIndex));
             ticks++;
-
         });
     }
 
@@ -134,7 +132,6 @@ public class SnailGame {
             transitionIndex = 0;
         }
         transitionIndex++;
-        canvas.draw();
     }
 
     /*
