@@ -103,8 +103,6 @@ public class Snail {
      * @param keysPressed and its current orientation, ways it can move, etc.
      */
     public void move(Set<Key> keysPressed){
-        System.out.println("Orientation: " + snailBottomOrientation + ", Movement: " + currentMovement + ", Appearance: "+currentAppearance);
-
         if(currentMovement == Movement.EXIT){
             updateAnimation();
         }
@@ -298,8 +296,6 @@ public class Snail {
         y += velocity;
         currentImage.setPosition(x,y);
         updateAnimation();
-
-        System.out.println("falling");
     }
 
     /**

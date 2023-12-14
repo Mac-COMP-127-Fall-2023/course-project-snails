@@ -20,7 +20,6 @@ public class SnailGame {
     private GraphicsGroup graphics;
 
     int transitionIndex = 6;
-    boolean won = false;
     boolean beginningOfRound = true;
 
     private List<String> transitionAnimPaths = List.of("GUI/Transition/screenwipe1.png", 
@@ -68,15 +67,14 @@ public class SnailGame {
     public SnailGame() {
         canvas = new CanvasWindow("Snails", 1920, 1080);
         currentLevel = levels.get(levelIndex);
-        playRound();
+        setUpLevel();
         handleSnailMovement();
     }
 
     /*
-     * plays the game for 1 level
-     * returns true if won
+     * sets up the canvas with the graphics of the current level
      */
-    private void playRound(){
+    private void setUpLevel(){
         canvas.removeAll();
         graphics = currentLevel.getGraphics();
         graphics.setPosition(0,0);
@@ -87,31 +85,31 @@ public class SnailGame {
         graphics.add(transition);
         graphics.setScale(scale);//THIS IS THE ULTIMATE SCALE FACTOR THIS IS THE ONLY THING YOU CAN CHANGE FOR SCALING THINGS
         canvas.add(graphics);
-        canvas.draw();
     }
 
-    //TODO: debug so it doesn't do the transition animation twice when you win
     //TODO: move snail to center of endpoint when win
+    //TODO: make a win screen when all levels have been won
     private void handleSnailMovement(){
         canvas.animate(() -> {
             if (ticks % 4 == 0){ //animate at 15 fps instead of 60
                 //Transition in at the beginning
                 if(beginningOfRound == true){
-                    if(transitionIndex == 5){
+                    if(transitionIndex == 1){
                         beginningOfRound = false; //once transition is over, stop
-                        transitionIndex = 0;
                     }
                     else{
                         transition();
                     }
-                    won = false;
                 }
                 else if(winRound()){
-                    won = true;
-                }
-                if(won){
                     transition.setScale(1);
                     snail.exit();
+                    if(transitionIndex == 6){
+                        levelIndex++;
+                        beginningOfRound = true;
+                        currentLevel = levels.get(levelIndex);
+                        setUpLevel();
+                    }
                     transition();
                 }
                 else{
@@ -127,22 +125,12 @@ public class SnailGame {
             transition.setImagePath(transitionAnimPaths.get(transitionIndex));
             ticks++;
 
-            System.out.println("Round: " + levels.indexOf(currentLevel));
-
         });
     }
 
     private void transition(){
-        System.out.println(transitionIndex);
-        if (transitionIndex == 5) { //why is 5 the magic number?
-            currentLevel = levels.get(levelIndex);
-            levelIndex++;
-            playRound();
-            System.out.println("here");
-        }
         if (transitionIndex >= 13) {
             transition.setScale(0);
-            won = false;
             transitionIndex = 0;
         }
         transitionIndex++;
