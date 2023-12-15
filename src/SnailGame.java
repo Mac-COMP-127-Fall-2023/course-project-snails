@@ -7,8 +7,8 @@ import java.util.stream.Collectors;
 import java.awt.Toolkit;
 
 public class SnailGame {
-    CanvasWindow canvas;
-    int ticks = 0;
+    private CanvasWindow canvas;
+    private int ticks = 0;
 
     public static final double scale = Math.min(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 1920, Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 1080);
 
@@ -19,8 +19,8 @@ public class SnailGame {
     private Level currentLevel;
     private GraphicsGroup graphics;
 
-    int transitionIndex = 6;
-    boolean beginningOfRound = true;
+    private int transitionIndex;
+    private boolean beginningOfRound;
 
     private List<String> transitionAnimPaths = List.of("GUI/Transition/screenwipe1.png", 
                                                     "GUI/Transition/screenwipe2.png", 
@@ -36,7 +36,7 @@ public class SnailGame {
                                                     "GUI/Transition/screenwipe12.png", 
                                                     "GUI/Transition/screenwipe13.png", 
                                                     "GUI/Transition/screenwipe14.png");
-    private Image transition = new Image(transitionAnimPaths.get(0));
+    private Image transition;
 
     private static List<Level> levels = List.of( 
         new Level("""
@@ -62,9 +62,14 @@ public class SnailGame {
         """)
     );
     
-    int levelIndex = 0;
+    private int levelIndex;
 
     public SnailGame() {
+        transition = new Image(transitionAnimPaths.get(7));
+        transitionIndex = 6;
+        beginningOfRound = true;
+        levelIndex = 0;
+
         canvas = new CanvasWindow("Snails", 1920, 1080);
         currentLevel = levels.get(levelIndex);
         setUpLevel();
