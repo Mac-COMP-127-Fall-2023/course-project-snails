@@ -73,7 +73,7 @@ public class SnailGame {
         canvas = new CanvasWindow("Snails", 1920, 1080);
         currentLevel = levels.get(levelIndex);
         setUpLevel();
-        handleSnailMovement();
+        play();
     }
 
     /*
@@ -94,7 +94,7 @@ public class SnailGame {
 
     //TODO: move snail to center of endpoint when win
     //TODO: make a win screen when all levels have been won
-    private void handleSnailMovement(){
+    private void play(){
         canvas.animate(() -> {
             if (ticks % 4 == 0){ //animate at 15 fps instead of 60
                 //Transition in at the beginning
