@@ -276,15 +276,12 @@ public class Snail {
     }
 
     /**
-     * 
+     * Changes the snail's appearance to curling and movement to falling
      */
     private void curl() {
         currentAppearance = Appearance.CURLING;
-       // if (snailBottomOrientation!=Orientation.BOTTOM) {
-            currentMovement = Movement.FALL;
-            velocity=0;
-            //fall();
-       // }
+        currentMovement = Movement.FALL;
+        velocity=0;
         updateAnimation();
     }
 
@@ -449,6 +446,9 @@ public class Snail {
         updateAnimation();
     }
 
+    /**
+     * sets the snail's graphic to the correct image based on its appearance
+     */
     public void updateAnimation() {
         String path = "Snail/";
         if (currentAppearance == lastAppearance) {
@@ -508,7 +508,7 @@ public class Snail {
     }
 
     /**
-     * @return a list of points on the snail in this order:
+     * @return a list of points on the border of the snail in this order:
      * top left, top middle, top right, right middle, bottom right, bottom middle, bottom left, left middle
      */
     public List<Point> getBoundaryPoints(){
@@ -524,6 +524,9 @@ public class Snail {
         return List.of(topLeft, top, topRight, right, bottomRight, bottom, bottomLeft, left);
     }
 
+    /**
+     * @return a list of points on the inner part of the snail (e.i. its shell)
+     */
     public List<Point> getInnerBoundaryPoints(){
          Point topLeft;
          Point top;
