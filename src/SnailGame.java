@@ -76,7 +76,7 @@ public class SnailGame {
         play();
     }
 
-    /*
+    /**
      * sets up the canvas with the graphics of the current level
      */
     private void setUpLevel(){
@@ -106,6 +106,7 @@ public class SnailGame {
                         transition();
                     }
                 }
+                //transition when you've won a level
                 else if(winRound()){
                     transition.setScale(1);
                     snail.exit();
@@ -117,6 +118,7 @@ public class SnailGame {
                     }
                     transition();
                 }
+                //handle snail movement during level
                 else{
                     snail.setHitPoints(snail.getBoundaryPoints()
                                     .stream()
@@ -131,6 +133,9 @@ public class SnailGame {
         });
     }
 
+    /**
+     * increments transition, going back to the beginning if it's run out of images
+     */
     private void transition(){
         if (transitionIndex >= 13) {
             transition.setScale(0);
@@ -139,8 +144,8 @@ public class SnailGame {
         transitionIndex++;
     }
 
-    /*
-     * return true if the snail has reached the endpoint
+    /**
+     * @return true if the snail has reached the endpoint, false otherwise
      */
     private boolean winRound(){
         if(currentLevel.getCompleted()){
