@@ -1,9 +1,12 @@
 import edu.macalester.graphics.CanvasWindow;
+import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsGroup;
+import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Image;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.awt.Color;
 import java.awt.Toolkit;
 
 public class SnailGame {
@@ -21,6 +24,7 @@ public class SnailGame {
 
     private int transitionIndex;
     private boolean beginningOfRound;
+    private boolean wonGame;
 
     private List<String> transitionAnimPaths = List.of("GUI/Transition/screenwipe1.png", 
                                                     "GUI/Transition/screenwipe2.png", 
@@ -69,6 +73,7 @@ public class SnailGame {
         transitionIndex = 6;
         beginningOfRound = true;
         levelIndex = 0;
+        wonGame = false;
 
         canvas = new CanvasWindow("Snails", 1920, 1080);
         currentLevel = levels.get(levelIndex);
@@ -97,8 +102,17 @@ public class SnailGame {
     private void play(){
         canvas.animate(() -> {
             if (ticks % 4 == 0){ //animate at 15 fps instead of 60
-                //Transition in at the beginning
-                if(beginningOfRound == true){
+                //transition to win screen if the game is over
+                if(wonGame){
+                    if(transitionIndex == 7){
+                        winGame();
+                    }
+                    else{
+                        transition();
+                    }
+                }
+                //Transition in at the beginning of the round
+                else if(beginningOfRound == true){
                     if(transitionIndex == 1){
                         beginningOfRound = false; //once transition is over, stop
                     }
@@ -106,11 +120,14 @@ public class SnailGame {
                         transition();
                     }
                 }
-                //transition when you've won a level
+                //transition out when you've won a level
                 else if(winRound()){
                     transition.setScale(1);
                     snail.exit();
-                    if(transitionIndex == 6){
+
+                    wonGame = winRound() && levels.indexOf(currentLevel) == levels.size() -1;
+
+                    if(transitionIndex == 6 && !wonGame){
                         levelIndex++;
                         beginningOfRound = true;
                         currentLevel = levels.get(levelIndex);
@@ -145,15 +162,23 @@ public class SnailGame {
     }
 
     /**
+     * Show the player a win screen
+     */
+    private void winGame(){
+        transition.setImagePath(transitionAnimPaths.get(transitionIndex));
+
+        GraphicsText winMessage = new GraphicsText("YOU WIN!");
+        winMessage.setFillColor(Color.WHITE);
+        winMessage.setFont(FontStyle.BOLD, 60);
+        winMessage.setCenter(currentLevel.getGraphics().getCenter());
+        canvas.add(winMessage);
+    }
+ 
+    /**
      * @return true if the snail has reached the endpoint, false otherwise
      */
     private boolean winRound(){
-        if(currentLevel.getCompleted()){
-            return true;
-        }
-        else{
-            return false;
-        }
+        return currentLevel.getCompleted();
     }
 
     public static void main(String[] args) {
