@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.Map;
 
 import edu.macalester.graphics.GraphicsGroup;
+import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
 /*
@@ -26,7 +27,8 @@ class Level {
     private List<Character> platformKeys = List.of('ヒ', 'ビ', 'ピ', 'ひ', 'び');
     private Character endpointKey = 'Ⓕ';
 
-    private Snail snail; 
+    private Snail snail;
+    private boolean won=false;
 
     public Level(String mapStr) {
         int tileX = 0; //x position in the unit of tiles (16*16 game pixels, 96*96 screen pixels)
@@ -40,29 +42,25 @@ class Level {
 
                 if (tileKey=='す'||tileKey == 'ず') {
                     if (tileKey=='ず') {
-                        snail = new Snail(topLeftPos); //set the position of the snail to the top left of the current tile
+                        snail = new Snail(this, topLeftPos); //set the position of the snail to the top left of the current tile
                     }
                     tileKey = ' '; //place an empty tile in the bg
                 }
                 if (tileKey == endpointKey) {
                     newTile = new Endpoint(topLeftPos);
                     endpoint = (Endpoint)newTile;
-                }
-                else if (platformKeys.contains(tileKey)) {
+                } else if (platformKeys.contains(tileKey)) {
                     newTile = new Platform(topLeftPos, tileKey); //create a new tile based on the character it reads
                     terrainLayer.add(newTile.getImage());
-                } 
-                else if (blockKeys.contains(tileKey)) {
+                } else if (blockKeys.contains(tileKey)) {
                     newTile = new Block(topLeftPos, tileKey); 
                     terrainLayer.add(newTile.getImage());
-                }
-                else if (decorationKeys.contains(tileKey)) {
+                } else if (decorationKeys.contains(tileKey)) {
                     newTile = new Decoration(topLeftPos, tileKey);
                     decorationLayer.add(newTile.getImage());
-                }
-                else {
+                } else {
                     newTile = new Empty(topLeftPos);
-                    terrainLayer.add(decorationLayer);
+                    decorationLayer.add(newTile.getImage());
                 }
                 tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
                 tileX++;
@@ -70,7 +68,6 @@ class Level {
             tileX = 0;
             tileY++;
         }   
-        snail.setOrientation(Snail.Orientation.BOTTOM);
     }
 
     public GraphicsGroup getGraphics() {
@@ -88,15 +85,8 @@ class Level {
     public Snail getSnail() {
         return snail;
     }
-
-    public void updateAttachedTileOfSnail(){
-        Tile newTile = getCollidableTileAt(snail.getMiddleOfOrientation());
-        if(newTile != null){
-             snail.updateAttachedTile(newTile);
-        }
-    }
     
-    private Tile getCollidableTileAt(Point p){
+    public Tile getCollidableTileAt(Point p){
         for (Tile tile : tileMap.values()) {
             if (tile.checkCollision(p)) {
                 return tile;
@@ -106,11 +96,15 @@ class Level {
     }
 
     public boolean getCompleted(){
-        for(Point p : snail.getInnerBoundaryPoints()){
-            if(endpoint.getImage().testHit(p.getX(), p.getY())){
-                return true;
+        if (won){
+            return false;
+        }
+        Image g = endpoint.getImage();
+        for (Point p : snail.getShellPoints()){
+            if(g.testHit(p.getX(), p.getY())){
+                won = true;
             }
         }
-        return false;
+        return won;
     }
 }
