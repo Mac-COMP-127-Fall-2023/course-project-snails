@@ -289,8 +289,6 @@ public class Snail {
         return List.of(convertAbsolute(bottomLeftShell()), convertAbsolute(bottomRightShell()), convertAbsolute(topLeftShell()), convertAbsolute(topRightShell()));
     }
 
-
-
     private void turnInner() {
         if (facing==Orientation.LEFT) {
             currentImage.rotateBy(90);   
@@ -304,14 +302,14 @@ public class Snail {
     }
 
     private void turnOuter() {
-        Tile t = currentLevel.getCollidableTileAt(getBoundaryPoint(3));
+        if (snailBottomOrientation==Orientation.BOTTOM) {
+            Tile t = currentLevel.getCollidableTileAt(getBoundaryPoint(5));
             if (t!=null&&!t.canStickToSide()) {
                 velocityX = 0;
                 velocityX = (facing==Orientation.LEFT ? -1 : 1);
                 curl();
-                return;
             }
-
+        }
         if (facing==Orientation.LEFT) {
             currentImage.rotateBy(-90);
         } else {
@@ -321,7 +319,6 @@ public class Snail {
         snailBottomOrientation = indexOrientationMap(reverseFacingIndex());
         x += nudgeX(facingCornerIndex,16);
         y += nudgeY(facingCornerIndex, 16);
-
     }  
 
     

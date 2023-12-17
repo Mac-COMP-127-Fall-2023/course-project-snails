@@ -32,9 +32,10 @@ public class SnailGame {
 「　　＿　　　　　　　　　　あ　　　　」
 「　　　　　　　　　　　　　ー　　　プ」
 「花　　　　＿＿　　　　　　　　　　ブ」
-「　ずす　　　あ　　　　　ひび　　ルフ」
-「　すす　　ロあ　　　＿　　　　＿＿＿あ
-あ＿＿＿＿＿＿あ　　　ー　　　　」　　」
+「　ずす　　　あ　　　　ひび　　　ルフ」
+「　すす　　ロあ　　　　　　　　＿＿＿あ
+あ＿＿＿＿＿＿あ　　　＿　　　　」　　」
+「　　　　　　　　　　ー　　　　　　　」
 「　　　　　　　　　　　　　　　　　　」
 「　　　　　　　　　　　　Ⓕ　　　　　」
 「　　　あ　　　　　　　　￣　　　　　」
@@ -84,12 +85,12 @@ public class SnailGame {
     private void play(){
 
         canvas.animate(() -> {
-            // int framerate = 6;
-            // if (canvas.getKeysPressed().contains(Key.SHIFT)) {
-            //     framerate=1;
-            // }
+            int framerate = 1;
+            if (canvas.getKeysPressed().contains(Key.SHIFT)) {
+                framerate=6;
+            }
 
-            if (ticks % 2 == 0){ //animate at 15 fps instead of 60
+            if (ticks % framerate == 0){ //animate at 15 fps instead of 60
                 transition();
                 snail.move(canvas.getKeysPressed()); 
             }
