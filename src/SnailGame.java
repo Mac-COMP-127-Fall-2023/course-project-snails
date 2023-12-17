@@ -13,7 +13,7 @@ public class SnailGame {
     private CanvasWindow canvas;
     private int ticks = 0;
 
-    public static final double scale = Math.min(Toolkit.getDefaultToolkit().getScreenSize().getWidth() / 1920, Toolkit.getDefaultToolkit().getScreenSize().getHeight() / 1080);
+    public static double scale;
 
     public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
 
@@ -76,7 +76,9 @@ public class SnailGame {
         wonGame = false;
 
         canvas = new CanvasWindow("Snails", 1920, 1080);
+        canvas.setBackground(new Color(93, 59, 65));
         currentLevel = levels.get(levelIndex);
+        scale = Math.min(currentLevel.getGraphics().getWidth(), currentLevel.getGraphics().getHeight()) / 1920;
         setUpLevel();
         play();
     }
