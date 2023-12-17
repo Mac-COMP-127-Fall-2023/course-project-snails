@@ -8,13 +8,9 @@ import edu.macalester.graphics.events.Key;
 public class Snail {
     private int x, y;
     private Level currentLevel;
-
     private Image currentImage;
-    private int currentFrame = 0; // update animation increments by 1
-
-     //the Tile that the snail is currently attached to. Needed for rotation around said Tile.
-
-    private List<Point> bounds = List.of(
+    private int currentFrame = 0; // updateAnimation increments by 1
+    private final List<Point> BOUNDS = List.of(
         new Point(0,0),
         new Point(16*SnailGame.SCREEN_PIXEL_RATIO,0),
         new Point(32*SnailGame.SCREEN_PIXEL_RATIO,0),
@@ -24,13 +20,6 @@ public class Snail {
         new Point(0,32*SnailGame.SCREEN_PIXEL_RATIO),
         new Point(0,16*SnailGame.SCREEN_PIXEL_RATIO)
     );
-
-    // private List<Point> shellInsets = List.of(
-    //     new Point(6*SnailGame.SCREEN_PIXEL_RATIO,19*SnailGame.SCREEN_PIXEL_RATIO), null,
-    //     new Point(21*SnailGame.SCREEN_PIXEL_RATIO,19*SnailGame.SCREEN_PIXEL_RATIO), null,
-    //     new Point(21*SnailGame.SCREEN_PIXEL_RATIO,0*SnailGame.SCREEN_PIXEL_RATIO), null,
-    //     new Point(6*SnailGame.SCREEN_PIXEL_RATIO,0*SnailGame.SCREEN_PIXEL_RATIO), null
-    // );
 
     //current animation state
     public static enum Appearance {
@@ -54,11 +43,10 @@ public class Snail {
     Boolean falling = false;
     Boolean crawled = false;
     Orientation snailBottomOrientation = Orientation.BOTTOM; //the side that the snail is attached to
-    Point middleOfOrientation; //the midpoint of the side of the snail that is attached
     Orientation facing = Orientation.RIGHT; // the side that the snail is facing relative to it's surface
 
     // current velocity while falling
-    private int velocity = 0;
+    private int velocity = 0; //y
     private int velocityX = 0;
 
     /**
@@ -74,19 +62,6 @@ public class Snail {
         currentAppearance = Appearance.CRAWLING;
         updateAnimation();
     }
-
-    public int getX() {
-        return x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public Orientation getOrientation() {
-        return snailBottomOrientation;
-    }
-
 
     /**
      * Update the snail's position and movement based on 
@@ -113,6 +88,7 @@ public class Snail {
         currentAppearance = Appearance.EXITING;
     }
 
+    //main logic that determines what happens when not falling
     private void handleInputs(Set<Key> keysPressed) {
         Orientation inputDirection;
         if (keysPressed.contains(Key.RIGHT_ARROW)) {
@@ -150,12 +126,22 @@ public class Snail {
         }
     }
 
+    /**
+     * mostly used to correct the snail's position while turning
+     * @param indexTo 0 top left, cw
+     * @param amount in ingame pixels
+     */
     private Point nudge(Point p, int indexTo, int amount){
         int dx = nudgeX(indexTo, amount);
         int dy = nudgeY(indexTo, amount);
         return p.add(new Point(dx,dy));
     }
 
+    /**
+     * helper function for nudge
+     * @param indexTo 0 top left, cw
+     * @param amount ingame pixels 
+     */
     private int nudgeY(int indexTo, int amount){
         int dy = 0;
         switch (modulo8(indexTo)) {
@@ -180,6 +166,11 @@ public class Snail {
         }
         return dy*amount*SnailGame.SCREEN_PIXEL_RATIO;
     }
+
+    /**
+     * @param indexTo 0 top left, cw
+     * @param amount ingame pixels
+     */
     private int nudgeX(int indexTo, int amount){
         int dx = 0;
         switch (modulo8(indexTo)) {
@@ -205,7 +196,9 @@ public class Snail {
         return dx*amount*SnailGame.SCREEN_PIXEL_RATIO;
     }
 
-    // moves the snail according to its orientation
+    /**
+     * first checks for inner corners, then checks outer corners, then moves if all is well
+     */
     private void crawl() {
         crawled = true;
         
@@ -215,7 +208,7 @@ public class Snail {
             turnInner();
             return;
         }
-        int m = (facing==Orientation.LEFT ? -1 : 1); //if it's facing left/right relative to its surface we move accordingly
+        int m = (facing==Orientation.LEFT ? -1 : 1); 
         m *= SnailGame.SCREEN_PIXEL_RATIO;
         int facingIndex = rotateOrientation(snailBottomOrientation, facing);
         Point p = getBoundaryPoint(snailBottomIndex);
@@ -244,20 +237,26 @@ public class Snail {
         }
     }
 
-    // curls the snail and sets it to falling
+    /**
+     * velocityX is set elsewhere because curl is called after to start falling, and we need to set
+     * an initial velocity if falling off platforms
+     */
     private void curl() {
         currentAppearance = Appearance.CURLING;
         falling=true;
         velocity=0;
     }
 
-    //moves the snail down as much as it can
+    /**
+     * way too much work to make sure it falls just enough and no more, probs could be better but it works
+     * and will allow the falling snail to react to hitting walls and crap and bounce a bit
+     * @param velocity tbh idk if this needs velocity as a parameter now i originally had a recursive thing
+     */
     private void fall(int velocity) {
         sideCollisions();
         if (checkBelow(velocity)) {
             falling = false;
-            velocity = belowFinder(velocity-1)+1;
-            // velocityX = checkAside(velocityX) ? asideFinder(velocity) : 0;
+            velocity = belowFinder(velocity-1)+1; //a bit weird but it checks out
             if (velocity<0) {
                 return;
             }
@@ -266,6 +265,17 @@ public class Snail {
         x += velocityX*SnailGame.SCREEN_PIXEL_RATIO;
     }
 
+    /**
+     * @param distance to fall
+     * @return if that collides
+     */
+    private Boolean checkBelow(int distance) {
+        Point distanceVector = new Point(0, distance*SnailGame.SCREEN_PIXEL_RATIO);
+        Point p = belowPoint();
+        return currentLevel.checkCollision(p.add(distanceVector));
+    }
+
+    //helper for fall, recursively finds the first point that won't collide with the bottom center of the shell
     private int belowFinder(int distance) {
         if (checkBelow(distance)) {
             distance=belowFinder(distance-1);
@@ -285,24 +295,23 @@ public class Snail {
             velocityX -= 1;
         }
     }
-    private Boolean checkBelow(int distance) {
-        Point distanceVector = new Point(0, distance*SnailGame.SCREEN_PIXEL_RATIO);
-        Point p = belowPoint();
-        return currentLevel.checkCollision(p.add(distanceVector));
-    }
 
+    /**
+     * @return the point at the bottom (absolute) center of the shell
+     */
     public Point belowPoint() {
         List<Point> ps = getShellPoints();
         return (ps.get(0).subtract(ps.get(1))).scale(.5).add(ps.get(1));
     }
 
     /**
-     * @return bl br tl tr
+     * @return list of four corners of shell in some of the sprites in order bottom left, bottom right, top left, top right
      */
     public List<Point> getShellPoints() {
         return List.of(convertAbsolute(bottomLeftShell()), convertAbsolute(bottomRightShell()), convertAbsolute(topLeftShell()), convertAbsolute(topRightShell()));
     }
 
+    //turns the snail on inner corners
     private void turnInner() {
         if (facing==Orientation.LEFT) {
             currentImage.rotateBy(90);   
@@ -315,8 +324,9 @@ public class Snail {
         y += nudgeY(facingCornerIndex+4, 4);
     }
 
+    //turns the snail on outer corners
     private void turnOuter() {
-        if (snailBottomOrientation==Orientation.BOTTOM) {
+        if (snailBottomOrientation==Orientation.BOTTOM) { //some junk for going off platforms
             Tile t = currentLevel.getCollidableTileAt(getBoundaryPoint(5));
             if (t!=null&&!t.canStickToSide()) {
                 velocityX = 0;
@@ -336,7 +346,7 @@ public class Snail {
     }  
 
     
-    // sets the graphic
+    // only called by move if something moved (hopefully), updates the sprite, its position, and if its reflected or not
     private void updateAnimation() {
         String path = "Snail/";
         if (currentAppearance == lastAppearance) {
@@ -383,7 +393,7 @@ public class Snail {
         if (facing==Orientation.LEFT) {
             currentImage.setScale(-1, 1);
         } else {
-            currentImage.setScale(1);
+            currentImage.setScale(1, 1);
         }
         lastAppearance = currentAppearance;
     }
@@ -392,26 +402,50 @@ public class Snail {
         return currentImage;
     }
 
+    /**
+     * @param i 0 top left, cw
+     * @return relative point for snail sprite
+     */
     private Point getBoundary(int i){
-        return bounds.get(modulo8(i));
+        return BOUNDS.get(modulo8(i));
     }
 
+    /**
+     * @param i 0 top left, cw
+     * @return absolute point for snail sprite
+     */
     private Point getBoundaryPoint(int i) {
         return convertAbsolute(getBoundary(i));
     }
 
-
+    /**
+     * @param i 0 top left, cw, the corner that's closest to the snails face
+     * @return a point inside the snails beautiful face
+     */
     private Point getSnailFace(int i){
         return convertAbsolute(nudge(getBoundary(i), i+4,4));
     }
+
+    /**
+     * @param p a point relative to the snail's top left
+     * @return the absolute position of the point
+     */
     private Point convertAbsolute(Point p) {
         return p.add(new Point(x,y));
     }
 
+    /**
+     * @param i 0 top left, cw
+     * @return i mod 8 (i hate java)
+     */
      private int modulo8(int i) {
         return (((i%8) + 8)%8);
     }
 
+    /**
+     * @param o Orientation
+     * @return 0 top left, cw
+     */
     private int orientationIndexMap(Orientation o) {
         switch (o) {
             case BOTTOM:
@@ -427,6 +461,10 @@ public class Snail {
         }
     }
 
+    /**
+     * @param i 0 top left, cw, ONLY VALID IF i is odd, positive, less than 8! we only have 4 orientations
+     * @return orientation
+     */
     private Orientation indexOrientationMap(int i) {
         switch (i) {
             case 1:
@@ -442,18 +480,30 @@ public class Snail {
         }
     }
 
+    //helper for turning
     private int absoluteFacingIndex(){
         return rotateOrientation(snailBottomOrientation, facing);
     }
 
+    //helper for turning
     private int reverseFacingIndex(){
         return rotateOrientation(snailBottomOrientation, facing==Orientation.LEFT ? Orientation.RIGHT : Orientation.LEFT);
     }
 
+    /**
+     * rotates the orientation by t. top rotated right gives you left. a snail attached to the left
+     * going left is looking upwards, so left rotated left gives you up, etc...
+     * @param o Orientation to rotate
+     * @param t Orientation to rotate by, idk what the return value would mean if t wasn't left or right
+     * @return an index, 0 top left, cw
+     */
     private int rotateOrientation(Orientation o, Orientation t) { //idk what it gives you if you rotate around bottom or top
         return modulo8((orientationIndexMap(o) - orientationIndexMap(t) + 1));
     }
 
+    /**
+     * @return the absolute bottom left point on the shell in relative coordinates
+     */
     private Point bottomLeftShell(){
         int px = 0;
         int py = 0;
@@ -478,6 +528,9 @@ public class Snail {
         return new Point(px*SnailGame.SCREEN_PIXEL_RATIO, py*SnailGame.SCREEN_PIXEL_RATIO);
     }
     
+    /**
+     * @return the absolute bottom right point on the shell in relative coordinates
+     */
     private Point bottomRightShell(){
         int px = 0;
         int py = 0;
@@ -502,6 +555,9 @@ public class Snail {
         return new Point(px*SnailGame.SCREEN_PIXEL_RATIO, py*SnailGame.SCREEN_PIXEL_RATIO);
     }
 
+    /**
+     * @return the absolute top left point on the shell in relative coordinates
+     */
     private Point topLeftShell(){
         int px = 0;
         int py = 0;
@@ -526,6 +582,9 @@ public class Snail {
         return new Point(px*SnailGame.SCREEN_PIXEL_RATIO, py*SnailGame.SCREEN_PIXEL_RATIO);
     }
     
+    /**
+     * @return the absolute top right point on the shell in relative coordinates
+     */
     private Point topRightShell(){
         int px = 0;
         int py = 0;
@@ -549,5 +608,17 @@ public class Snail {
         }
         return new Point(px*SnailGame.SCREEN_PIXEL_RATIO, py*SnailGame.SCREEN_PIXEL_RATIO);
     }
-    
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public Orientation getOrientation() {
+        return snailBottomOrientation;
+    }
 }
+
