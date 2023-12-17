@@ -7,7 +7,6 @@ import edu.macalester.graphics.Image;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.awt.Color;
-import java.awt.Toolkit;
 
 public class SnailGame {
     private CanvasWindow canvas;
