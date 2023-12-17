@@ -30,12 +30,12 @@ public class SnailGame {
 ４＿＿あ＿＿＿あ＿＿＿＿＿＿あ＿＿＿＿＋
 「　　あ　　　＿　　　　　　あ　　　　」
 「　　＿　　　　　　　　　　あ　　　　」
-「　　　　　　　　　　　　　ー　　　プ」
-「花　　　　＿＿　　　　　　　　　　ブ」
-「　ずす　　　あ　　　　ひび　　　ルフ」
-「　すす　　ロあ　　　　　　　　＿＿＿あ
-あ＿＿＿＿＿＿あ　　　＿　　　　」　　」
-「　　　　　　　　　　ー　　　　　　　」
+「　　　　　　　　　　　　　ー　　　　」
+「花　　　　＿＿　　　　　　　　　　プ」
+「　ずす　　　あ　　　　ひび　　　　ブ」
+「　すす　　ロあ　　　　　　　　　ルフ」
+あ＿＿＿＿＿＿あ　　　＿　　　　＿＿＿あ
+「　　　　　　　　　　ー　　　　」　　」
 「　　　　　　　　　　　　　　　　　　」
 「　　　　　　　　　　　　Ⓕ　　　　　」
 「　　　あ　　　　　　　　￣　　　　　」
@@ -88,6 +88,18 @@ public class SnailGame {
             int framerate = 1;
             if (canvas.getKeysPressed().contains(Key.SHIFT)) {
                 framerate=6;
+            }
+            if (canvas.getKeysPressed().contains(Key.R)) {
+                Ellipse e = new Ellipse(0, 0, 6, 6);
+                e.setCenter(snail.getGraphics().getCenter().add(new Point(0,16*6)));
+                e.setFillColor(Color.RED);
+                graphics.add(e);
+            }
+            if (canvas.getKeysPressed().contains(Key.G)) {
+                Ellipse e = new Ellipse(0, 0, 6, 6);
+                e.setCenter(snail.belowPoint());
+                e.setFillColor(Color.GREEN);
+                graphics.add(e);
             }
 
             if (ticks % framerate == 0){ //animate at 15 fps instead of 60

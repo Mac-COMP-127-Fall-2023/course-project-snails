@@ -108,6 +108,7 @@ public class Snail {
         }
         updateAnimation();
     }
+
     public void exit(){
         currentAppearance = Appearance.EXITING;
     }
@@ -214,15 +215,19 @@ public class Snail {
             turnInner();
             return;
         }
-        
+        int m = (facing==Orientation.LEFT ? -1 : 1); //if it's facing left/right relative to its surface we move accordingly
+        m *= SnailGame.SCREEN_PIXEL_RATIO;
         int facingIndex = rotateOrientation(snailBottomOrientation, facing);
-        if (!currentLevel.checkCollision(nudge(getBoundaryPoint(snailBottomIndex),facingIndex,1))) {
+        Point p = getBoundaryPoint(snailBottomIndex);
+        if (!currentLevel.checkCollision(p)) { //can rarely occur if it fell sideways near an edge
+            velocityX=0;
+            x+=3*m;
+            curl();
+            return;
+        } else if (!currentLevel.checkCollision(nudge(p,facingIndex,1))) {
             turnOuter();
             return;
         }
-
-        int m = (facing==Orientation.LEFT ? -1 : 1); //if it's facing left/right relative to its surface we move accordingly
-        m *= SnailGame.SCREEN_PIXEL_RATIO;
         switch (snailBottomOrientation) {
             case BOTTOM:
                 x+=m;
@@ -270,16 +275,25 @@ public class Snail {
 
     private void sideCollisions() {
         List<Point> ps = getShellPoints();
-        velocityX += currentLevel.checkCollision(ps.get(0)) ? 1 : 0;
-        velocityX += currentLevel.checkCollision(ps.get(2)) ? 1 : 0;
-        velocityX += currentLevel.checkCollision(ps.get(1)) ? -1 : 0;
-        velocityX += currentLevel.checkCollision(ps.get(3)) ? -1 : 0;
+        if (currentLevel.checkCollision(ps.get(0))) {
+            velocityX += 1;
+        } else if (currentLevel.checkCollision(ps.get(2))) {
+            velocityX += 1;
+        } else if (currentLevel.checkCollision(ps.get(1))) {
+            velocityX -= 1;
+        } else if (currentLevel.checkCollision(ps.get(3))) {
+            velocityX -= 1;
+        }
     }
     private Boolean checkBelow(int distance) {
         Point distanceVector = new Point(0, distance*SnailGame.SCREEN_PIXEL_RATIO);
-        List<Point> ps = getShellPoints();
-        Point p = (ps.get(0).subtract(ps.get(1))).scale(.5).add(ps.get(1));
+        Point p = belowPoint();
         return currentLevel.checkCollision(p.add(distanceVector));
+    }
+
+    public Point belowPoint() {
+        List<Point> ps = getShellPoints();
+        return (ps.get(0).subtract(ps.get(1))).scale(.5).add(ps.get(1));
     }
 
     /**
@@ -306,7 +320,7 @@ public class Snail {
             Tile t = currentLevel.getCollidableTileAt(getBoundaryPoint(5));
             if (t!=null&&!t.canStickToSide()) {
                 velocityX = 0;
-                velocityX = (facing==Orientation.LEFT ? -1 : 1);
+                velocityX = (facing==Orientation.LEFT ? -2 : 2);
                 curl();
             }
         }
