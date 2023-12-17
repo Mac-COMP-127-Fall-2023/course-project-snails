@@ -88,7 +88,9 @@ public class Snail {
         currentAppearance = Appearance.EXITING;
     }
 
-    //main logic that determines what happens when not falling
+    /**
+     * main logic that determines what happens when not falling
+     */
     private void handleInputs(Set<Key> keysPressed) {
         Orientation inputDirection;
         if (keysPressed.contains(Key.RIGHT_ARROW)) {
@@ -124,76 +126,6 @@ public class Snail {
             default:
                 break;
         }
-    }
-
-    /**
-     * mostly used to correct the snail's position while turning
-     * @param indexTo 0 top left, cw
-     * @param amount in ingame pixels
-     */
-    private Point nudge(Point p, int indexTo, int amount){
-        int dx = nudgeX(indexTo, amount);
-        int dy = nudgeY(indexTo, amount);
-        return p.add(new Point(dx,dy));
-    }
-
-    /**
-     * helper function for nudge
-     * @param indexTo 0 top left, cw
-     * @param amount ingame pixels 
-     */
-    private int nudgeY(int indexTo, int amount){
-        int dy = 0;
-        switch (modulo8(indexTo)) {
-            case 0:
-                dy=-1;
-                break;
-            case 1:
-                dy=-1;
-                break;
-            case 2:
-                dy=-1;
-                break;
-            case 4:
-                dy=1;
-                break;
-            case 5:
-                dy=1;
-                break;
-            case 6:
-                dy=1;
-                break;
-        }
-        return dy*amount*SnailGame.SCREEN_PIXEL_RATIO;
-    }
-
-    /**
-     * @param indexTo 0 top left, cw
-     * @param amount ingame pixels
-     */
-    private int nudgeX(int indexTo, int amount){
-        int dx = 0;
-        switch (modulo8(indexTo)) {
-            case 0:
-                dx=-1;
-                break;
-            case 2:
-                dx=1;
-                break;
-            case 3:
-                dx=1;
-                break;
-            case 4:
-                dx=1;
-                break;
-            case 6:
-                dx=-1;
-                break;
-            case 7:
-                dx=-1;
-                break;
-        }
-        return dx*amount*SnailGame.SCREEN_PIXEL_RATIO;
     }
 
     /**
@@ -275,7 +207,9 @@ public class Snail {
         return currentLevel.checkCollision(p.add(distanceVector));
     }
 
-    //helper for fall, recursively finds the first point that won't collide with the bottom center of the shell
+    /**
+     * helper for fall, recursively finds the first point that won't collide with the bottom center of the shell
+     */
     private int belowFinder(int distance) {
         if (checkBelow(distance)) {
             distance=belowFinder(distance-1);
@@ -283,6 +217,9 @@ public class Snail {
         return distance;
     }
 
+    /**
+     * updates velocityX if the shell is colliding with a tile
+     */
     private void sideCollisions() {
         List<Point> ps = getShellPoints();
         if (currentLevel.checkCollision(ps.get(0))) {
@@ -311,7 +248,9 @@ public class Snail {
         return List.of(convertAbsolute(bottomLeftShell()), convertAbsolute(bottomRightShell()), convertAbsolute(topLeftShell()), convertAbsolute(topRightShell()));
     }
 
-    //turns the snail on inner corners
+    /**
+     * turns the snail sprite and orientation and adjusts the position accordingly for inner corners
+     */
     private void turnInner() {
         if (facing==Orientation.LEFT) {
             currentImage.rotateBy(90);   
@@ -324,7 +263,9 @@ public class Snail {
         y += nudgeY(facingCornerIndex+4, 4);
     }
 
-    //turns the snail on outer corners
+    /**
+     * turns the snail sprite and orientation and adjusts the position accordingly for outer corners
+     */
     private void turnOuter() {
         if (snailBottomOrientation==Orientation.BOTTOM) { //some junk for going off platforms
             Tile t = currentLevel.getCollidableTileAt(getBoundaryPoint(5));
@@ -346,7 +287,10 @@ public class Snail {
     }  
 
     
-    // only called by move if something moved (hopefully), updates the sprite, its position, and if its reflected or not
+    /**
+     * only ever called at the end of move if it's necessary, updates the sprite animation frame
+     * its position, and if its reflected or not
+     */ 
     private void updateAnimation() {
         String path = "Snail/";
         if (currentAppearance == lastAppearance) {
@@ -619,6 +563,77 @@ public class Snail {
 
     public Orientation getOrientation() {
         return snailBottomOrientation;
+    }
+
+     /**
+     * mostly a helper for nudge
+     * @param indexTo 0 top left, cw
+     * @param amount ingame pixels 
+     */
+    private int nudgeY(int indexTo, int amount){
+        int dy = 0;
+        switch (modulo8(indexTo)) {
+            case 0:
+                dy=-1;
+                break;
+            case 1:
+                dy=-1;
+                break;
+            case 2:
+                dy=-1;
+                break;
+            case 4:
+                dy=1;
+                break;
+            case 5:
+                dy=1;
+                break;
+            case 6:
+                dy=1;
+                break;
+        }
+        return dy*amount*SnailGame.SCREEN_PIXEL_RATIO;
+    }
+
+    /**
+     * mostly a helper for nudge
+     * @param indexTo 0 top left, cw
+     * @param amount ingame pixels
+     */
+    private int nudgeX(int indexTo, int amount){
+        int dx = 0;
+        switch (modulo8(indexTo)) {
+            case 0:
+                dx=-1;
+                break;
+            case 2:
+                dx=1;
+                break;
+            case 3:
+                dx=1;
+                break;
+            case 4:
+                dx=1;
+                break;
+            case 6:
+                dx=-1;
+                break;
+            case 7:
+                dx=-1;
+                break;
+        }
+        return dx*amount*SnailGame.SCREEN_PIXEL_RATIO;
+    }
+
+    /**
+     * nudges the point towards a direction, mostly used to correct the snail's position while turning
+     * @param indexTo 0 top left, cw
+     * @param amount in ingame pixels
+     */
+    private Point nudge(Point p, int indexTo, int amount){
+        int dx = nudgeX(indexTo, amount);
+        int dy = nudgeY(indexTo, amount);
+        return p.add(new Point(dx,dy));
     }
 }
 

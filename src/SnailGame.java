@@ -85,23 +85,23 @@ public class SnailGame {
     private void play(){
 
         canvas.animate(() -> {
-            int framerate = 1;
-            if (canvas.getKeysPressed().contains(Key.SHIFT)) {
-                framerate=6;
-            }
-            if (canvas.getKeysPressed().contains(Key.R)) {
-                Ellipse e = new Ellipse(0, 0, 6, 6);
-                e.setCenter(snail.getGraphics().getCenter().add(new Point(0,16*6)));
-                e.setFillColor(Color.RED);
-                graphics.add(e);
-            }
-            if (canvas.getKeysPressed().contains(Key.G)) {
-                Ellipse e = new Ellipse(0, 0, 6, 6);
-                e.setCenter(snail.belowPoint());
-                e.setFillColor(Color.GREEN);
-                graphics.add(e);
-            }
-
+            //debugging stuff
+            int framerate = 2;
+            // if (canvas.getKeysPressed().contains(Key.SHIFT)) {
+            //     framerate=6;
+            // }
+            // if (canvas.getKeysPressed().contains(Key.R)) {
+            //     Ellipse e = new Ellipse(0, 0, 6, 6);
+            //     e.setCenter(snail.getGraphics().getCenter().add(new Point(0,16*6)));
+            //     e.setFillColor(Color.RED);
+            //     graphics.add(e);
+            // }
+            // if (canvas.getKeysPressed().contains(Key.G)) {
+            //     Ellipse e = new Ellipse(0, 0, 6, 6);
+            //     e.setCenter(snail.belowPoint());
+            //     e.setFillColor(Color.GREEN);
+            //     graphics.add(e);
+            // }
             if (ticks % framerate == 0){ //animate at 15 fps instead of 60
                 transition();
                 snail.move(canvas.getKeysPressed()); 
@@ -125,13 +125,15 @@ public class SnailGame {
                 transition.setScale(0);
                 break;                           //have to check again to see if we're now at 0 because its mod 14 
             case 7:
-                currentLevel = levels.get(++levelIndex); //++i returns i+1 and increments i 
+                currentLevel = levels.get(++levelIndex); 
                 setUpLevel();
                 break;
         }
         transition.setCenter(snail.getGraphics().getCenter());
     }
 
+    //transition handles the level transition, so if we call this once it'll start the process that makes it setup the next
+    //level
     public static void win(){
         transitionIndex = 1;
         transition.setScale(2);

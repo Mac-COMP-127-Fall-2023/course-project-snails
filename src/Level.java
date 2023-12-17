@@ -6,12 +6,6 @@ import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
-/*
- * DO TO: 
- *  add a finishing point visual of some kind (** this will also
- *  be used in SnailGame to see if the snail should proceed to the 
- *  next level)
- */
 class Level {
     private GraphicsGroup terrainLayer = new GraphicsGroup();
     private  GraphicsGroup decorationLayer = new GraphicsGroup();
@@ -95,6 +89,7 @@ class Level {
       return null;
     }
 
+    //only triggers once, called by snail at the end of move() every frame
     public boolean getCompleted(){
         if (won){
             return false;
