@@ -47,6 +47,8 @@ public interface Tile{
         entry('ル', "Tiles/rocks_small2.png"),
         entry('ロ', "Tiles/rocks_large.png"),
         entry('花', "Tiles/flower_wall_left.png"),
-        entry('え', "Tiles/finish.png")
+        entry('え', "Tiles/finish.png"),
+        entry('G', "Tiles/grass1_tall1.png"),
+        entry('g', "Tiles/grass1_tall2.png")
     );
 }

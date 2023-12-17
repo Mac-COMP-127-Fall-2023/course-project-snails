@@ -20,33 +20,24 @@ public class Snail {
         new Point(0,32*SnailGame.SCREEN_PIXEL_RATIO),
         new Point(0,16*SnailGame.SCREEN_PIXEL_RATIO)
     );
-
     //current animation state
     public static enum Appearance {
-        CRAWLING,
-        ROLLING,
-        CURLING,
-        UNCURLING,
-        INSHELL,
-        EXITING
+        CRAWLING, ROLLING,
+        CURLING, UNCURLING,
+        INSHELL, EXITING
     }
-
-    // the side that the snail is attached to
+    // the side that the snail is attached to, can also be represented with an integer mod 8, 0 top left, clockwise
     public static enum Orientation {
-        BOTTOM,
-        LEFT,
-        TOP,
-        RIGHT
+        BOTTOM, LEFT,
+        TOP, RIGHT
     }
-    Appearance currentAppearance = Appearance.CRAWLING;
-    Appearance lastAppearance;
-    Boolean falling = false;
-    Boolean crawled = false;
-    Orientation snailBottomOrientation = Orientation.BOTTOM; //the side that the snail is attached to
-    Orientation facing = Orientation.RIGHT; // the side that the snail is facing relative to it's surface
-
-    // current velocity while falling
-    private int velocity = 0; //y
+    private Appearance currentAppearance = Appearance.CRAWLING;
+    private Appearance lastAppearance;
+    private Boolean falling = false;
+    private Boolean crawled = false;
+    private Orientation snailBottomOrientation = Orientation.BOTTOM; //the side that the snail is attached to
+    private Orientation facing = Orientation.RIGHT; // the side that the snail is facing relative to it's surface
+    private int velocity = 0; //velocity for falling
     private int velocityX = 0;
 
     /**
@@ -67,7 +58,7 @@ public class Snail {
      * Update the snail's position and movement based on 
      * @param keysPressed and its current orientation, ways it can move, etc.
      */
-    public void move(Set<Key> keysPressed){
+    public boolean move(Set<Key> keysPressed){
         if(falling) {
             velocity += (velocity < 14) ? 2 : 0;
             fall(velocity);
@@ -75,13 +66,14 @@ public class Snail {
             handleInputs(keysPressed);
         }
         if (!crawled&&currentAppearance==Appearance.CRAWLING) {
-            return;
+            return false;
         }
         if (currentLevel.getCompleted()) {
             exit();
             SnailGame.win();
         }
         updateAnimation();
+        return true;
     }
 
     public void exit(){

@@ -3,9 +3,11 @@ import edu.macalester.graphics.Ellipse;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
+import edu.macalester.graphics.Rectangle;
 import edu.macalester.graphics.events.Key;
 
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 import java.awt.Color;
 import java.awt.Toolkit;
@@ -13,11 +15,14 @@ import java.awt.Toolkit;
 public class SnailGame {
     private CanvasWindow canvas;
     private int ticks = 0;
+    private final double SCALE = .55;
+
+    private int parallaxFrom =16;
+    private int parallaxTo =16;
 
     public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
-
+    private GraphicsGroup background;
     private Snail snail;
-
     private Level currentLevel;
     private GraphicsGroup graphics;
 
@@ -27,23 +32,35 @@ public class SnailGame {
 
     private static List<Level> levels = List.of( 
         new Level("""
-４＿＿あ＿＿＿あ＿＿＿＿＿＿あ＿＿＿＿＋
-「　　あ　　　＿　　　　　　あ　　　　」
-「　　＿　　　　　　　　　　あ　　　　」
-「　　　　　　　　　　　　　ー　　　　」
-「花　　　　＿＿　　　　　　　　　　プ」
-「　ずす　　　あ　　　　ひび　　　　ブ」
-「　すす　　ロあ　　　　　　　　　ルフ」
-あ＿＿＿＿＿＿あ　　　＿　　　　＿＿＿あ
-「　　　　　　　　　　ー　　　　」　　」
-「　　　　　　　　　　　　　　　　　　」
-「　　　　　　　　　　　　Ⓕ　　　　　」
-「　　　あ　　　　　　　　￣　　　　　」
-「　　　あ　　あ　　　　　　　　　　　」
-「　　　　　あ　　　　　　　　あ　　　」
-「　　　　　あ　　　　　　　　あ　　　」
-・￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣／"""),
+４＿＿あ＿＿＿あ＿＿＿＿＿＿あ＿＿＿＿＋ああああああああああ
+「　　あ　　　＿　　　　　　あ　　　　」ああああああああああ
+「　　＿　　　　　　　　　　あ　　　　」ああああああああああ
+「　　　　　　　　　　　　　ー　　　　」ああああああああああ
+「花　　　　　　　　　　　　　　　　プ」ああああああああああ
+「　ずす　　　　　　　　ひび　　　　ブ」ああああああああああ
+「　すす　　ロ「　　　　　　　　　ルフ」ああああああああああ
+あ＿＿＿＿＿＿「花　＿＿　　　　＿＿＿あああああああああああ
+「　　　　　　　　　　　　　　　」　　」ああああああああああ
+「　　　　　　　　　　　　　　　　　　」ああああああああああ
+「　　　　　　　ひび　　　Ⓕ　　　　　」ああああああああああ
+「　　　あ　　　　　　　　￣　　　　　」ああああああああああ
+「　　　あ　　￣　　　　　＿　　　　　」ああああああああああ
+「　　　　　　あ　　　　　　　あ　　　」ああああああああああ
+「　　　　　あ　　　　　　　　あ　　　」ああああああああああ
+・￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣／ああああああああああ""",
+"""
+　　　　　　
+プ　　g　　
+ブ　　G　」
+フ　　￣￣あ
+￣￣￣あああ"""),
+
         new Level("""
+　　ずす　　
+　　すす　Ⓕ
+￣￣￣￣￣￣
+        """,
+"""
 　　ずす　　
 　　すす　Ⓕ
 ￣￣￣￣￣￣
@@ -64,29 +81,37 @@ public class SnailGame {
      */
     private void setUpLevel(){
         canvas.removeAll();
+        canvas.setBackground(Color.BLACK);
+
+        background = currentLevel.getBackground();
+        background.setScale(SCALE*3);
+        background.setAnchor(new Point(0,0));
+        background.setPosition((32-parallaxFrom)*SCALE*6,2*16*SCALE*9);
+        canvas.add(background);
+
+        Rectangle overlay = new Rectangle(0,0,1920,1080);
+        overlay.setFillColor(new Color(46*4,25*4,28*4,127));
+        canvas.add(overlay);
+
         graphics = currentLevel.getGraphics();
         graphics.setPosition(0,0);
+
         snail = currentLevel.getSnail();
-        // for (Point p : snail.getShellPoints()) {
-        //     Ellipse e = new Ellipse(0,0,6,6);
-        //     e.setFillColor(Color.RED);
-        //     e.setCenter(p);
-        //     graphics.add(e);
-        // }
         graphics.add(snail.getGraphics());
-        graphics.setAnchor(graphics.getPosition());
+
         transition.setScale(2);
         graphics.add(transition);
-        graphics.setScale(.55);
-        canvas.add(graphics);
 
+        graphics.setAnchor(graphics.getPosition());
+        graphics.setScale(SCALE);
+        canvas.add(graphics);
     }
 
     private void play(){
 
         canvas.animate(() -> {
             //debugging stuff
-            int framerate = 2;
+            int framerate = 1;
             // if (canvas.getKeysPressed().contains(Key.SHIFT)) {
             //     framerate=6;
             // }
@@ -104,7 +129,10 @@ public class SnailGame {
             // }
             if (ticks % framerate == 0){ //animate at 15 fps instead of 60
                 transition();
-                snail.move(canvas.getKeysPressed()); 
+                boolean moved = snail.move(canvas.getKeysPressed());
+                // if (moved) {
+                //     parallaxTo = snail.getX()/16;
+                // }
             }
             ticks++;
         });
@@ -114,6 +142,17 @@ public class SnailGame {
      * increments transition, going back to the beginning if it's run out of images
      */
     private void transition(){
+        // if (parallaxTo>parallaxFrom) {
+        //     if (Math.random()>.8) {
+        //         background.setPosition((32-++parallaxFrom)*SCALE*6,2*16*SCALE*9);
+        //     }
+        // } else if (parallaxTo<parallaxFrom) {
+        //     if (Math.random()>.8) {
+        //         parallaxFrom--;
+        //         background.setPosition((32-parallaxFrom)*SCALE*6,2*16*SCALE*9 );
+        //     }
+        // }
+
         if (transitionIndex==0) {
             return;
         }
