@@ -144,6 +144,8 @@ public class Snail {
                     curl();
                 }
                 break; 
+            default:
+                break;
         }
     }
 
@@ -265,24 +267,6 @@ public class Snail {
         }
         return distance;
     }
-    private int asideFinder(int distance) {
-        if (checkAside(distance)) {
-            distance=belowFinder(distance-1);
-        }
-        return distance;
-    }
-
-    private Boolean checkAside(int distance) {
-        Point distanceVector = new Point(distance*SnailGame.SCREEN_PIXEL_RATIO,0);
-        List<Point> ps = getShellPoints();
-        Point p;
-        if (distance > 0) { //going right
-            p = (ps.get(1).subtract(ps.get(3))).scale(.5).add(ps.get(3));
-        } else {
-            p = (ps.get(2).subtract(ps.get(0))).scale(.5).add(ps.get(0));
-        }
-        return currentLevel.checkCollision(p.add(distanceVector));
-    }
 
     private void sideCollisions() {
         List<Point> ps = getShellPoints();
@@ -338,56 +322,7 @@ public class Snail {
         x += nudgeX(facingCornerIndex,16);
         y += nudgeY(facingCornerIndex, 16);
 
-    }   
-     /**
-     * Move the snail according the the new orientation and midpoint, the newSideMidpoint
-     * being the midpoint of the side that is the newOrientation.
-     * 
-     * @param newSideMidpoint should be the corner of the block snail is on
-     */
-    private void rotateOnTile(Point newSideMidpoint, Orientation newOrientation){
-        if(newOrientation == Orientation.LEFT && snailBottomOrientation == Orientation.BOTTOM){
-            x = (int)newSideMidpoint.getX();
-            y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
-            currentImage.rotateBy(90);
-        }
-        else if(newOrientation == Orientation.BOTTOM && snailBottomOrientation == Orientation.LEFT){
-            x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
-            y = (int)(newSideMidpoint.getY() - currentImage.getHeight());
-            currentImage.rotateBy(-90);
-        }
-        else if (newOrientation == Orientation.TOP && snailBottomOrientation == Orientation.LEFT){
-            x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
-            y = (int)(newSideMidpoint.getY());
-            currentImage.rotateBy(90);
-        }
-        else if (newOrientation == Orientation.LEFT && snailBottomOrientation == Orientation.TOP){
-            x = (int)newSideMidpoint.getX();
-            y = (int)(newSideMidpoint.getY()-currentImage.getHeight()/2);
-            currentImage.rotateBy(-90);
-        }
-        else if (newOrientation == Orientation.RIGHT && snailBottomOrientation == Orientation.BOTTOM){
-            x = (int)(newSideMidpoint.getX() - currentImage.getWidth());
-            y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
-            currentImage.rotateBy(-90);
-        }
-        else if (newOrientation == Orientation.BOTTOM && snailBottomOrientation == Orientation.RIGHT){
-            x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
-            y = (int)(newSideMidpoint.getY() - currentImage.getHeight());
-            currentImage.rotateBy(90);
-        }
-        else if(newOrientation == Orientation.TOP && snailBottomOrientation == Orientation.RIGHT){
-            x = (int)(newSideMidpoint.getX() - currentImage.getWidth()/2);
-            y = (int)(newSideMidpoint.getY());
-            currentImage.rotateBy(-90);
-        }
-        else if(newOrientation == Orientation.RIGHT && snailBottomOrientation == Orientation.TOP){
-            x = (int)(newSideMidpoint.getX()- currentImage.getWidth());
-            y = (int)(newSideMidpoint.getY() - currentImage.getHeight()/2);
-            currentImage.rotateBy(90);
-        }
-        currentImage.setPosition(x,y);
-    }
+    }  
 
     
     // sets the graphic
