@@ -22,7 +22,8 @@ import java.io.IOException;
 public class SnailGame {
     private CanvasWindow canvas;
     private int ticks = 0;
-    private final double SCALE = .55;
+    private final double SCALE = .5;
+    private boolean playing = false;
 
     private int parallaxFrom =16;
     private int parallaxTo =16;
@@ -48,11 +49,11 @@ public class SnailGame {
 「　　　　　あ　　　　　　　　あ　　　」ああああああああああ
 ・￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣／ああああああああああ""",
 """
-　　　　　　
-プ　　g　　
-ブ　　G　」
-フ　　￣￣あ
-￣￣￣あああ""");
+　　　　　　　　ひび
+プ　　　g　　
+ブ　　　G　」花
+フ　　　￣￣あ
+￣￣￣￣あああ""");
     private GraphicsGroup graphics;
 
     private static int transitionIndex;
@@ -61,22 +62,27 @@ public class SnailGame {
 
     private static List<Level> levels = List.of( 
         new Level("""
-４＿＿あ＿＿＿あ＿＿＿＿＿＿あ＿＿＿＿＋ああああああああああ
-「　　あ　　　＿　　　　　　あ　　　　」ああああああああああ
-「　　＿　　　　　　　　　　あ　　　　」ああああああああああ
-「　　　　　　　　　　　　　ー　　　　」ああああああああああ
-「花　　　　　　　　　　　　　　　　プ」ああああああああああ
-「　ずす　　　　　　　　ひび　　　　ブ」ああああああああああ
-「　すす　　ロ「　　　　　　　　　ルフ」ああああああああああ
-あ＿＿＿＿＿＿「花　＿＿　　　　＿＿＿あああああああああああ
-「　　　　　　　　　　　　　　　」　　」ああああああああああ
-「　　　　　　　　　　　　　　　　　　」ああああああああああ
-「　　　　　　　ひび　　　Ⓕ　　　　　」ああああああああああ
-「　　　あ　　　　　　　　￣　　　　　」ああああああああああ
-「　　　あ　　￣　　　　　＿　　　　　」ああああああああああ
-「　　　　　　あ　　　　　　　あ　　　」ああああああああああ
-「　　　　　あ　　　　　　　　あ　　　」ああああああああああ
-・￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣／ああああああああああ""",
+４＿＿あ＿＿＿あ＿＿＿＿＿＿あ＿＿＿＿＋あああああああああああああああ
+「　　あ　　　＿　　　　　　あ　　　　」あああああああああああああああ
+「　　＿　　　　　　　　　　あ　　　　」あああああああああああああああ
+「　　　　　　　　　　　　　ー　　　　」あああああああああああああああ
+「花　　　　　　　　　　　　　　　　プ」あああああああああああああああ
+「　ずす　　　　　　　　ひび　　　　ブ」あああああああああああああああ
+「　すす　　ロ「　　　　　　　　　ルフ」あああああああああああああああ
+あ＿＿＿＿＿＿「花　＿＿　　　　＿＿＿ああああああああああああああああ
+「　　　　　　　　　　　　　　　」　　」あああああああああああああああ
+「　　　　　　　　　　　　　　　　　　」あああああああああああああああ
+「　　　　　　　ひび　　　Ⓕ　　　　　」あああああああああああああああ
+「　　　あ　　　　　　　　￣　　　　　」あああああああああああああああ
+「　　　あ　　￣　　　　　＿　　　　　」あああああああああああああああ
+「　　　　　　あ　　　　　　　あ　　　」あああああああああああああああ
+「　　　　　あ　　　　　　　　あ　　　」あああああああああああああああ
+・￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣／あああああああああああああああ
+あああああああああああああああああああああああああああああああああああ
+あああああああああああああああああああああああああああああああああああ
+あああああああああああああああああああああああああああああああああああ
+あああああああああああああああああああああああああああああああああああ""",
+
 """
 　　　　　　
 プ　　g　　
@@ -112,9 +118,9 @@ public class SnailGame {
     private void titleScreen() {
         canvas.setBackground(Color.BLACK);
         background = currentLevel.getBackground();
-        background.setScale(SCALE*3);
         background.setAnchor(new Point(0,0));
-        background.setPosition((32-parallaxFrom)*SCALE*6,2*16*SCALE*9);
+        background.setScale(SCALE*3);
+        background.setPosition(16*SCALE*4,2*16*SCALE*9);
         canvas.add(background);
 
         Rectangle overlay = new Rectangle(0,0,1920,1080);
@@ -127,14 +133,21 @@ public class SnailGame {
             
         }
         GraphicsText title = new GraphicsText("Slimy\n Navigational\n  Adventure\n   Involving\n    L'escargot");
-        title.setFont(new Font("Pixellari", 0, 100));
-        title.setPosition(100,100);
+        title.setFont(new Font("Pixellari", 0, (3*32)));
+        title.setPosition(96,96);
+        title.setFillColor(new Color(144,163,83));
         canvas.add(title);
-        canvas.draw();
-        while (canvas.getKeysPressed().isEmpty()) {
-
-        }
-        play();
+        canvas.animate(()->{
+            if (playing||!canvas.getKeysPressed().isEmpty()) {
+                playing = true;
+                int framerate = 1;    
+                if (ticks % 1 == 0){
+                    transition();
+                    snail.move(canvas.getKeysPressed());
+                }
+                ticks++;
+            }
+        });
     }
 
     private void setUpLevel(){
@@ -166,7 +179,6 @@ public class SnailGame {
     }
 
     private void play(){
-
         canvas.animate(() -> {
             //debugging stuff
             int framerate = 1;
