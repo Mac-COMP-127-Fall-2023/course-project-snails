@@ -6,6 +6,7 @@ import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.Rectangle;
+import edu.macalester.graphics.TextAlignment;
 import edu.macalester.graphics.events.Key;
 
 import java.util.List;
@@ -49,11 +50,12 @@ public class SnailGame {
 「　　　　　あ　　　　　　　　あ　　　」ああああああああああ
 ・￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣／ああああああああああ""",
 """
-　　　　　　　　ひび
-プ　　　g　　
-ブ　　　G　」花
-フ　　　￣￣あ
-￣￣￣￣あああ""");
+　　　　　　　　　ひび
+　プ　　　　g　
+　ブ　　　　G　」花
+　フ　　　　￣￣／
+￣￣￣￣￣￣／「
+あああああああ「""");
     private GraphicsGroup graphics;
 
     private static int transitionIndex;
@@ -120,11 +122,11 @@ public class SnailGame {
         background = currentLevel.getBackground();
         background.setAnchor(new Point(0,0));
         background.setScale(SCALE*3);
-        background.setPosition(16*SCALE*4,2*16*SCALE*9);
+        background.setPosition(-16*SCALE*9,2*16*SCALE*6 );
         canvas.add(background);
 
         Rectangle overlay = new Rectangle(0,0,1920,1080);
-        overlay.setFillColor(new Color(46*4,25*4,28*4,127));
+        overlay.setFillColor(new Color(46*5,25*5,28*5,102));
         canvas.add(overlay);
         try {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -132,12 +134,31 @@ public class SnailGame {
         } catch (IOException|FontFormatException e){
             
         }
-        GraphicsText title = new GraphicsText("Slimy\n Navigational\n  Adventure\n   Involving\n    L'escargot");
+        GraphicsText title = new GraphicsText("Slimy\n  Navigational\n    Adventure\n      Involving\n        L'escargot");
         title.setFont(new Font("Pixellari", 0, (3*32)));
-        title.setPosition(96,96);
+        title.setPosition(72,128);
         title.setFillColor(new Color(144,163,83));
         canvas.add(title);
+        GraphicsText keytext = new GraphicsText("press any key\nto");
+        GraphicsText start = new GraphicsText("start");
+        start.setFont(new Font("Pixellari", 0, (3*16)));
+        start.setFillColor(new Color(88,141,190));
+        start.setPosition(1200,777);
+
+        keytext.setFont(new Font("Pixellari", 0, (3*16)));
+        keytext.setFillColor(new Color(232,116,105));
+        keytext.setPosition(1150, 727);
+        canvas.add(keytext);
+        canvas.add(start);
         canvas.animate(()->{
+            ticks++;
+            if (!playing) {
+                keytext.setPosition(1150 +3*Math.sin(ticks/37F)*Math.min(ticks/777f, 1.5), 7*Math.sin(ticks/20F)*Math.min(ticks/777f, 1.5)+727);
+                keytext.setRotation(Math.sin(ticks/50F)*Math.min(ticks/777f, 1.5));
+                start.setPosition(1200 +5*Math.sin(ticks/29F)*Math.min(ticks/777f, 1.5), 7*Math.sin(ticks/24F)*Math.min(ticks/777f, 1.5)+777+5*Math.min(ticks/777f, 1.5)*Math.sin(ticks/51F));
+                start.setRotation(Math.sin(ticks/32F)*3*Math.min(ticks/777f, 1.5));
+
+            }
             if (playing||!canvas.getKeysPressed().isEmpty()) {
                 playing = true;
                 int framerate = 1;    
@@ -145,7 +166,6 @@ public class SnailGame {
                     transition();
                     snail.move(canvas.getKeysPressed());
                 }
-                ticks++;
             }
         });
     }
