@@ -114,11 +114,12 @@ public class SnailGame {
         overlay.setFillColor(new Color(46*5,25*5,28*5,102));
         canvas.add(overlay);
         canvas.draw();
+        String font = "Pixellari";
         try {
             GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
             ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("res/Fonts/Pixellari.ttf")));
         } catch (IOException|FontFormatException e){
-            
+            font = "arial narrow";
         }
         List<GraphicsText> title = List.of(new GraphicsText("Slimy"), 
                                             new GraphicsText("Navigational"), 
@@ -128,7 +129,7 @@ public class SnailGame {
         int i = 0;
         for (GraphicsText word : title) {
             // word.setFont(new Font("Pixellari", 0, (3*32))); //leaving this just in case
-            word.setFont("Pixellari",FontStyle.PLAIN,3*32);
+            word.setFont(font,FontStyle.PLAIN,3*32);
             word.setPosition(72+56*i, 128+93*i);
             word.setFillColor(new Color(144,163,83,0));
             canvas.add(word);
@@ -136,10 +137,10 @@ public class SnailGame {
         }
         GraphicsText keytext = new GraphicsText("press any key\nto");
         GraphicsText start = new GraphicsText("start");
-        start.setFont("Pixellari", FontStyle.PLAIN, (3*16));
+        start.setFont(font, FontStyle.PLAIN, (3*16));
         start.setFillColor(new Color(88,141,190,0));
         start.setPosition(1200,777);
-        keytext.setFont("Pixellari", FontStyle.PLAIN, (3*16));
+        keytext.setFont(font, FontStyle.PLAIN, (3*16));
         keytext.setFillColor(new Color(232,116,105,0));
         keytext.setPosition(1150, 727);
         canvas.add(keytext);
