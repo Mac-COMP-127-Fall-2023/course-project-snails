@@ -62,7 +62,6 @@ class Level {
                 }
                 else {
                     newTile = new Empty(topLeftPos);
-                    terrainLayer.add(decorationLayer);
                 }
                 tileMap.put(new Point(tileX, tileY), newTile); //key for each tile is its x and y coordinates in tiles
                 tileX++;
