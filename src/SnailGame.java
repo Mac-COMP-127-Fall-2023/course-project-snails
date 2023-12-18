@@ -121,13 +121,14 @@ public class SnailGame {
             
         }
         List<GraphicsText> title = List.of(new GraphicsText("Slimy"), 
-                                                new GraphicsText("Navigational"), 
-                                                new GraphicsText("Adventure"),
-                                                new GraphicsText("Involving"),
-                                                new GraphicsText("L'escargot"));
+                                            new GraphicsText("Navigational"), 
+                                            new GraphicsText("Adventure"),
+                                            new GraphicsText("Involving"),
+                                            new GraphicsText("L'escargot"));
         int i = 0;
         for (GraphicsText word : title) {
-            word.setFont(new Font("Pixellari", 0, (3*32)));
+            // word.setFont(new Font("Pixellari", 0, (3*32))); //leaving this just in case
+            word.setFont("Pixellari",FontStyle.PLAIN,3*32);
             word.setPosition(72+56*i, 128+93*i);
             word.setFillColor(new Color(144,163,83,0));
             canvas.add(word);
@@ -135,11 +136,10 @@ public class SnailGame {
         }
         GraphicsText keytext = new GraphicsText("press any key\nto");
         GraphicsText start = new GraphicsText("start");
-        start.setFont(new Font("Pixellari", 0, (3*16)));
+        start.setFont("Pixellari", FontStyle.PLAIN, (3*16));
         start.setFillColor(new Color(88,141,190,0));
         start.setPosition(1200,777);
-
-        keytext.setFont(new Font("Pixellari", 0, (3*16)));
+        keytext.setFont("Pixellari", FontStyle.PLAIN, (3*16));
         keytext.setFillColor(new Color(232,116,105,0));
         keytext.setPosition(1150, 727);
         canvas.add(keytext);
