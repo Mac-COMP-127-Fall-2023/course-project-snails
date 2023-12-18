@@ -147,6 +147,7 @@ public class SnailGame {
         canvas.animate(()->{
             ticks++;
             if (!playing) {
+                preload(ticks-20);
                 keytext.setFillColor(new Color(232,116,105,Math.min(ticks*64,255)));
                 start.setFillColor(new Color(88,141,190,Math.min(ticks*64,255)));
 
@@ -249,6 +250,16 @@ public class SnailGame {
             graphics.setPosition(Math.cos(shakeFrame*Math.PI/2)*shake*shakeFrame*(4-shakeFrame)/7f,0);
         } else {
             shake=0;
+        }
+    }
+
+    private void preload(int i) {
+        if (i>=0) {
+            if (i<14) {
+                Image img = new Image("GUI/Transition/screenwipe" + i + ".png");
+            } else if (i<22) {
+                Image img = new Image("Snail/Crawl/snail" + (i-14) + ".png");
+            }
         }
     }
 
