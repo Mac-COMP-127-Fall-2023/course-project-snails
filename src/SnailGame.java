@@ -1,6 +1,8 @@
 import edu.macalester.graphics.CanvasWindow;
 import edu.macalester.graphics.Ellipse;
+import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsGroup;
+import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.Rectangle;
@@ -10,7 +12,12 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
 import java.awt.Toolkit;
+import java.io.File;
+import java.io.IOException;
 
 public class SnailGame {
     private CanvasWindow canvas;
@@ -23,7 +30,29 @@ public class SnailGame {
     public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
     private GraphicsGroup background;
     private Snail snail;
-    private Level currentLevel;
+    private Level currentLevel = new Level("""
+４＿＿あ＿＿＿あ＿＿＿＿＿＿あ＿＿＿＿＋ああああああああああ
+「　　あ　　　＿　　　　　　あ　　　　」ああああああああああ
+「　　＿　　　　　　　　　　あ　　　　」ああああああああああ
+「　　　　　　　　　　　　　ー　　　　」ああああああああああ
+「花　　　　　　　　　　　　　　　　プ」ああああああああああ
+「　ずす　　　　　　　　ひび　　　　ブ」ああああああああああ
+「　すす　　ロ「　　　　　　　　　ルフ」ああああああああああ
+あ＿＿＿＿＿＿「花　＿＿　　　　＿＿＿あああああああああああ
+「　　　　　　　　　　　　　　　」　　」ああああああああああ
+「　　　　　　　　　　　　　　　　　　」ああああああああああ
+「　　　　　　　ひび　　　Ⓕ　　　　　」ああああああああああ
+「　　　あ　　　　　　　　￣　　　　　」ああああああああああ
+「　　　あ　　￣　　　　　＿　　　　　」ああああああああああ
+「　　　　　　あ　　　　　　　あ　　　」ああああああああああ
+「　　　　　あ　　　　　　　　あ　　　」ああああああああああ
+・￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣￣／ああああああああああ""",
+"""
+　　　　　　
+プ　　g　　
+ブ　　G　」
+フ　　￣￣あ
+￣￣￣あああ""");
     private GraphicsGroup graphics;
 
     private static int transitionIndex;
@@ -73,12 +102,41 @@ public class SnailGame {
         transitionIndex = 6;        // the initial transition call will increment both these
         levelIndex = -1;            // values and then set up the level accordingly
         canvas = new CanvasWindow("Snails", 1920, 1080);
-        play();
+        titleScreen();
     }
 
     /**
      * sets up the canvas with the graphics of the current level
      */
+
+    private void titleScreen() {
+        canvas.setBackground(Color.BLACK);
+        background = currentLevel.getBackground();
+        background.setScale(SCALE*3);
+        background.setAnchor(new Point(0,0));
+        background.setPosition((32-parallaxFrom)*SCALE*6,2*16*SCALE*9);
+        canvas.add(background);
+
+        Rectangle overlay = new Rectangle(0,0,1920,1080);
+        overlay.setFillColor(new Color(46*4,25*4,28*4,127));
+        canvas.add(overlay);
+        try {
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(Font.createFont(Font.TRUETYPE_FONT, new File("res/Fonts/Pixellari.ttf")));
+        } catch (IOException|FontFormatException e){
+            
+        }
+        GraphicsText title = new GraphicsText("Slimy\n Navigational\n  Adventure\n   Involving\n    L'escargot");
+        title.setFont(new Font("Pixellari", 0, 100));
+        title.setPosition(100,100);
+        canvas.add(title);
+        canvas.draw();
+        while (canvas.getKeysPressed().isEmpty()) {
+
+        }
+        play();
+    }
+
     private void setUpLevel(){
         canvas.removeAll();
         canvas.setBackground(Color.BLACK);
