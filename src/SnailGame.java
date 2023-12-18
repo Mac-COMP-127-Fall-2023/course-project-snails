@@ -1,22 +1,16 @@
 import edu.macalester.graphics.CanvasWindow;
-import edu.macalester.graphics.Ellipse;
 import edu.macalester.graphics.FontStyle;
 import edu.macalester.graphics.GraphicsGroup;
 import edu.macalester.graphics.GraphicsText;
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.Rectangle;
-import edu.macalester.graphics.TextAlignment;
-import edu.macalester.graphics.events.Key;
 
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.FontFormatException;
 import java.awt.GraphicsEnvironment;
-import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 
@@ -103,8 +97,8 @@ public class SnailGame {
 
     /**
      * sets up the canvas with the graphics of the current level
+     * and plays the game
      */
-
     private void titleScreen() {
         canvas.setBackground(Color.BLACK);
         background = currentLevel.getBackground();
@@ -170,10 +164,6 @@ public class SnailGame {
             }
             if (playing||!canvas.getKeysPressed().isEmpty()) {
                 playing = true;
-                int framerate = 1;
-                // if (canvas.getKeysPressed().contains(Key.SHIFT)) {
-                //     framerate=6;
-                // }  
                 if (ticks % 1 == 0){
                     transition();
                     snail.move(canvas.getKeysPressed());
@@ -183,6 +173,10 @@ public class SnailGame {
         });
     }
 
+    /**
+     * sets up the current level by removing the previous and adding graphics
+     * and the snail
+     */
     private void setUpLevel(){
         canvas.removeAll();
         canvas.setBackground(Color.BLACK);
@@ -218,6 +212,7 @@ public class SnailGame {
 
     /**
      * increments transition, going back to the beginning if it's run out of images
+     * increments level as appropriate, and calls winGame() when all levels are finished
      */
     private void transition(){
         if (transitionIndex==0) {
@@ -237,7 +232,7 @@ public class SnailGame {
                 break;                           //have to check again to see if we're now at 0 because its mod 14 
             case 7:
                 if(levelIndex < levels.size()-1){
-                     currentLevel = levels.get(++levelIndex); 
+                    currentLevel = levels.get(++levelIndex); 
                     setUpLevel();
                 }
                 else{
@@ -249,7 +244,7 @@ public class SnailGame {
         transition.setCenter(snail.getGraphics().getCenter());
     }
 
-     /**
+    /**
      * Show the player a win screen
      */
     private void winGame(){
@@ -262,9 +257,10 @@ public class SnailGame {
         canvas.add(winMessage);
     }
 
-    //transition handles the level transition, so if we call this once it'll start the process that makes it setup the next
-    //level
-    public static void win(){
+    /**
+     * set transition back such that the next level will begin
+     */
+    public static void winLevel(){
         transitionIndex = 1;
         transition.setScale(2);
     }

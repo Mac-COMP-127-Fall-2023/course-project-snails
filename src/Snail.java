@@ -73,7 +73,7 @@ public class Snail {
         }
         if (currentLevel.getCompleted()) {
             exit();
-            SnailGame.win();
+           SnailGame.winLevel();
         }
         updateAnimation();
         return true;
