@@ -24,17 +24,18 @@ public class SnailGame {
 
     public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
     private GraphicsGroup background;
+    Rectangle overlay = new Rectangle(0,0,1920,1080);
     private Image backbackground = new Image("GUI/snail_background.png");
     private Snail snail;
     private Level currentLevel = new Level("""
 あ""",
 """
 　　　　　　　　　ひび
-　プ　　　　g　
-　ブ　　　　G　」花
-　フ　　　　￣￣／
-￣￣￣￣￣￣／「
-あああああああ「""");
+　プ　　　　ぎ　
+　ブ　　　　が　上花
+ぎフ　　　　⊛￣✚
+が⊛￣￣￣￣／✚
+右＿＿＿＿＿✚""");
     private GraphicsGroup graphics;
 
     private static int transitionIndex;
@@ -65,11 +66,14 @@ public class SnailGame {
 あああああああああああああああああああああああああああああああああああ""",
 
 """
-　　　　　　
-プ　　ぎ　　
-ブ　　が　」
-フ　　￣￣あ
-￣￣￣あああ"""),
+あああああ左
+ああああ「　上
+あ４＿＿＿ー✚
+４✚
+✚
+　　　　　　　上
+　　　　　　　」￣⊕
+　　　　　　⊛／あ・⊕"""),
 
         new Level("""
 　　ずす　　
@@ -107,7 +111,6 @@ public class SnailGame {
         background.setPosition(-16*SCALE*9,2*16*SCALE*6 );
         canvas.add(background);
         
-        Rectangle overlay = new Rectangle(0,0,1920,1080);
         overlay.setFillColor(new Color(46*5,25*5,28*5,102));
         canvas.add(overlay);
         canvas.draw();
@@ -180,23 +183,19 @@ public class SnailGame {
     private void setUpLevel(){
         canvas.removeAll();
         canvas.setBackground(Color.BLACK);
+        graphics = new GraphicsGroup();
 
-        background = currentLevel.getBackground();
-        background.setScale(SCALE*3);
-        background.setAnchor(new Point(0,0));
-        background.setPosition(16*SCALE*6,2*16*SCALE*9);
-        canvas.add(background);
-
-        backbackground.setScale(SCALE * 1.5);
+        backbackground.setScale(SCALE * 2);
         backbackground.setAnchor(new Point(0,0));
         backbackground.setPosition(-3 * SCALE, 0);
         canvas.add(backbackground);
 
-        Rectangle overlay = new Rectangle(0,0,1920,1080);
-        overlay.setFillColor(new Color(46*4,25*4,28*4,127));
-        canvas.add(overlay);
+        background = currentLevel.getBackground();
+        background.setAnchor(new Point(0,0));
+        background.setPosition(0,0);
+        canvas.add(background);
 
-        graphics = new GraphicsGroup();
+        canvas.add(overlay);
 
         snail = currentLevel.getSnail();
         graphics.add(snail.getGraphics());

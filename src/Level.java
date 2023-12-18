@@ -17,7 +17,7 @@ class Level {
 
     public static final int SCREEN_PIXELS_PER_TILE = PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO;
 
-    private List<Character> blockKeys = List.of('￣', '＿', '「', '」', '・', '／', '４', '＋', '～','＝','｛','｝','⊕','⊛','✚','＊', 'あ', '上', '下', '左', '右','ー','｜','四');
+    private List<Character> blockKeys = List.of('￣', '＿', '「', '」', '・', '／', '４', '＋', '～','＝','｛','｝','⊕','⊛','✚','＊', 'あ', '上', '下', '左', '右','ー','｜','四','Ⓕ');
     private List<Character> decorationKeys = List.of('フ','ブ','プ','ラ','ル','ロ','が','ぎ');
     private List<Character> platformKeys = List.of('ヒ', 'ビ', 'ピ', 'ひ', 'び');
     private Character endpointKey = 'Ⓕ';
