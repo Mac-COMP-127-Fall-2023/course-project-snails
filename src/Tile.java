@@ -1,31 +1,61 @@
-import java.util.HashMap;
 import java.util.Map;
+import static java.util.Map.entry;
 
 import edu.macalester.graphics.Image;
+import edu.macalester.graphics.Point;
 
-public class Tile extends Image{
-    private final Map<Character, String> IMAGE_PATH_MAP = new HashMap<>();
+public interface Tile{
+    public Point getTopRightCorner();
+    public Point getBottomRightCorner();
+    public Point getTopLeftCorner();
+    public Point getBottomLeftCorner();
+    
+    public boolean checkCollision(Point point);
+    public boolean isCollidable();
+    public boolean canStickToSide();
 
-    public Tile(int x, int y, char key) {
-        super(x, y);
-        setupImagePathMap();
-        setImagePath(!IMAGE_PATH_MAP.get(key).isEmpty() ? IMAGE_PATH_MAP.get(key) : "Tile/empty.png");
-    }
+    public Image getImage();
 
-    private void setupImagePathMap() {
-        IMAGE_PATH_MAP.put(' ', "Tiles/empty.png"); //not a space, \u0020
-        IMAGE_PATH_MAP.put('.', "Tiles/rocks_small1.png");
-        IMAGE_PATH_MAP.put('-', "Tiles/block_i_dirt_b.png");
-        IMAGE_PATH_MAP.put('_', "Tiles/block_i_dirt_t.png");
-        IMAGE_PATH_MAP.put('[', "Tiles/block_i_dirt_r.png");
-        IMAGE_PATH_MAP.put(']', "Tiles/block_i_dirt_l.png");
-        IMAGE_PATH_MAP.put('\\', "Tiles/block_i_dirt_tr.png");
-        IMAGE_PATH_MAP.put('/', "Tiles/block_i_dirt_lt.png");
-        IMAGE_PATH_MAP.put('4', "Tiles/block_i_dirt_rb.png");
-        IMAGE_PATH_MAP.put('+', "Tiles/block_i_dirt_lb.png"); 
-        IMAGE_PATH_MAP.put('▘', "Tiles/block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▝', "Tiles/block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▘', "Tiles/block_e_dirt.png");
-        IMAGE_PATH_MAP.put('▝', "Tiles/block_e_dirt.png"); 
-    }
+    public static final Map<Character, String> IMAGE_PATH_MAP = Map.ofEntries(
+        entry('　', "Tiles/empty.png"), //not a space, \u0020
+        entry('あ', "Tiles/block_e_dirt.png"),
+        entry('＿', "Tiles/block_i_dirt_b.png"),
+        entry('￣', "Tiles/block_i_dirt_t.png"),
+        entry('「', "Tiles/block_i_dirt_r.png"),
+        entry('」', "Tiles/block_i_dirt_l.png"),
+        entry('・', "Tiles/block_i_dirt_tr.png"),
+        entry('／', "Tiles/block_i_dirt_lt.png"),
+        entry('４', "Tiles/block_i_dirt_rb.png"),
+        entry('＋', "Tiles/block_i_dirt_lb.png"),
+        entry('～', "Tiles/block_e_dirt_b.png"),
+        entry('＝', "Tiles/block_e_dirt_t.png"),
+        entry('｛', "Tiles/block_e_dirt_r.png"),
+        entry('｝', "Tiles/block_e_dirt_l.png"),
+        entry('⊕', "Tiles/block_e_dirt_tr.png"),
+        entry('⊛', "Tiles/block_e_dirt_lt.png"),
+        entry('✚', "Tiles/block_e_dirt_rb.png"),
+        entry('＊', "Tiles/block_e_dirt_lb.png"),
+        entry('上', "Tiles/block_e_dirt_ltr.png"),
+        entry('右', "Tiles/block_e_dirt_tlb.png"),
+        entry('左', "Tiles/block_e_dirt_trb.png"),
+        entry('下', "Tiles/block_e_dirt_lbr.png"),
+        entry('四', "Tiles/block_e_dirt_ltrb.png"),
+        entry('ー', "Tiles/block_e_dirt_tb.png"),
+        entry('｜', "Tiles/block_e_dirt_lr.png"),
+        entry('フ', "Tiles/mushroom1.png"),
+        entry('ブ', "Tiles/mushroom2.png"),
+        entry('プ', "Tiles/mushroom3.png"),
+        entry('ヒ', "Tiles/platform_thick_dirt_l.png"),
+        entry('ビ', "Tiles/platform_thick_dirt_m.png"),
+        entry('ピ', "Tiles/platform_thick_dirt_r.png"),
+        entry('ひ', "Tiles/platform_thin_dirt_l.png"),
+        entry('び', "Tiles/platform_thin_dirt_r.png"),
+        entry('ラ', "Tiles/rocks_small1.png"),
+        entry('ル', "Tiles/rocks_small2.png"),
+        entry('ロ', "Tiles/rocks_large.png"),
+        entry('花', "Tiles/flower_wall_left.png"),
+        entry('え', "Tiles/finish.png"),
+        entry('G', "Tiles/grass1_tall1.png"),
+        entry('g', "Tiles/grass1_tall2.png")
+    );
 }
