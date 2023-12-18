@@ -5,6 +5,9 @@ import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 import edu.macalester.graphics.events.Key;
 
+//JOIN THE ZOOM!!!
+//https://us04web.zoom.us/j/79639985390?pwd=EidCbXO8abNWapFrzdHlQO5SvX6Vvc.1
+
 public class Snail {
     private int x, y;
     private Level currentLevel;
