@@ -267,9 +267,7 @@ public class SnailGame {
     }
 
     public static void shake(int velocity){
-        System.out.println("shake");
         if (velocity>5) {
-            System.out.println("shake!");
             shakeFrame=0;
             shake=velocity-5;
         }
