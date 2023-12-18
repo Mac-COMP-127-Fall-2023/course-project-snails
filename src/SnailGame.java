@@ -90,7 +90,10 @@ public class SnailGame {
     
     private int levelIndex;
 
+    private boolean won;
+
     public SnailGame() {
+        won = false;
         transitionIndex = 6;        // the initial transition call will increment both these
         levelIndex = -1;            // values and then set up the level accordingly
         canvas = new CanvasWindow("Snails", 1920, 1080);
@@ -214,16 +217,28 @@ public class SnailGame {
         if (transitionIndex==0) {
             return;
         }
-        transitionIndex = (transitionIndex + 1) % 14;
-        transition.setImagePath(transitionPath(transitionIndex));
+        if(won){
+            transitionIndex = 7;
+        }
+        else{
+            transitionIndex = (transitionIndex + 1) % 14;
+            transition.setImagePath(transitionPath(transitionIndex));
+        }
 
         switch (transitionIndex) {
             case 0:
                 transition.setScale(0);
                 break;                           //have to check again to see if we're now at 0 because its mod 14 
             case 7:
-                currentLevel = levels.get(++levelIndex); 
-                setUpLevel();
+                levelIndex++;
+                if(levelIndex < levels.size()){
+                     currentLevel = levels.get(++levelIndex); 
+                    setUpLevel();
+                }
+                else{
+                    winGame();
+                    won = true;
+                }
                 break;
         }
         transition.setCenter(snail.getGraphics().getCenter());
