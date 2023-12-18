@@ -25,9 +25,8 @@ public class SnailGame {
     private int ticks = 0;
     private final double SCALE = .5;
     private boolean playing = false;
-
-    private int parallaxFrom =16;
-    private int parallaxTo =16;
+    private static int shakeFrame=10;
+    private static int shake;
 
     public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
     private GraphicsGroup background;
@@ -166,10 +165,14 @@ public class SnailGame {
             }
             if (playing||!canvas.getKeysPressed().isEmpty()) {
                 playing = true;
-                int framerate = 1;    
+                int framerate = 1;
+                // if (canvas.getKeysPressed().contains(Key.SHIFT)) {
+                //     framerate=6;
+                // }  
                 if (ticks % 1 == 0){
                     transition();
                     snail.move(canvas.getKeysPressed());
+                    shake();
                 }
             }
         });
@@ -182,7 +185,7 @@ public class SnailGame {
         background = currentLevel.getBackground();
         background.setScale(SCALE*3);
         background.setAnchor(new Point(0,0));
-        background.setPosition((32-parallaxFrom)*SCALE*6,2*16*SCALE*9);
+        background.setPosition(16*SCALE*6,2*16*SCALE*9);
         canvas.add(background);
 
         Rectangle overlay = new Rectangle(0,0,1920,1080);
@@ -203,51 +206,10 @@ public class SnailGame {
         canvas.add(graphics);
     }
 
-    private void play(){
-        canvas.animate(() -> {
-            //debugging stuff
-            int framerate = 1;
-            // if (canvas.getKeysPressed().contains(Key.SHIFT)) {
-            //     framerate=6;
-            // }
-            // if (canvas.getKeysPressed().contains(Key.R)) {
-            //     Ellipse e = new Ellipse(0, 0, 6, 6);
-            //     e.setCenter(snail.getGraphics().getCenter().add(new Point(0,16*6)));
-            //     e.setFillColor(Color.RED);
-            //     graphics.add(e);
-            // }
-            // if (canvas.getKeysPressed().contains(Key.G)) {
-            //     Ellipse e = new Ellipse(0, 0, 6, 6);
-            //     e.setCenter(snail.belowPoint());
-            //     e.setFillColor(Color.GREEN);
-            //     graphics.add(e);
-            // }
-            if (ticks % framerate == 0){ //animate at 15 fps instead of 60
-                transition();
-                boolean moved = snail.move(canvas.getKeysPressed());
-                // if (moved) {
-                //     parallaxTo = snail.getX()/16;
-                // }
-            }
-            ticks++;
-        });
-    }
-
     /**
      * increments transition, going back to the beginning if it's run out of images
      */
     private void transition(){
-        // if (parallaxTo>parallaxFrom) {
-        //     if (Math.random()>.8) {
-        //         background.setPosition((32-++parallaxFrom)*SCALE*6,2*16*SCALE*9);
-        //     }
-        // } else if (parallaxTo<parallaxFrom) {
-        //     if (Math.random()>.8) {
-        //         parallaxFrom--;
-        //         background.setPosition((32-parallaxFrom)*SCALE*6,2*16*SCALE*9 );
-        //     }
-        // }
-
         if (transitionIndex==0) {
             return;
         }
@@ -271,6 +233,23 @@ public class SnailGame {
     public static void win(){
         transitionIndex = 1;
         transition.setScale(2);
+    }
+
+    public static void shake(int velocity){
+        System.out.println("shake");
+        if (velocity>5) {
+            System.out.println("shake!");
+            shakeFrame=0;
+            shake=velocity-5;
+        }
+    }
+    private void shake(){
+        if (shakeFrame<4) {
+            shakeFrame++;
+            graphics.setPosition(Math.cos(shakeFrame*Math.PI/2)*shake*shakeFrame*(4-shakeFrame)/7f,0);
+        } else {
+            shake=0;
+        }
     }
 
     private static String transitionPath(int i) {

@@ -182,6 +182,7 @@ public class Snail {
     private void fall(int velocity) {
         sideCollisions();
         if (checkBelow(velocity)) {
+            SnailGame.shake(this.velocity);
             falling = false;
             velocity = belowFinder(velocity-1)+1; //a bit weird but it checks out
             if (velocity<0) {
