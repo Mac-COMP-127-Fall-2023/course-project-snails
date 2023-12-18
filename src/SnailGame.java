@@ -229,6 +229,19 @@ public class SnailGame {
         transition.setCenter(snail.getGraphics().getCenter());
     }
 
+     /**
+     * Show the player a win screen
+     */
+    private void winGame(){
+        transition.setImagePath(transitionPath(transitionIndex));
+
+        GraphicsText winMessage = new GraphicsText("YOU WIN!");
+        winMessage.setFillColor(Color.WHITE);
+        winMessage.setFont(FontStyle.BOLD, 60);
+        winMessage.setCenter(currentLevel.getGraphics().getCenter());
+        canvas.add(winMessage);
+    }
+
     //transition handles the level transition, so if we call this once it'll start the process that makes it setup the next
     //level
     public static void win(){
