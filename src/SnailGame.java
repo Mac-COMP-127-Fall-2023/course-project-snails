@@ -30,6 +30,7 @@ public class SnailGame {
 
     public static final int SCREEN_PIXEL_RATIO = 6; //the size, in screen pixels, of a single in-game pixel
     private GraphicsGroup background;
+    private Image backbackground = new Image("GUI/snail_background.png");
     private Snail snail;
     private Level currentLevel = new Level("""
 あ""",
@@ -108,7 +109,7 @@ public class SnailGame {
         canvas.setBackground(Color.BLACK);
         background = currentLevel.getBackground();
         background.setAnchor(new Point(0,0));
-        background.setScale(SCALE*3);
+        background.setScale(SCALE*3); //relative size of background tiles compared to normal tiles
         background.setPosition(-16*SCALE*9,2*16*SCALE*6 );
         canvas.add(background);
         
@@ -191,6 +192,11 @@ public class SnailGame {
         background.setAnchor(new Point(0,0));
         background.setPosition(16*SCALE*6,2*16*SCALE*9);
         canvas.add(background);
+
+        backbackground.setScale(SCALE * 1.5);
+        backbackground.setAnchor(new Point(0,0));
+        backbackground.setPosition(-3 * SCALE, 0);
+        canvas.add(backbackground);
 
         Rectangle overlay = new Rectangle(0,0,1920,1080);
         overlay.setFillColor(new Color(46*4,25*4,28*4,127));
