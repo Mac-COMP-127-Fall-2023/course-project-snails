@@ -1,6 +1,10 @@
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
+/***
+ * Basic building block of levels
+ * collidable, snail can't attach to sides
+ */
 class Platform implements Tile{
     Image image;
     int x;

@@ -1,6 +1,10 @@
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
+/***
+ * Basic building block of levels
+ * cannot collide or attach--Level class ends level on overlap
+ */
 public class Endpoint implements Tile{
     Image image;
     int x;

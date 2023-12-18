@@ -48,16 +48,16 @@ public class SnailGame {
 「　　下　　　　　　　　　　｜　　　　」あああああああああああああああ
 「　　　　　　　　　　　　　下　　　　」あああああああああああああああ
 「花　　　　　　　　　　　　　　　　プ」あああああああああああああああ
-「　ずす　　　　　　　　ひび　　　　ブ」あああああああああああああああ
-「　すす　　ロ上　　　　　　　　　ルフ」あああああああああああああああ
+「　ずすぎ　　　　　　　ひび　　　　ブ」あああああああああああああああ
+「　すすが　ロ上　　　　　　　　　ルフ」あああああああああああああああ
 あーーーーーー✚花　右左　　　　⊛ーーああああああああああああああああ
 「　　　　　　　　　　　　　　　下　　」あああああああああああああああ
 「　　　　　　　　　　　　　　　　　　」あああああああああああああああ
 「　　　　　　　ひび　　　Ⓕ　　　　　」あああああああああああああああ
 「　　　上　　　　　　　　上　　　　　」あああああああああああああああ
 「　　　下　　上　　　　　下　　　　　」あああああああああああああああ
-「　　　　　　下　　　　　　　上　　　」あああああああああああああああ
-「　　　　　上　　　　　　　　｜　　　」あああああああああああああああ
+「　　　　　　下　　ぎ　　　　上　　　」あああああああああああああああ
+「　　　　　上　　　が　　　　｜　　　」あああああああああああああああ
 ・￣￣￣￣￣あ￣￣￣￣￣￣￣￣あ￣￣￣／あああああああああああああああ
 あああああああああああああああああああああああああああああああああああ
 あああああああああああああああああああああああああああああああああああ
@@ -66,8 +66,8 @@ public class SnailGame {
 
 """
 　　　　　　
-プ　　g　　
-ブ　　G　」
+プ　　ぎ　　
+ブ　　が　」
 フ　　￣￣あ
 ￣￣￣あああ"""),
 
@@ -196,11 +196,13 @@ public class SnailGame {
         overlay.setFillColor(new Color(46*4,25*4,28*4,127));
         canvas.add(overlay);
 
-        graphics = currentLevel.getGraphics();
-        graphics.setPosition(0,0);
+        graphics = new GraphicsGroup();
 
         snail = currentLevel.getSnail();
         graphics.add(snail.getGraphics());
+
+        graphics.add(currentLevel.getGraphics());
+        graphics.setPosition(0,0);
 
         transition.setScale(2);
         graphics.add(transition);

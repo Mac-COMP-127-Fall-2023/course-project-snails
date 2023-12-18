@@ -4,20 +4,25 @@ import static java.util.Map.entry;
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
+/***
+ * Interface for all tiles in a level
+ */
 public interface Tile{
-    public Point getTopRightCorner();
+    //get bounds of tile
+    public Point getTopRightCorner(); 
     public Point getBottomRightCorner();
     public Point getTopLeftCorner();
     public Point getBottomLeftCorner();
     
-    public boolean checkCollision(Point point);
-    public boolean isCollidable();
-    public boolean canStickToSide();
+    public boolean checkCollision(Point point); //whether given point is within bounds of the tile
+    public boolean isCollidable(); 
+    public boolean canStickToSide(); //whether the snail can attach to tile
 
     public Image getImage();
 
+    //Map of paths to all tile images, with the corresponding character as the key
     public static final Map<Character, String> IMAGE_PATH_MAP = Map.ofEntries(
-        entry('　', "Tiles/empty.png"), //not a space, \u0020
+        entry('　', "Tiles/empty.png"),
         entry('あ', "Tiles/block_e_dirt.png"),
         entry('＿', "Tiles/block_i_dirt_b.png"),
         entry('￣', "Tiles/block_i_dirt_t.png"),
@@ -55,7 +60,7 @@ public interface Tile{
         entry('ロ', "Tiles/rocks_large.png"),
         entry('花', "Tiles/flower_wall_left.png"),
         entry('え', "Tiles/finish.png"),
-        entry('G', "Tiles/grass1_tall1.png"),
-        entry('g', "Tiles/grass1_tall2.png")
+        entry('が', "Tiles/grass1_tall1.png"),
+        entry('ぎ', "Tiles/grass1_tall2.png")
     );
 }

@@ -18,18 +18,26 @@ class Level {
     public static final int SCREEN_PIXELS_PER_TILE = PIXELS_PER_TILE * SnailGame.SCREEN_PIXEL_RATIO;
 
     private List<Character> blockKeys = List.of('￣', '＿', '「', '」', '・', '／', '４', '＋', '～','＝','｛','｝','⊕','⊛','✚','＊', 'あ', '上', '下', '左', '右','ー','｜','四');
-    private List<Character> decorationKeys = List.of('フ','ブ','プ','ラ','ル','ロ');
+    private List<Character> decorationKeys = List.of('フ','ブ','プ','ラ','ル','ロ','が','ぎ');
     private List<Character> platformKeys = List.of('ヒ', 'ビ', 'ピ', 'ひ', 'び');
     private Character endpointKey = 'Ⓕ';
 
     private Snail snail;
     private boolean won=false;
 
+    /***
+     * A single level/screen of the game. Stores and creates snail and all tiles.
+     * @param mapStr multiline string representing level layout
+     * @param backgroundString second multiline string for background objects
+     */
     public Level(String mapStr, String backgroundString) {
         parseKana(mapStr, true);
         parseKana(backgroundString, false);
     }
 
+    /***
+     * @return graphics of all objects in level
+     */
     public GraphicsGroup getGraphics() {
         GraphicsGroup group = new GraphicsGroup();
         group.add(decorationLayer);
@@ -42,6 +50,12 @@ class Level {
         return background;
     }
 
+    /***
+     * Splices mapStr into individual lines, each line into individual characters.
+     * Creates Tile based on character
+     * @param str map string
+     * @param map whether tile should be on terrain layer
+     */
     private void parseKana(String str, Boolean map){
         int tileX = 0;
         int tileY = 0;
@@ -62,13 +76,18 @@ class Level {
         }
     }
 
+    /***
+     * @param p position of new tile
+     * @param c character to read to determine tile type
+     * @return new Tile based based on character
+     */
     private Tile parseMapTile(Point p, char c) {
         Tile newTile;
         if (c=='す'||c == 'ず') {
             if (c=='ず') {
                 snail = new Snail(this, p); //set the position of the snail to the top left of the current tile
             }
-            c = ' ';
+            c = ' '; //creates blank tile where snail is
         }
         if (c == endpointKey) {
             newTile = new Endpoint(p);
@@ -89,11 +108,15 @@ class Level {
         return newTile;
     }
 
+    //parseMapTile, but for tiles in the background group
     private void parseBgTile(Point p, char c) {
         Decoration bgt = new Decoration(p, c);
         background.add(bgt.getImage());
     }
 
+    /***
+     * @return true if there is a collidable tile at p
+     */
     public boolean checkCollision(Point p){
         return terrainLayer.testHit(p.getX(), p.getY());
     }
@@ -102,6 +125,9 @@ class Level {
         return snail;
     }
     
+    /***
+     * @return tile object at p
+     */
     public Tile getCollidableTileAt(Point p){
         for (Tile tile : tileMap.values()) {
             if (tile.checkCollision(p)) {

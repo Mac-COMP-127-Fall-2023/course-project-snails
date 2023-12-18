@@ -1,8 +1,12 @@
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
+/**
+ * Decorative tile
+ * no collisions, cannot attach, rendered in front of snail
+ */
 public class Decoration implements Tile {
-        Image image;
+    Image image;
     int x;
     int y;
     int width = Level.SCREEN_PIXELS_PER_TILE;

@@ -1,6 +1,10 @@
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
+/***
+ * Basic building block of levels
+ * square, collidable, snail can attach
+ */
 class Block implements Tile{
     Image image;
     int x;

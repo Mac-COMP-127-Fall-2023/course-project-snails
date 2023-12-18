@@ -1,6 +1,7 @@
 import edu.macalester.graphics.Image;
 import edu.macalester.graphics.Point;
 
+//blank tile
 public class Empty implements Tile{
     Image image;
     int x;
