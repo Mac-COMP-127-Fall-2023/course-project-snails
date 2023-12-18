@@ -230,8 +230,7 @@ public class SnailGame {
                 transition.setScale(0);
                 break;                           //have to check again to see if we're now at 0 because its mod 14 
             case 7:
-                levelIndex++;
-                if(levelIndex < levels.size()){
+                if(levelIndex < levels.size()-1){
                      currentLevel = levels.get(++levelIndex); 
                     setUpLevel();
                 }
